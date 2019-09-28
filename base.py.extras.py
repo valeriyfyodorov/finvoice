@@ -3,10 +3,7 @@ import environ
 # find end replace below
 ROOT_DIR = environ.Path(__file__) - 3
 APPS_DIR = ROOT_DIR.path('____project______name________here')
-
-
 env = environ.Env()
-
 # This section added from an update to standards in CookieCutter Django to ensure no errors are encountered at runserver/migrations
 READ_DOT_ENV_FILE = env.bool('DJANGO_READ_DOT_ENV_FILE', default=False)
 if READ_DOT_ENV_FILE:
@@ -25,17 +22,17 @@ DEBUG = env.bool('DJANGO_DEBUG', False)
 
 # change structure of apps:
 
-DJANGO_APPS = (
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-)
-THIRD_PARTY_APPS = (
-)
-LOCAL_APPS = (
-)
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+]
 
+THIRD_PARTY_APPS = [
+]
+LOCAL_APPS = [
+]
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
