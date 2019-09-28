@@ -28,6 +28,7 @@ if READ_DOT_ENV_FILE:
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('DJANGO_SECRET_KEY', default='xyi%p4h74@r!$bbkv1fp&85@(9q$f3&l9!pw-)wg)-hc#5fm60')
 
