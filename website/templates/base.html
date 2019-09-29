@@ -1,0 +1,73 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>
+            {% block title %}   {% endblock %}
+            
+            {% block title_suffix %}   {% endblock %}
+
+        </title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="  ">
+        <meta name="author" content="      ">
+
+
+        {# Global stylesheets #}
+
+        <link rel="stylesheet" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" type="text/css">
+
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+        <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+        
+        <!-- style with this template -->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/template.min.css' %}">
+
+        <!-- extra css specifically for template modification  -->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/website.css' %}">
+
+        {% block extracss %}
+        {% endblock extracss %}
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        
+
+
+    </head>
+
+    <body id="page-top" >
+       
+        {% block content %}
+        
+        {% endblock %}
+
+
+        {% block extra_body %}
+        {% endblock %}
+
+ 
+
+
+        <!-- Bootstrap core JavaScript -->
+  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+  
+  <!-- Custom scripts for this template -->
+  <script src="{% static 'js/template.min.js' %}"></script>
+  <script src="{% static 'vendor/jqBootstrapValidation.js' %}"></script>
+  
+  <script type="text/javascript" src="{% static 'js/website.js' %}"></script>
+
+{% block extrajs %}
+{% endblock extrajs %}
+
+    </body>
+</html>

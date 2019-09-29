@@ -1,0 +1,55 @@
+{% extends "invoices/local_base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{{ form.media }}
+
+{% block extracss %}
+<style type="text/css">  
+input[type=number]{
+    width: 80px;
+} 
+</style>
+
+<style type="text/css">
+    .add-row {
+        padding-left:18px;
+    }
+    .delete-row {
+        float:right;
+        display:block;
+        margin:5px 0 0 5px;
+        width:16px;
+        height:16px;
+    }
+    .row1 td { background-color: #f9f9f9; }
+    .row2 td { background-color: #dddddd; }
+    .row3 td { background-color: #ededed; }
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    {% crispy form %}
+    <div class="row">
+        <div class="col-md-3">
+            <a href="{% url 'invoices:index' %}">All invoices</a>
+
+
+        </div>
+        
+        <div class="col-md-6">
+            <a class="btn btn-outline-danger" href="{% url 'invoices:invoice_delete' invoice_id=object.id %}">Delete</a>
+        </div>
+    </div>
+    <br>
+
+</div>
+
+
+  {% endblock content %}
+
+
+
+

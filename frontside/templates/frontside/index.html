@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extracss %}
+<link rel="stylesheet" href="{% static 'css/welcome_page.css' %}">
+{% endblock extracss %}
+
+
+{% block content %}
+
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand js-scroll-trigger" href="#page-top">Seahorse Management</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav text-uppercase ml-auto">
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="#services">Services</a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="#about">About</a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header class="masthead">
+    <div class="container">
+      <div class="intro-text">
+        <div class="intro-lead-in">Welcome To Modern Shipping!</div>
+        <div class="intro-heading text-uppercase">It's time to get on board</div>
+        <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#services">Full ahead</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Services -->
+  <section class="page-section" id="services">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h2 class="section-heading text-uppercase">Services</h2>
+          <h3 class="section-subheading text-muted">Our company provides modern shipping solutions to customers worldwide.
+            Experienced staff can supply you with any service you may imagine, such (and not limited) as:
+          </h3>
+        </div>
+      </div>
+      <div class="row text-center">
+        <div class="col-md-4">
+          <span class="fa-stack fa-4x">
+            <i class="fas fa-circle fa-stack-2x text-primary"></i>
+            <i class="fas fa-box fa-stack-1x fa-inverse"></i>
+          </span>
+          <h4 class="service-heading">Liner chartering and agency</h4>
+          <p class="text-muted">
+            Have a cargo for container shipment? We can find best deal to deliver your cargo anywhere in the world.
+          </p>
+        </div>
+        <div class="col-md-4">
+          <span class="fa-stack fa-4x">
+            <i class="fas fa-circle fa-stack-2x text-primary"></i>
+            <i class="fas fa-ship fa-stack-1x fa-inverse"></i>
+          </span>
+          <h4 class="service-heading">Ship management</h4>
+          <p class="text-muted">
+              Have a ship that you need to perform better?
+              Just live your life when your ship is perfectly managed by us.
+            </p>  
+        </div>
+        <div class="col-md-4">
+            <span class="fa-stack fa-4x">
+              <i class="fas fa-circle fa-stack-2x text-primary"></i>
+              <i class="fas fa-wrench fa-stack-1x fa-inverse"></i>
+            </span>
+            <h4 class="service-heading">Technical management</h4>
+            <p class="text-muted">
+                With worldwide connections we may bring perfect technical crew that is specifically best for your ship.
+                
+              </p>  
+          </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-md-4">
+                <span class="fa-stack fa-4x">
+                  <i class="fas fa-circle fa-stack-2x text-primary"></i>
+                  <i class="fas fa-user-secret fa-stack-1x fa-inverse"></i>
+                </span>
+                <h4 class="service-heading">Agency</h4>
+                <p class="text-muted">
+                    We maintain network of reliable partnering ship agents that may bring 
+                    local experience for your ships or cargoes in various Eurpean ports.
+                  </p>  
+              </div>
+              <div class="col-md-4">
+                  <span class="fa-stack fa-4x">
+                    <i class="fas fa-circle fa-stack-2x text-primary"></i>
+                    <i class="fas fa-file-signature fa-stack-1x fa-inverse"></i>
+                  </span>
+                  <h4 class="service-heading">Ships sale</h4>
+                  <p class="text-muted">
+                      Looking to buy or sell a ship?
+                      We are able to find, inspect and prepare sale contract for cargo ships of many popular sizes.
+                    </p>  
+                </div>
+        <div class="col-md-4">
+          <span class="fa-stack fa-4x">
+            <i class="fas fa-circle fa-stack-2x text-primary"></i>
+            <i class="fas fa-chart-line fa-stack-1x fa-inverse"></i>
+          </span>
+          <h4 class="service-heading">Brokerage</h4>
+          <p class="text-muted">
+              Looking for cargo or ship for one voyage? 
+              Our relations with shipbrokers will help to fix the deal.
+            </p>  
+          </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Portfolio Grid -->
+  
+
+  <!-- About -->
+  <section class="page-section" id="about">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h2 class="section-heading text-uppercase">About</h2>
+          <h3 class="section-subheading text-muted">
+              The company was created as an answer to the clients need for faster, better service 
+              in the business area related to the internatinal shipping.</h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          Now as the time has passed, we have proved ourselves already as reliable partner to many international clients.
+          We have grown and sustain large network of connections 
+          so now you may contact us for any matter and we can find best professional to solve this in the best way possible.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+
+  
+  <!-- Contact -->
+  <section class="page-section" id="contact">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h2 class="section-heading text-uppercase">Contact Us</h2>
+          <h3 class="section-subheading text-muted">
+            We do our best to be responsive at any time and normally reply within 24-hour period.</h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12 text-primary text-center">
+          <p>
+            Seahorse Management, SIA
+            <br>
+            Birztalu 3, LV-1015, Riga, Latvia
+            <br>
+            Reg nr: 40203217446
+          </p>
+          Please email us: 
+          <a href="mailto:office@sea-hm.com">office@sea-hm.com</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-4">
+          <span class="copyright">Copyright &copy; Seahorse Management 2019</span>
+        </div>
+        <div class="col-md-4">
+          
+        </div>
+        <div class="col-md-4">
+          <ul class="list-inline quicklinks">
+            <li class="list-inline-item">
+              <a href="#">Privacy Policy</a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">Terms of Use</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  
+  <!-- Modal 6 -->
+  
+
+
+  {% endblock content %}
+
+

@@ -1,0 +1,116 @@
+{% extends "invoices/local_base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block extrajs %}
+<script type="text/javascript" src="{% static 'vendor/DataTables/datatables.min.js' %}"></script>
+<script type="text/javascript">
+  $(document).ready( function () {
+    $('#table_id').DataTable(
+    {
+        "order": [[ 0, "desc" ]]
+    }
+      );
+} );
+</script>
+{% endblock extrajs %}
+
+{% block content %}
+
+
+<div class="container">
+
+  {% if form %}
+    <div class="row mt-1">
+      <div class="col-md-12">
+          <form method="post">
+            {% csrf_token %}
+            <div class="form-row">
+            <div class="form-group col-md-6 mb-0 text-right">
+              {{ form.template|as_crispy_field }}
+            </div>
+            <div class="form-group col-md-6 mb-0 text-left">
+              <br>
+              <button type="submit" class="btn btn-primary">Add new</button>
+            </div>
+                </div>
+            
+        </form>
+      </div>
+    </div>
+    {% endif %}
+  <div class="row">
+  <div class="col-md-12" style="margin-top: 20px;">
+
+
+{% if invoices %}
+
+<table id="table_id" class="display table table-striped table-hover table-sm">
+
+    <caption>Invoices</caption>
+
+    <thead>
+ <tr>
+     <th>number</th>
+     <th>issued_date </th>
+     <th>paid</th>
+     <th>company</th>
+     <th>total_net</th>
+     <th>total_gross</th>
+     <th>edit</th>
+     <th>view</th>
+     <th>stamp</th>
+     <th>pdf</th>
+  </tr>
+ </thead>
+<tbody>
+    <tr >
+    {% for invoice in invoices %}
+        <td>{{ invoice.number }}</td>
+        <td>{{ invoice.issued_date }}</td>
+        <td>
+          {% if invoice.is_paid %}
+            <i class="fas fa-fw fa-check"> </i>
+          {% endif %}
+      </td>
+        <td>{{ invoice.company.name }}</td>
+        <td>{{ invoice.total_net }}</td>
+        <td>{{ invoice.total_gross }}</td>
+        <td>
+          <a href="/invoices/update/{{ invoice.id }}/">
+            <i class="fas fa-fw fa-edit"> </i>
+          </a>
+        </td>
+        <td>
+          <a href="/invoices/{{ invoice.id }}/">
+            <i class="fas fa-fw fa-eye"> </i>
+          </a>
+        </td>
+        <td>
+          <a href="/invoices/{{ invoice.id }}/1/">
+            <i class="fas fa-fw fa-stamp"> </i>
+          </a>
+        </td>
+        <td>
+          <a href="/invoices/print/{{ invoice.id }}/">
+            <i class="fas fa-fw fa-file-pdf"> </i>
+          </a>
+        </td>
+    </tr>
+   {% endfor %}
+</tbody>
+    </table>
+
+
+{% else %}
+    <p>No invoices are available.</p>
+{% endif %}
+
+</div>
+
+</div>
+</div>
+  {% endblock content %}
+
+
+ 

@@ -1,0 +1,65 @@
+{% load static wagtailuserbar %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>
+            {{title}}
+        </title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="Seahorse Management">
+        <meta name="author" content="Seahorse Management">
+
+
+        {# Global stylesheets #}
+
+        <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+
+<!-- Weasyprint config -->
+        <style>
+        @page {
+            size: "A4";
+            margin: 1cm 1cm 1cm 2cm;
+            font: 10pt "Arial";
+            @bottom-center {
+                /* background-size: auto 1.5cm; */
+                padding-top: 0;
+                content: "Seahorse Management, SIA"; */
+                font: 10pt "Arial";
+                text-align: center;
+                vertical-align: top;
+            }
+            @bottom-right {
+                content: "Page " counter(page) " of " counter(pages); 
+            }
+        }
+        </style>
+
+        <!-- Extra scripts per page -->
+        {% block extracss %} 
+
+        {% endblock %}
+      
+    </head>
+
+    <body>
+       
+        {% block content %}
+        
+        {% endblock %}
+
+ 
+
+
+        <!-- Bootstrap core JavaScript -->
+ 
+  
+
+
+<!-- Extra scripts per page -->
+  {% block extrajs %} {% endblock %}
+
+    </body>
+</html>
