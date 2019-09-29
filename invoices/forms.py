@@ -9,7 +9,7 @@ from .custom_layout_object import *
 
 
 class TemplateChoiceForm(Form):
-    template = ModelChoiceField(queryset = Template.objects.all() )
+    template = ModelChoiceField(queryset=Template.objects.all())
 
 
 class Row(Div):
