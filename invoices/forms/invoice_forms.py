@@ -1,6 +1,6 @@
 from django.forms import ModelForm, Textarea, Form, ModelChoiceField
 from flatpickr import DatePickerInput
-from .models import *
+from invoices.models import *
 from django.forms.models import inlineformset_factory
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, Fieldset, Div, HTML, ButtonHolder, Submit
