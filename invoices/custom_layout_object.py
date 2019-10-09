@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 ###### https://stackoverflow.com/questions/15157262/django-crispy-forms-nesting-a-formset-within-a-form/22053952#22053952
 
 class Formset(LayoutObject):
-    template = "invoices/formset.html"
+    template = "invoices/formsets/simple_table.html"
 
     def __init__(self, formset_name_in_context, template=None):
         self.formset_name_in_context = formset_name_in_context
