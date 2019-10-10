@@ -3,4 +3,57 @@
 
 {% block extracss %}
 <link rel="stylesheet" type="text/css" href="{% static 'vendor/DataTables/datatables.min.css' %}"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
+<style type="text/css">
+    .navbar-brand,
+.navbar-nav a {
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+
+.nav-link:focus, .nav-link:hover {
+    color: #c99 !important;
+}
+
+</style>
+
 {% endblock extracss %}
+
+ {% block navbar %}
+        
+
+<nav class="navbar navbar-expand-sm navbar-light bg-light">
+  <a class="navbar-brand" href="#">Invoices</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" 
+  data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    {% url 'invoices:index' as index_url %}
+    {% url 'admin:index' as admin_url %}
+    
+    <div class="navbar-nav">
+      <a class="nav-item nav-link 
+      {% if request.get_full_path == index_url %} active {% endif %}" 
+      href="{{ index_url }}"> Invoices Out</a>
+
+      <a class="nav-item nav-link 
+      {% if request.get_full_path == index_url %} active {% endif %}" 
+      href="{{ index_url }}"> Invoices In</a>
+
+      <a class="nav-item nav-link 
+      {% if request.get_full_path == index_url %} active {% endif %}" 
+      href="{{ index_url }}"> Bank records</a>
+
+      <a class="nav-item nav-link 
+      {% if request.get_full_path == index_url %} active {% endif %}" 
+      href="{{ index_url }}"> Deals</a>
+
+    <a class="nav-item nav-link 
+      {% if request.get_full_path == index_url %} active {% endif %}" 
+      href="{{ admin_url }}"> Settings</a>
+
+    </div>
+  </div>
+</nav>
+{% endblock %}

@@ -5,6 +5,7 @@ from django.db.models import Sum
 from decimal import Decimal
 from .helpers import invoiceAutoNumber
 from .common_models import Company
+from .deal_models import Currency, Deal, BankRecord
 
 class InvoiceManager(models.Manager):
     def create_invoice_from_template(self, template, count_part):
@@ -36,16 +37,20 @@ class Invoice(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     description = models.TextField(max_length=300, blank=True,
                                    validators=[MaxLengthValidator(300)])
-    total_net = models.DecimalField(default=0, max_digits=8, decimal_places=2)
+    total_net = models.DecimalField(default=0, max_digits=10, decimal_places=2)
     vat_percent = models.DecimalField(default=0, max_digits=6, decimal_places=2)
-    total_vat = models.DecimalField(default=0, max_digits=8, decimal_places=2)
-    total_gross = models.DecimalField(default=0, max_digits=8, decimal_places=2)
+    total_vat = models.DecimalField(default=0, max_digits=10, decimal_places=2)
+    total_gross = models.DecimalField(default=0, max_digits=10, decimal_places=2)
     advance_required = models.BooleanField(default=False)
     advance_percent = models.DecimalField(default=0, max_digits=5, decimal_places=2)
-    advance_amount = models.DecimalField(default=0, max_digits=8, decimal_places=2)
+    advance_amount = models.DecimalField(default=0, max_digits=10, decimal_places=2)
     is_paid = models.BooleanField(default=False)
     payment_details = models.TextField(max_length=100, blank=True,
                                    validators=[MaxLengthValidator(100)])
+    currency = models.ForeignKey(Currency, related_name="invoices", on_delete=models.CASCADE, null=True, blank=True) 
+    deal = models.ForeignKey(Deal, related_name="invoices", on_delete=models.CASCADE, null=True, blank=True) 
+    bank_records = models.ManyToManyField(BankRecord, related_name="invoices")
+    
     
     class Meta:
         ordering = ('-issued_date',)
@@ -82,9 +87,9 @@ class InvoiceItem(models.Model):
     objects = InvoiceItemManager()
     order_number = models.IntegerField(default=1)
     description = models.CharField(max_length=200)
-    price = models.DecimalField(default=0, max_digits=10, decimal_places=4)
-    quantity = models.DecimalField(default=0, max_digits=10, decimal_places=4)
-    total = models.DecimalField(default=0, max_digits=8, decimal_places=2, blank=True)
+    price = models.DecimalField(default=0, max_digits=12, decimal_places=4)
+    quantity = models.DecimalField(default=0, max_digits=12, decimal_places=4)
+    total = models.DecimalField(default=0, max_digits=10, decimal_places=2, blank=True)
     invoice = models.ForeignKey(Invoice, related_name="items", on_delete=models.CASCADE)
 
     class Meta:
@@ -109,13 +114,13 @@ class Template(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     description = models.TextField(max_length=300, blank=True,
                                    validators=[MaxLengthValidator(300)])
-    total_net = models.DecimalField(default=0, max_digits=8, decimal_places=2)
+    total_net = models.DecimalField(default=0, max_digits=10, decimal_places=2)
     vat_percent = models.DecimalField(default=0, max_digits=6, decimal_places=2)
-    total_vat = models.DecimalField(default=0, max_digits=8, decimal_places=2)
-    total_gross = models.DecimalField(default=0, max_digits=8, decimal_places=2)
+    total_vat = models.DecimalField(default=0, max_digits=10, decimal_places=2)
+    total_gross = models.DecimalField(default=0, max_digits=10, decimal_places=2)
     advance_required = models.BooleanField(default=False)
     advance_percent = models.DecimalField(default=0, max_digits=5, decimal_places=2)
-    advance_amount = models.DecimalField(default=0, max_digits=8, decimal_places=2)
+    advance_amount = models.DecimalField(default=0, max_digits=10, decimal_places=2)
     
     class Meta:
         ordering = ('description',)
@@ -138,9 +143,9 @@ class Template(models.Model):
 class TemplateItem(models.Model):
     order_number = models.IntegerField(default=1)
     description = models.CharField(max_length=200)
-    price = models.DecimalField(default=0, max_digits=10, decimal_places=4)
-    quantity = models.DecimalField(default=0, max_digits=10, decimal_places=4)
-    total = models.DecimalField(default=0, max_digits=8, decimal_places=2, blank=True)
+    price = models.DecimalField(default=0, max_digits=12, decimal_places=4)
+    quantity = models.DecimalField(default=0, max_digits=12, decimal_places=4)
+    total = models.DecimalField(default=0, max_digits=10, decimal_places=2, blank=True)
     template = models.ForeignKey(Template, related_name="items", on_delete=models.CASCADE)
 
     class Meta:
