@@ -40,7 +40,10 @@ input[type=number]{
         </div>
         
         <div class="col-md-6">
+            {% if object.id %}
             <a class="btn btn-outline-danger" href="{% url 'invoices:invoice_delete' invoice_id=object.id %}">Delete</a>
+                
+            {% endif %}
         </div>
     </div>
     <br>
