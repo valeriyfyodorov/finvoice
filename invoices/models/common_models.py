@@ -20,7 +20,7 @@ class Company(models.Model):
     payment_address = models.TextField(max_length=300, blank=True,
                                    validators=[MaxLengthValidator(300)])
     eu_country = models.BooleanField(default=False)
-    vat_number = models.CharField(max_length=30)
+    vat_number = models.CharField(max_length=30, blank=True)
     
     class Meta:
         ordering = ('name',)

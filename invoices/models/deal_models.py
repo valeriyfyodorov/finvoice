@@ -50,7 +50,7 @@ class BankRecord(models.Model):
     used_amount = models.DecimalField(default=0, max_digits=10, decimal_places=2)
     bank_account = models.ForeignKey(BankAccount, related_name="records", on_delete=models.CASCADE)
     deal_related = models.BooleanField(default=True)
-    deals = models.ManyToManyField(Deal, related_name="bank_records")
+    deals = models.ManyToManyField(Deal, related_name="bank_records", blank=True)
 
     class Meta:
         ordering = ('-recorded_date',)

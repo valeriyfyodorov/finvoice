@@ -49,7 +49,7 @@ class Invoice(models.Model):
                                    validators=[MaxLengthValidator(100)])
     currency = models.ForeignKey(Currency, related_name="invoices", on_delete=models.CASCADE, null=True, blank=True) 
     deal = models.ForeignKey(Deal, related_name="invoices", on_delete=models.CASCADE, null=True, blank=True) 
-    bank_records = models.ManyToManyField(BankRecord, related_name="invoices")
+    bank_records = models.ManyToManyField(BankRecord, related_name="invoices", blank=True)
     
     
     class Meta:
