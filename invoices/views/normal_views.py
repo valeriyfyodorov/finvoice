@@ -3,8 +3,8 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from django.urls import reverse_lazy
 from django.db import transaction
-from .models import *
-from .forms import *
+from invoices.models import *
+from invoices.forms import *
 from datetime import date
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required

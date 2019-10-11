@@ -20,7 +20,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('invoices/', include('invoices.local_urls')),
+    path('invoices/', include('invoices.urls_normal')),
     path(
         'accounts/login/', LoginView.as_view(
             template_name='admin/login.html',
@@ -29,7 +29,8 @@ urlpatterns = [
             },
         )
     ),
-    path('', include('frontside.local_urls')),
+    path('api/', include('invoices.urls_api')),
+    path('', include('frontside.urls_normal')),
 ]
 
 
