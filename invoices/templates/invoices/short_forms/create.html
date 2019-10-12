@@ -1,0 +1,47 @@
+{% extends "invoices/local_base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{{ form.media }}
+
+{% block extracss %}
+<style type="text/css">  
+input[type=number]{
+    width: 80px;
+} 
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h3>{{headerText}} {{ view.class.name }}</h3>
+    <form method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit" class="btn btn-success">{{submitText}}</button>
+  </form>
+    <div class="row">
+        <div class="col-md-3">
+            <a href="{{returnUrlHref}}">{{returnUrlText}}</a>
+
+
+        </div>
+        
+        <div class="col-md-6">
+            {% if object.id %}
+            <a class="btn btn-outline-danger" href="{{deleteUrlHref}}">Delete</a>
+                
+            {% endif %}
+        </div>
+    </div>
+    <br>
+
+</div>
+
+
+  {% endblock content %}
+
+
+
+

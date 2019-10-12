@@ -13,9 +13,11 @@ class CurrencySerializer(serializers.ModelSerializer):
 
 class BankAccountSerializer(serializers.ModelSerializer):
     currency = CurrencySerializer()
+    currency_name = serializers.ReadOnlyField(source='currency.name')
+    id = serializers.IntegerField(read_only=True)
     
     class Meta:
         model = BankAccount
         fields = (
-            'name', 'bank_name', 'bank_swift', 'payment_details', 'currency_name',
+            'id', 'name', 'bank_name', 'bank_swift', 'account_name', 'payment_details', 'currency_name', 'currency',
         )

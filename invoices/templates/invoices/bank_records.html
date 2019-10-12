@@ -1,0 +1,71 @@
+{% extends "invoices/local_base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block extrajs %}
+<script type="text/javascript" src="{% static 'vendor/DataTables/datatables.min.js' %}"></script>
+<script type="text/javascript">
+  $(document).ready( function () {
+    $('#table_bank_accounts').DataTable(
+    {
+      "serverSide": true,
+        // "ajax": "/api/bank_accounts/?format=datatables",
+        "ajax": "{% url 'api:bank_accounts-list' %}" + "?format=datatables" ,
+        "columns": [
+            {"data": "id", "searchable": false, "orderable": false},
+            {"data": "name"},
+            {"data": "bank_name"},
+            {"data": "currency.name", "name": "currency.name"},
+            {"data": "account_name"},
+            ],
+        columnDefs: [
+            {
+            "targets": 0,
+            "data": "id",          // This does the trick... Adding data ...
+            // "visible": false,      // And making this columns invisible ...
+            "orderable" : false,
+            "searchable": false,
+            render: function ( data, type, row, meta ) {
+                var url_mask = "{% url 'invoices:bank_account_update' bank_account_id=12345 %}".replace(/12345/, row.id.toString());
+                return '<a href="'+ url_mask + '">'+'Edit'+'</a>';
+              }
+            },
+            ],
+        "order": [[ 1, "desc" ]]
+    }
+    );
+} );
+</script>
+{% endblock extrajs %}
+
+{% block content %}
+ <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      Accounts
+
+<table id="table_bank_accounts" class="display table table-striped table-hover table-sm">
+    <thead>
+ <tr>
+    <th>...</th>
+     <th>Short name</th>
+     <th>Bank Name </th>
+     <th>Currency</th>
+     <th>Account</th>
+  </tr>
+ </thead>
+
+    </table>
+
+
+
+</div> {# end of col #}
+
+</div> {# end of row #}
+
+</div> {# end of container #}
+
+  {% endblock content %}
+
+
+ 
