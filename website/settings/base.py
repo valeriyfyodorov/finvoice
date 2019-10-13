@@ -54,6 +54,7 @@ THIRD_PARTY_APPS = [
     'crispy_forms',
     'flatpickr',
     'rest_framework',
+    'django_filters',
     'rest_framework_datatables',
 ]
 LOCAL_APPS = [
@@ -128,7 +129,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en-GB'
 
 TIME_ZONE = 'UTC'
 
@@ -137,6 +138,13 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+DATE_INPUT_FORMATS = [
+    '%d/%m/%y', '%d/%m/%Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', # '2006-10-25', '10/25/2006', '10/25/06'
+    '%b %d %Y', '%b %d, %Y',            # 'Oct 25 2006', 'Oct 25, 2006'
+    '%d %b %Y', '%d %b, %Y',            # '25 Oct 2006', '25 Oct, 2006'
+    '%B %d %Y', '%B %d, %Y',            # 'October 25 2006', 'October 25, 2006'
+    '%d %B %Y', '%d %B, %Y',            # '25 October 2006', '25 October, 2006'
+]
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (

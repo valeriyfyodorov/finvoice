@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block extracss %}
-<link rel="stylesheet" type="text/css" href="{% static 'vendor/DataTables/datatables.min.css' %}"/>
 <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
 <style type="text/css">
     .navbar-brand,
@@ -16,6 +15,9 @@
 }
 
 </style>
+  {% block specificcss %}
+  {% endblock specificcss %}
+
 
 {% endblock extracss %}
 
@@ -30,6 +32,7 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     {% url 'invoices:index' as index_url %}
+    {% url 'invoices:bank_records_index' as bank_records %}
     {% url 'admin:index' as admin_url %}
     
     <div class="navbar-nav">
@@ -43,7 +46,7 @@
 
       <a class="nav-item nav-link 
       {% if request.get_full_path == index_url %} active {% endif %}" 
-      href="{{ index_url }}"> Bank records</a>
+      href="{{ bank_records }}"> Bank records</a>
 
       <a class="nav-item nav-link 
       {% if request.get_full_path == index_url %} active {% endif %}" 

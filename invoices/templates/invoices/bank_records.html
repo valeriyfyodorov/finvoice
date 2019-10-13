@@ -2,15 +2,28 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
+{% block specificcss %}
+<style type="text/css">
+    .table-condensed, .table-sm, .dataTables_length, .dataTables_filter, .dataTables_paginate, .dataTables_info {
+      font-size: 12px;
+    }
+    .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: rgb(100, 200, 255);
+}
+</style>
+{% endblock specificcss %}
+
 {% block extrajs %}
-<script type="text/javascript" src="{% static 'vendor/DataTables/datatables.min.js' %}"></script>
 <script type="text/javascript">
   $(document).ready( function () {
-    $('#table_bank_accounts').DataTable(
+    var masterTable = $('#table_bank_accounts').DataTable(
     {
       "serverSide": true,
         // "ajax": "/api/bank_accounts/?format=datatables",
-        "ajax": "{% url 'api:bank_accounts-list' %}" + "?format=datatables" ,
+        "ajax": "{% url 'api:bank_accounts-list' %}" + "?format=datatables",
+        select: {
+            style: 'single'
+        },
         "columns": [
             {"data": "id", "searchable": false, "orderable": false},
             {"data": "name"},
@@ -34,6 +47,71 @@
         "order": [[ 1, "desc" ]]
     }
     );
+    var childTableRecords = $('#table_bank_records').DataTable(
+    {
+      "serverSide": true,
+        // "ajax": "/api/bank_accounts/?format=datatables",
+        // "ajax": "{% url 'api:bank_records-list' %}" + "?format=datatables" ,
+        "ajax": {
+              url: "{% url 'api:bank_records-list' %}" + "?format=datatables",
+              type: 'get',
+              data: function ( d ) {
+                  var selected = masterTable.row( { selected: true } );
+                  // alert("In ajax func");
+                  if ( selected.any() ) {
+                      // alert("Some selected");
+                      d.bank_account = selected.data().id;
+                  }
+              }
+          },
+        "columns": [
+            {"data": "id", "searchable": false, "orderable": false},
+            {"data": "recorded_date"},
+            {"data": "description"},
+            {"data": "amount"},
+            {"data": "used_amount"},
+            {"data": "deal_related"},
+            {"data": "deals", "name": "deals.name", "sortable": false},
+            {"data": "bank_account.name", "name": "bank_account.name"},
+            ],
+        columnDefs: [
+            {
+            "targets": 0,
+            "data": "id",          // This does the trick... Adding data ...
+            // "visible": false,      // And making this columns invisible ...
+            "orderable" : false,
+            "searchable": false,
+            render: function ( data, type, row, meta ) {
+                var url_mask = "{% url 'invoices:bank_record_update' bank_record_id=12345 %}".replace(/12345/, row.id.toString());
+                return '<a href="'+ url_mask + '">'+'Edit'+'</a>';
+              }
+            },
+            {targets:1, render:function(data){
+              return moment(data).format('DD/MM/YY');
+            }},
+            {targets:5, render: function(data, type, row) {
+              if (type === 'myExport') {
+                return data === true ? "Y" : "N";
+              }
+              if (data === true) {
+                return '<input type="checkbox" class="editor-active" onclick="return false;" checked>';
+              } else {
+                return '<input type="checkbox" onclick="return false;" class="editor-active">';
+              }
+              return data;
+            }},
+            ],
+
+        "order": [[ 1, "desc" ]]
+    }
+    );
+    masterTable.on( 'select', function () {
+      childTableRecords.ajax.reload();
+    } );
+    masterTable.on( 'deselect', function () {
+        childTableRecords.ajax.reload();
+    } );
+
 } );
 </script>
 {% endblock extrajs %}
@@ -43,25 +121,38 @@
   <div class="row">
     <div class="col-md-12">
       Accounts
-
-<table id="table_bank_accounts" class="display table table-striped table-hover table-sm">
-    <thead>
- <tr>
-    <th>...</th>
-     <th>Short name</th>
-     <th>Bank Name </th>
-     <th>Currency</th>
-     <th>Account</th>
-  </tr>
- </thead>
-
-    </table>
-
-
-
-</div> {# end of col #}
-
-</div> {# end of row #}
+    <table id="table_bank_accounts" class="display table dataTable table-striped table-sm table-hover" role="grid">
+        <thead>
+         <tr>
+            <th>...</th>
+             <th>Short name</th>
+             <th>Bank Name </th>
+             <th>Currency</th>
+             <th>Account</th>
+          </tr>
+        </thead>
+      </table>
+    </div> {# end of col #}
+  </div> {# end of row #}
+  <div class="row">
+    <div class="col-md-12">
+      Records
+    <table id="table_bank_records" class="display table table-striped table-hover table-sm">
+        <thead>
+         <tr>
+            <th>...</th>
+             <th>Date</th>
+             <th>Details </th>
+             <th>Amount</th>
+             <th>Used</th>
+             <th>In deals</th>
+             <th>Deals</th>
+             <th>Account name</th>
+          </tr>
+        </thead>
+      </table>
+    </div> {# end of col #}
+  </div> {# end of row #}
 
 </div> {# end of container #}
 

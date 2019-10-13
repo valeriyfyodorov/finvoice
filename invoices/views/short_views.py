@@ -1,5 +1,5 @@
 from django.views.generic import CreateView, UpdateView
-from invoices.models import BankAccount
+from invoices.models import BankAccount, BankRecord
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -44,4 +44,15 @@ class BankAccountUpdateView(ShortUpdateView):
     modelDescriptiveName = "account"
     success_url = reverse_lazy('invoices:bank_records_index')
     pk_url_kwarg = "bank_account_id"
+    
+class BankRecordCreateView(ShortCreateView):
+    model = BankRecord
+    modelDescriptiveName = "record"
+    success_url = reverse_lazy('invoices:bank_records_index')
+
+class BankRecordUpdateView(ShortUpdateView):
+    model = BankRecord
+    modelDescriptiveName = "record"
+    success_url = reverse_lazy('invoices:bank_records_index')
+    pk_url_kwarg = "bank_record_id"
     

@@ -10,6 +10,8 @@ urlpatterns = [
     # ex: /invoices/5/
     path('bank_account/create/', views.BankAccountCreateView.as_view(), name='bank_account_create'),
     path('bank_account/update/<int:bank_account_id>/', views.BankAccountUpdateView.as_view(), name='bank_account_update'),
+    path('bank_record/create/', views.BankRecordCreateView.as_view(), name='bank_record_create'),
+    path('bank_record/update/<int:bank_record_id>/', views.BankRecordUpdateView.as_view(), name='bank_record_update'),
     path('bank_records', login_required(views.bank_records_index), name='bank_records_index'),
     path('<int:invoice_id>/', views.InvoiceDetailView.as_view(), name='invoice_detail'),
     path('<int:invoice_id>/<int:use_stamp>/', views.InvoiceDetailView.as_view(), name='invoice_stamped_detail'),
