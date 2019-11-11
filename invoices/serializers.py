@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Currency, BankAccount, BankRecord, Deal
+from .models import Currency, BankAccount, BankRecord, Deal, Invoice, Company
 
 class CurrencySerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
@@ -8,6 +8,15 @@ class CurrencySerializer(serializers.ModelSerializer):
         model = Currency
         fields = (
             'id', 'name', 'exchange_rate',
+        )
+
+class CompanySerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = Company
+        fields = (
+            'id', 'name', 'vat_number',
         )
 
 
@@ -28,7 +37,25 @@ class DealSerializer(serializers.ModelSerializer):
     class Meta:
         model = Deal
         fields = (
-            'id', 'name', 'started_date', 'department',
+            'id', 'name', 'started_date', 'department', 'safe_name', 
+        )
+
+class InvoiceSerializer(serializers.ModelSerializer):
+    currency = CurrencySerializer()
+    currency_name = serializers.ReadOnlyField(source='currency.name')
+    company = CompanySerializer()
+    company_name = serializers.ReadOnlyField(source='company.name')
+    # deal_name = serializers.ReadOnlyField(source='deal.safe_name', default="N/A D")
+    # deal = serializers.ReadOnlyField(source='deal.id', default=0)
+    deal = DealSerializer(required=False)
+    id = serializers.IntegerField(read_only=True)
+    
+    class Meta:
+        model = Invoice
+        fields = (
+            'id', 'number', 'issued_date', 'payment_term', 
+            'company', 'company_name', 'total_net', 'total_gross', 
+            'currency', 'currency_name', 'deal', 'deal_id',
         )
 
 class BankRecordSerializer(serializers.ModelSerializer):

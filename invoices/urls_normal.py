@@ -6,8 +6,8 @@ app_name = 'invoices'
 
 urlpatterns = [
     # ex: /invoices/
-    path('', login_required(views.index), name='index'),
-    # ex: /invoices/5/
+    path('', login_required(views.invoices_outgoing_index), name='index'),
+    path('invoices_incoming', login_required(views.invoices_incoming_index), name='invoices_incoming_index'),
     path('bank_account/create/', views.BankAccountCreateView.as_view(), name='bank_account_create'),
     path('bank_account/update/<int:bank_account_id>/', views.BankAccountUpdateView.as_view(), name='bank_account_update'),
     path('bank_record/create/', views.BankRecordCreateView.as_view(), name='bank_record_create'),

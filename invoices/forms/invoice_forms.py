@@ -68,6 +68,9 @@ class InvoiceForm(ModelForm):
             ),
             Row(
                 Field('description', wrapper_class='col-md-3'),
+                Div('', css_class='col-md-3'),
+                Field('currency', wrapper_class='col-md-3'),
+                Field('is_incoming', wrapper_class='col-md-3'),
             ),
             Row(
                 Field('total_net', wrapper_class='col-md-3'),

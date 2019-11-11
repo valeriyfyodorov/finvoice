@@ -16,20 +16,22 @@
 {% block extrajs %}
 <script type="text/javascript">
   $(document).ready( function () {
-    var masterTable = $('#table_bank_accounts').DataTable(
+    var masterTable = $('#table_master').DataTable(
     {
       "serverSide": true,
-        // "ajax": "/api/bank_accounts/?format=datatables",
-        "ajax": "{% url 'api:bank_accounts-list' %}" + "?format=datatables",
+        "ajax": "{% url 'api:invoices_incoming-list' %}" + "?format=datatables",
         select: {
             style: 'single'
         },
         "columns": [
             {"data": "id", "searchable": false, "orderable": false},
-            {"data": "name"},
-            {"data": "bank_name"},
+            {"data": "number"},
+            {"data": "issued_date"},
             {"data": "currency.name", "name": "currency.name"},
-            {"data": "account_name"},
+            {"data": "company.name", "name": "company.name"},
+            {"data": "total_gross"},
+            {"data": "deal.name", "name": "deal.name", "defaultContent": "<i>Not set</i>"},
+            {"data": "deal_id", "name": "deal_id"},
             ],
         columnDefs: [
             {
@@ -43,11 +45,21 @@
                 return '<a href="'+ url_mask + '">'+'Edit'+'</a>';
               }
             },
+            {targets:2, render:function(data){
+              return moment(data).format('DD/MM/YY');
+            }},
+            {
+            "targets": 7,
+            "data": "deal",          // This does the trick... Adding data ...
+            "visible": false,      // And making this columns invisible ...
+            "orderable" : false,
+            "searchable": false,
+            },
             ],
-        "order": [[ 1, "desc" ]]
+        "order": [[ 2, "desc" ]]
     }
     );
-    var childTableRecords = $('#table_bank_records').DataTable(
+    var childTableRecords = $('#table_child').DataTable(
     {
       "serverSide": true,
         // "ajax": "/api/bank_accounts/?format=datatables",
@@ -60,7 +72,16 @@
                   // alert("In ajax func");
                   if ( selected.any() ) {
                       // alert("Some selected");
-                      d.bank_account = selected.data().id;
+                      if (selected.data().deal_id)
+                      {
+                        // console.log(d.columns[6]);
+                        // d.columns[6].search.value = selected.data().deal_id;
+                        d.deal_selected = selected.data().deal_id;
+                      }
+                      else
+                      {
+                        d.deal_selected = 0;
+                      }
                   }
               }
           },
@@ -121,14 +142,17 @@
   <div class="row">
     <div class="col-md-12">
       {{master_header}}
-    <table id="table_bank_accounts" class="display table dataTable table-striped table-sm table-hover" role="grid">
+    <table id="table_master" class="display table dataTable table-striped table-sm table-hover" role="grid">
         <thead>
          <tr>
             <th>...</th>
-             <th>Short name</th>
-             <th>Bank Name </th>
+             <th>Number</th>
+             <th>Issued </th>
              <th>Currency</th>
-             <th>Account</th>
+             <th>Company</th>
+             <th>Amount</th>
+             <th>Deal</th>
+             <th>Deal id </th>
           </tr>
         </thead>
       </table>
@@ -137,7 +161,7 @@
   <div class="row">
     <div class="col-md-12">
        {{child_header}}
-    <table id="table_bank_records" class="display table table-striped table-hover table-sm">
+    <table id="table_child" class="display table table-striped table-hover table-sm">
         <thead>
          <tr>
             <th>...</th>

@@ -10,10 +10,14 @@ class Department(models.Model):
 
 
 class Deal(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30, default="N/A D")
     started_date = models.DateField(default=date.today)
     department = models.ForeignKey(Department, related_name="deals", on_delete=models.CASCADE)
-    
+
+    @property
+    def safe_name(self):
+        return self.name or 'N/A D'
+
     class Meta:
         ordering = ('-started_date',)
 

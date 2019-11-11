@@ -33,6 +33,7 @@
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     {% url 'invoices:index' as index_url %}
     {% url 'invoices:bank_records_index' as bank_records %}
+    {% url 'invoices:invoices_incoming_index' as invoices_incoming_index %}
     {% url 'admin:index' as admin_url %}
     
     <div class="navbar-nav">
@@ -42,7 +43,7 @@
 
       <a class="nav-item nav-link 
       {% if request.get_full_path == index_url %} active {% endif %}" 
-      href="{{ index_url }}"> Invoices In</a>
+      href="{{ invoices_incoming_index }}"> Invoices In</a>
 
       <a class="nav-item nav-link 
       {% if request.get_full_path == index_url %} active {% endif %}" 

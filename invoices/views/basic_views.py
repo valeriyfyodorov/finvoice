@@ -16,7 +16,7 @@ from django.template.loader import render_to_string
 
 
 @login_required
-def index(request):
+def invoices_outgoing_index(request):
     if request.method == 'POST':
         form = TemplateChoiceForm(request.POST)
         if form.is_valid():
@@ -29,7 +29,7 @@ def index(request):
             return redirect('invoices:invoice_update', invoice_id=invoice.pk)
 
     else:
-        invoices = Invoice.objects.all()[:150]
+        invoices = Invoice.objects.outgoing()[:150]
         form = TemplateChoiceForm
         context = {'invoices': invoices, 'form': form}
         return render(request, "invoices/index.html", context)

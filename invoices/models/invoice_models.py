@@ -22,12 +22,19 @@ class InvoiceManager(models.Manager):
             advance_percent=template.advance_percent,
             advance_amount=template.advance_amount,
             is_paid=False,
+            is_incoming=False,
             payment_details="",
             currency=template.currency,
         )
         for template_item in template.items.all():
             InvoiceItem.objects.create_invoice_item_from_template_item(template_item, invoice)
         return invoice
+
+    def incoming(self):
+        return self.get_queryset().filter(is_incoming=True)
+
+    def outgoing(self):
+        return self.get_queryset().exclude(is_incoming=True)
 
 
 class Invoice(models.Model):
@@ -49,7 +56,8 @@ class Invoice(models.Model):
     is_incoming = models.BooleanField(default=False)
     payment_details = models.TextField(max_length=100, blank=True,
                                    validators=[MaxLengthValidator(100)])
-    currency = models.ForeignKey(Currency, related_name="invoices", on_delete=models.CASCADE, null=True, blank=True) 
+    currency = models.ForeignKey(Currency, related_name="invoices", on_delete=models.CASCADE, 
+        null=False, blank=False, default=1) 
     deal = models.ForeignKey(Deal, related_name="invoices", on_delete=models.CASCADE, null=True, blank=True) 
     bank_records = models.ManyToManyField(BankRecord, related_name="invoices", blank=True)
     
@@ -123,7 +131,8 @@ class Template(models.Model):
     advance_required = models.BooleanField(default=False)
     advance_percent = models.DecimalField(default=0, max_digits=5, decimal_places=2)
     advance_amount = models.DecimalField(default=0, max_digits=10, decimal_places=2)
-    currency = models.ForeignKey(Currency, related_name="templates", on_delete=models.CASCADE, null=True, blank=True) 
+    currency = models.ForeignKey(Currency, related_name="templates", on_delete=models.CASCADE, 
+        null=False, blank=False, default=1) 
     
     class Meta:
         ordering = ('description',)
