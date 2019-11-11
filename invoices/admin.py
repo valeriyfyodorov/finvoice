@@ -12,7 +12,7 @@ class InvoiceAdmin(admin.ModelAdmin):
         InvoiceItemsInline,
     ]
     list_display = ('number', 'company', 'issued_date', 
-        'payment_term', 'description', 'total_net', 'total_gross', 'is_paid',)
+        'payment_term', 'description', 'currency', 'total_gross', 'is_paid',)
     readonly_fields = ["total_net", "total_gross", "total_vat"]
 admin.site.register(Invoice, InvoiceAdmin)
 
@@ -35,7 +35,7 @@ class TemplateAdmin(admin.ModelAdmin):
     inlines = [
         TemplateItemsInline,
     ]
-    list_display = ('company', 'description', 'total_net', 'total_vat', 'total_gross', )
+    list_display = ('company', 'description', 'currency', 'total_vat', 'total_gross', )
     readonly_fields = ["total_net", "total_gross", "total_vat"]
 admin.site.register(Template, TemplateAdmin)
 

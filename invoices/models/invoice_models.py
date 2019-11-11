@@ -23,6 +23,7 @@ class InvoiceManager(models.Manager):
             advance_amount=template.advance_amount,
             is_paid=False,
             payment_details="",
+            currency=template.currency,
         )
         for template_item in template.items.all():
             InvoiceItem.objects.create_invoice_item_from_template_item(template_item, invoice)
@@ -45,6 +46,7 @@ class Invoice(models.Model):
     advance_percent = models.DecimalField(default=0, max_digits=5, decimal_places=2)
     advance_amount = models.DecimalField(default=0, max_digits=10, decimal_places=2)
     is_paid = models.BooleanField(default=False)
+    is_incoming = models.BooleanField(default=False)
     payment_details = models.TextField(max_length=100, blank=True,
                                    validators=[MaxLengthValidator(100)])
     currency = models.ForeignKey(Currency, related_name="invoices", on_delete=models.CASCADE, null=True, blank=True) 
@@ -121,6 +123,7 @@ class Template(models.Model):
     advance_required = models.BooleanField(default=False)
     advance_percent = models.DecimalField(default=0, max_digits=5, decimal_places=2)
     advance_amount = models.DecimalField(default=0, max_digits=10, decimal_places=2)
+    currency = models.ForeignKey(Currency, related_name="templates", on_delete=models.CASCADE, null=True, blank=True) 
     
     class Meta:
         ordering = ('description',)
