@@ -2,7 +2,10 @@ from rest_framework import viewsets
 from invoices.models import Currency, BankAccount, BankRecord, Invoice
 from invoices.serializers import CurrencySerializer, BankAccountSerializer, BankRecordSerializer, InvoiceSerializer
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework_datatables.filters import DatatablesFilterBackend
+from rest_framework_datatables_editor.filters import DatatablesFilterBackend
+from rest_framework_datatables_editor.pagination import DatatablesPageNumberPagination
+from rest_framework_datatables_editor.renderers import DatatablesRenderer
+from rest_framework_datatables_editor.viewsets import DatatablesEditorModelViewSet
 
 class CurrencyViewSet(viewsets.ModelViewSet):
     queryset = Currency.objects.all().order_by('name')
@@ -12,7 +15,7 @@ class BankAccountViewSet(viewsets.ModelViewSet):
     queryset = BankAccount.objects.all().order_by('name')
     serializer_class = BankAccountSerializer
 
-class InvoicesIncomingViewSet(viewsets.ModelViewSet):
+class InvoicesIncomingViewSet(DatatablesEditorModelViewSet):
     queryset = Invoice.objects.incoming().order_by('-number')
     serializer_class = InvoiceSerializer
 
