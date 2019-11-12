@@ -41,7 +41,7 @@
             "orderable" : false,
             "searchable": false,
             render: function ( data, type, row, meta ) {
-                var url_mask = "{% url 'invoices:bank_account_update' bank_account_id=12345 %}".replace(/12345/, row.id.toString());
+                var url_mask = "{% url 'invoices:invoice_update' invoice_id=12345 %}".replace(/12345/, row.id.toString());
                 return '<a href="'+ url_mask + '">'+'Edit'+'</a>';
               }
             },
@@ -56,7 +56,7 @@
             "searchable": false,
             },
             ],
-        "order": [[ 2, "desc" ]]
+        "order": [[ 1, "desc" ]]
     }
     );
     var childTableRecords = $('#table_child').DataTable(

@@ -83,6 +83,7 @@ class InvoiceForm(ModelForm):
                 Field('advance_required', wrapper_class='col-md-3'),
                 Field('advance_percent', wrapper_class='col-md-3'),
                 Field('advance_amount', wrapper_class='col-md-3'),
+                Field('deal', wrapper_class='col-md-3'),
             ),
             Div(
                 Fieldset('Add items',
