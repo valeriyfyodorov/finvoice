@@ -40,6 +40,30 @@ class DealSerializer(serializers.ModelSerializer):
             'id', 'name', 'started_date', 'department', 'safe_name', 
         )
 
+class InvoiceSerializerWrite(serializers.ModelSerializer):
+    depth = 1
+    class Meta:
+        model = Invoice
+        fields = (
+            'id', 'number', 'issued_date', 'payment_term', 
+            'company', 'total_net', 'total_gross', 
+            'currency', 'deal', 
+        )
+    def create(self, request):
+        pass
+
+    def retrieve(self, request, pk=None):
+        pass
+
+    def update(self, request, pk=None):
+        pass
+
+    def partial_update(self, request, pk=None):
+        pass
+
+    def destroy(self, request, pk=None):
+        pass
+
 class InvoiceSerializer(serializers.ModelSerializer):
     currency = CurrencySerializer()
     currency_name = serializers.ReadOnlyField(source='currency.name')

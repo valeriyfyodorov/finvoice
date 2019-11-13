@@ -30,6 +30,7 @@ urlpatterns = [
         )
     ),
     path('api/', include('invoices.urls_api')),
+    path('json/', include('invoices.urls_json')),
     path('', include('frontside.urls_normal')),
 ]
 

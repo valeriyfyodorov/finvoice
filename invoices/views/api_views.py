@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from invoices.models import Currency, BankAccount, BankRecord, Invoice
-from invoices.serializers import CurrencySerializer, BankAccountSerializer, BankRecordSerializer, InvoiceSerializer
+from invoices.serializers import CurrencySerializer, BankAccountSerializer, BankRecordSerializer, InvoiceSerializer, InvoiceSerializerWrite
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_datatables_editor.filters import DatatablesFilterBackend
 from rest_framework_datatables_editor.pagination import DatatablesPageNumberPagination
@@ -15,9 +15,16 @@ class BankAccountViewSet(viewsets.ModelViewSet):
     queryset = BankAccount.objects.all().order_by('name')
     serializer_class = BankAccountSerializer
 
-class InvoicesIncomingViewSet(DatatablesEditorModelViewSet):
+class InvoicesIncomingViewSet(viewsets.ModelViewSet):
     queryset = Invoice.objects.incoming().order_by('-number')
-    serializer_class = InvoiceSerializer
+    # serializer_class = InvoiceSerializer
+ 
+    def get_serializer_class(self):
+        method = self.request.method
+        if method == 'PUT' or method == 'POST':
+            return InvoiceSerializerWrite
+        else:
+            return InvoiceSerializer
 
 
 # class BankRecordViewSet(viewsets.ModelViewSet):

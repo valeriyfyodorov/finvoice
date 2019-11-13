@@ -16,11 +16,13 @@
 {% block extrajs %}
 <script type="text/javascript">
 
-  
+  // var csrftoken = Cookies.get('csrftoken');
   $(document).ready( function () {
 
-    var editor = new $.fn.dataTable.Editor( {
-          ajax: "{% url 'api:invoices_incoming-list' %}" + "editor/?format=datatables",
+    var editorMaster = new $.fn.dataTable.Editor( {
+          ajax: {url: "{% url 'api:invoices_incoming-list' %}" + "editor/?format=datatables",
+                headers: {'X-CSRFToken': '{{ csrf_token }}'},
+              },
           table: "#table_master",
           idSrc:  'id',
           fields: [ {
@@ -28,7 +30,12 @@
                   name:  "number"
               }, {
                   label: "Date:",
-                  name:  "issued_date"
+                  name:  "issued_date",
+                  type: "date"
+              }, {
+                  label: "Currency:",
+                  name:  "currency",
+                  type: "select"
               }, 
           ]
       } );
@@ -75,9 +82,11 @@
         },
         dom: 'lfBrtip',
         buttons: [
-                    {extend: "create", editor: editor},
-                    {extend: "edit", editor: editor},
-                    {extend: "remove", editor: editor}
+                    {extend: "create", editor: editorMaster, text: '<i class="fas fa-plus-square"></i>'},
+                    {extend: "edit", editor: editorMaster, text: '<i class="fas fa-edit"></i>'},
+                    {extend: "remove", editor: editorMaster, text: '<i class="fas fa-trash-alt"></i>'},
+                    {extend: 'excelHtml5', title: 'Data export', text: 'xls'},
+                    {extend: 'pdfHtml5',title: 'Data export', text: 'pdf'},
                 ],
         "order": [[ 2, "desc" ]]
     }
@@ -155,6 +164,23 @@
     masterTable.on( 'deselect', function () {
         childTableRecords.ajax.reload();
     } );
+
+    var optionsCurrency = [];
+    $.getJSON("{% url 'json:currency_list' %}", {
+            term: "-1"
+        },
+        function(data) {
+            var option = {};
+            $.each(data, function(i, e) {
+                option.label = e.name;
+                option.value = e.id;
+                optionsCurrency.push(option);
+                option = {};
+            });
+        }
+    ).done(function() {
+        editorMaster.field('currency').update(optionsCurrency);
+    });
 
 } );
 </script>
