@@ -1,23 +1,35 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from .models import Currency, BankAccount, BankRecord, Deal, Invoice, Company
 
 class CurrencySerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
 
+    # if we need to edit a field that is a nested serializer,
+    # we must override to_internal_value method
+    def to_internal_value(self, data):
+        return get_object_or_404(Currency, pk=data['id'])
+
     class Meta:
         model = Currency
         fields = (
             'id', 'name', 'exchange_rate',
         )
+        datatables_always_serialize = ('id',)
+
 
 class CompanySerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
+
+    def to_internal_value(self, data):
+        return get_object_or_404(Company, pk=data['id'])
 
     class Meta:
         model = Company
         fields = (
             'id', 'name', 'vat_number',
         )
+        datatables_always_serialize = ('id',)
 
 
 class BankAccountSerializer(serializers.ModelSerializer):
@@ -33,53 +45,50 @@ class BankAccountSerializer(serializers.ModelSerializer):
 
 class DealSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
+
+    def to_internal_value(self, data):
+        return get_object_or_404(Deal, pk=data['id'])
     
     class Meta:
         model = Deal
         fields = (
             'id', 'name', 'started_date', 'department', 'safe_name', 
         )
+        datatables_always_serialize = ('id',)
 
-class InvoiceSerializerWrite(serializers.ModelSerializer):
-    depth = 1
-    class Meta:
-        model = Invoice
-        fields = (
-            'id', 'number', 'issued_date', 'payment_term', 
-            'company', 'total_net', 'total_gross', 
-            'currency', 'deal', 
-        )
-    def create(self, request):
-        pass
-
-    def retrieve(self, request, pk=None):
-        pass
-
-    def update(self, request, pk=None):
-        pass
-
-    def partial_update(self, request, pk=None):
-        pass
-
-    def destroy(self, request, pk=None):
-        pass
 
 class InvoiceSerializer(serializers.ModelSerializer):
     currency = CurrencySerializer()
     currency_name = serializers.ReadOnlyField(source='currency.name')
     company = CompanySerializer()
     company_name = serializers.ReadOnlyField(source='company.name')
-    # deal_name = serializers.ReadOnlyField(source='deal.safe_name', default="N/A D")
-    # deal = serializers.ReadOnlyField(source='deal.id', default=0)
     deal = DealSerializer(required=False)
-    id = serializers.IntegerField(read_only=True)
+    deal_name = serializers.ReadOnlyField(source='deal.name')
+    DT_RowId = serializers.SerializerMethodField()
+    DT_RowAttr = serializers.SerializerMethodField()
+    # id = serializers.IntegerField(read_only=True)
+    
+    # currency_view = CurrencySerializer(source="currency", read_only=True)
+    # bank_records = serializers.SerializerMethodField()
+
+    # @staticmethod
+    # def get_bank_records(invoice):
+    #     return ', '.join([str(bank_record) for bank_record in invoice.bank_record.all()])
+
+    @staticmethod
+    def get_DT_RowId(invoice):
+        return invoice.pk
+
+    @staticmethod
+    def get_DT_RowAttr(invoice):
+        return {'data-pk': invoice.pk}
     
     class Meta:
         model = Invoice
         fields = (
-            'id', 'number', 'issued_date', 'payment_term', 
+            'DT_RowId', 'DT_RowAttr', 'number', 'issued_date', 'payment_term', 
             'company', 'company_name', 'total_net', 'total_gross', 
-            'currency', 'currency_name', 'deal', 'deal_id',
+            'currency', 'currency_name', 'deal', 'deal_id', 'deal_name',
         )
 
 class BankRecordSerializer(serializers.ModelSerializer):

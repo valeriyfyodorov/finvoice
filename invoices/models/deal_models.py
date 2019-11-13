@@ -28,6 +28,9 @@ class Currency(models.Model):
     name = models.CharField(max_length=10)
     exchange_rate = models.DecimalField(default=1, max_digits=10, decimal_places=4)
     
+    class Meta:
+        ordering = ('name',)
+
     def __str__(self):
         return self.name
 

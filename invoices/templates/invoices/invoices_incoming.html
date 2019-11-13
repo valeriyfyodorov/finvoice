@@ -24,18 +24,20 @@
                 headers: {'X-CSRFToken': '{{ csrf_token }}'},
               },
           table: "#table_master",
-          idSrc:  'id',
           fields: [ {
                   label: "Number:",
                   name:  "number"
               }, {
                   label: "Date:",
                   name:  "issued_date",
-                  type: "date"
+                  type: "datetime",
+                  def: function () { return new Date(); },
+                  displayFormat: "D/M/YYYY",
+                  wireFormat: 'YYYY-MM-DD',
               }, {
-                  label: "Currency:",
-                  name:  "currency",
-                  type: "select"
+                    label: "Currency:",
+                    name: "currency.id",
+                    type: "select"
               }, 
           ]
       } );
@@ -45,7 +47,7 @@
       "serverSide": true,
         "ajax": "{% url 'api:invoices_incoming-list' %}" + "?format=datatables",
         "columns": [
-            {"data": "id", "searchable": false, "orderable": false},
+            {"data": "DT_RowId", "searchable": false, "orderable": false},
             {"data": "number"},
             {"data": "issued_date"},
             {"data": "currency.name", "name": "currency.name"},
@@ -57,13 +59,13 @@
         columnDefs: [
             {
             "targets": 0,
-            "data": "id",          // This does the trick... Adding data ...
+            "data": "DT_RowId",          // This does the trick... Adding data ...
             // "visible": false,      // And making this columns invisible ...
             "orderable" : false,
             "searchable": false,
             render: function ( data, type, row, meta ) {
-                var url_mask = "{% url 'invoices:invoice_update' invoice_id=12345 %}".replace(/12345/, row.id.toString());
-                return '<a href="'+ url_mask + '">'+'Edit'+'</a>';
+                var url_mask = "{% url 'invoices:invoice_update' invoice_id=12345 %}".replace(/12345/, row.DT_RowId.toString());
+                return '<a href="'+ url_mask + '">'+'Detalis'+'</a>';
               }
             },
             {targets:2, render:function(data){
@@ -165,22 +167,7 @@
         childTableRecords.ajax.reload();
     } );
 
-    var optionsCurrency = [];
-    $.getJSON("{% url 'json:currency_list' %}", {
-            term: "-1"
-        },
-        function(data) {
-            var option = {};
-            $.each(data, function(i, e) {
-                option.label = e.name;
-                option.value = e.id;
-                optionsCurrency.push(option);
-                option = {};
-            });
-        }
-    ).done(function() {
-        editorMaster.field('currency').update(optionsCurrency);
-    });
+    
 
 } );
 </script>
