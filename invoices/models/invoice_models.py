@@ -71,6 +71,9 @@ class Invoice(models.Model):
 
     def save(self, *args, **kwargs):
         items_total_sum = self.items.all().aggregate(Sum('total'))['total__sum']
+        if self.total_net == 0:
+            self.total_vat = self.total_gross / (Decimal('100.00') + self.vat_percent) * Decimal('100.00')
+            self.total_net = self.total_gross - self.total_vat
         if self.is_incoming:
             if self.total_net > 0:
                 self.total_net = -self.total_net
