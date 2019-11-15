@@ -128,7 +128,8 @@ dmypy.json
 #only after initial setting of django are downloaded to the production server
 # git rm --cached website/settings/production.py
 # git rm --cached manage.py
-# git rm --cached wsgi.py
+# git rm --cached website/wsgi.py
+# after that recreate files on server
 
 production.py
 manage.py
