@@ -7,7 +7,8 @@ from invoices.models import *
 from invoices.forms import *
 from datetime import date
 from django.shortcuts import redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin
 from weasyprint import HTML
 from weasyprint.fonts import FontConfiguration
@@ -66,7 +67,7 @@ class InvoiceDetailView(LoginRequiredMixin, DetailView):
         context["use_stamp"] = self.kwargs.get('use_stamp', False)
         return context
 
-
+@method_decorator(user_passes_test(lambda u:u.is_staff), name='dispatch')
 class InvoiceCreate(LoginRequiredMixin, CreateView):
     model = Invoice
     template_name = 'invoices/invoice_create.html'
@@ -95,7 +96,7 @@ class InvoiceCreate(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse_lazy('invoices:invoice_detail', kwargs={'invoice_id': self.object.pk})
 
-
+@method_decorator(user_passes_test(lambda u:u.is_staff), name='dispatch')
 class InvoiceUpdate(LoginRequiredMixin, UpdateView):
     model = Invoice
     form_class = InvoiceForm
@@ -125,7 +126,7 @@ class InvoiceUpdate(LoginRequiredMixin, UpdateView):
         return reverse_lazy('invoices:index')
         # return reverse_lazy('invoices:invoice_detail', kwargs={'invoice_id': self.object.pk})
 
-
+@method_decorator(user_passes_test(lambda u:u.is_staff), name='dispatch')
 class InvoiceDelete(LoginRequiredMixin, DeleteView):
     model = Invoice
     pk_url_kwarg = "invoice_id"

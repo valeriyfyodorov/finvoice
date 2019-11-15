@@ -2,8 +2,10 @@ from django.views.generic import CreateView, UpdateView
 from invoices.models import BankAccount, BankRecord
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import user_passes_test
 
-
+@method_decorator(user_passes_test(lambda u:u.is_staff), name='dispatch')
 class ShortCreateView(LoginRequiredMixin, CreateView):
     fields = '__all__'
     template_name = "invoices/short_forms/create.html"
@@ -19,6 +21,7 @@ class ShortCreateView(LoginRequiredMixin, CreateView):
         context['returnUrlText'] = "Return"
         return context
 
+@method_decorator(user_passes_test(lambda u:u.is_staff), name='dispatch')
 class ShortUpdateView(LoginRequiredMixin, UpdateView):
     fields = '__all__'
     template_name = "invoices/short_forms/create.html"

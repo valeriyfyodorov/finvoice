@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from rest_framework.permissions import DjangoModelPermissions
 from invoices.models import Currency, BankAccount, BankRecord, Invoice, Company, Deal
 from invoices.serializers import CurrencySerializer, BankAccountSerializer, BankRecordSerializer, InvoiceSerializer
 from django_filters.rest_framework import DjangoFilterBackend
@@ -21,6 +22,7 @@ def get_invoice_options():
     }
 
 class InvoicesIncomingViewSet(DatatablesEditorModelViewSet):
+    permission_classes = (DjangoModelPermissions, )
     queryset = Invoice.objects.incoming().order_by('-number')
     serializer_class = InvoiceSerializer
 
@@ -31,6 +33,7 @@ class InvoicesIncomingViewSet(DatatablesEditorModelViewSet):
         datatables_extra_json = ('get_options', )
 
 class InvoicesOutgoingViewSet(DatatablesEditorModelViewSet):
+    permission_classes = (DjangoModelPermissions, )
     queryset = Invoice.objects.outgoing().order_by('-number')
     serializer_class = InvoiceSerializer
 
@@ -41,6 +44,7 @@ class InvoicesOutgoingViewSet(DatatablesEditorModelViewSet):
         datatables_extra_json = ('get_options', )
 
 class BankRecordViewSet(viewsets.ModelViewSet):
+    permission_classes = (DjangoModelPermissions, )
     serializer_class = BankRecordSerializer
 
     def get_queryset(self):
@@ -60,6 +64,7 @@ class BankRecordViewSet(viewsets.ModelViewSet):
 #     serializer_class = CurrencySerializer
 
 class CurrencyViewSet(viewsets.ViewSet):
+    permission_classes = (DjangoModelPermissions, )
     queryset = Currency.objects.all()
     serializer_class = CurrencySerializer
 
