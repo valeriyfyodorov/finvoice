@@ -72,6 +72,9 @@
       {% if request.get_full_path == admin_url %} active {% endif %}" 
       href="{{ admin_url }}"> Settings</a>
 
+      <a class="nav-item nav-link" 
+      href="{% url 'frontside:logout'%}"> Logout</a>
+
     </div>
   </div>
 </nav>
