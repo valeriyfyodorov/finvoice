@@ -19,7 +19,7 @@ class Deal(models.Model):
         return self.name or 'N/A D'
 
     class Meta:
-        ordering = ('-started_date',)
+        ordering = ('-started_date', 'name',)
 
     def __str__(self):
         return self.name
