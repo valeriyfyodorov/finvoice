@@ -30,6 +30,15 @@ class InvoicesIncomingViewSet(DatatablesEditorModelViewSet):
     class Meta:
         datatables_extra_json = ('get_options', )
 
+class InvoicesOutgoingViewSet(DatatablesEditorModelViewSet):
+    queryset = Invoice.objects.outgoing().order_by('-number')
+    serializer_class = InvoiceSerializer
+
+    def get_options(self):
+        return get_invoice_options()
+
+    class Meta:
+        datatables_extra_json = ('get_options', )
 
 class BankRecordViewSet(viewsets.ModelViewSet):
     serializer_class = BankRecordSerializer

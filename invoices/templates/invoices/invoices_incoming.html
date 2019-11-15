@@ -24,7 +24,7 @@
     }
 
     var editorMaster = new $.fn.dataTable.Editor( {
-          ajax: {url: "{% url 'api:invoices_incoming-list' %}" + "editor/?format=datatables",
+          ajax: {url: "{{masterTableURL}}" + "editor/?format=datatables",
                 headers: {'X-CSRFToken': '{{ csrf_token }}'},
               },
           table: "#table_master",
@@ -89,7 +89,7 @@
     var masterTable = $('#table_master').DataTable(
     {
         "serverSide": true,
-        "ajax": "{% url 'api:invoices_incoming-list' %}" + "?format=datatables",
+        "ajax": "{{masterTableURL}}" + "?format=datatables",
         "columns": [
             {"data": "DT_RowId", "searchable": false, "orderable": false},
             {"data": "number"},
@@ -161,7 +161,7 @@
         // "ajax": "/api/bank_accounts/?format=datatables",
         // "ajax": "{% url 'api:bank_records-list' %}" + "?format=datatables" ,
         "ajax": {
-              url: "{% url 'api:bank_records-list' %}" + "?format=datatables",
+              url: "{{childTableURL}}" + "?format=datatables",
               type: 'get',
               data: function ( d ) {
                   var selected = masterTable.row( { selected: true } );
