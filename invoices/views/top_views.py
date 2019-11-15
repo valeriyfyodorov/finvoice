@@ -20,7 +20,7 @@ def invoices_incoming_index(request):
         'child_header': 'Bank records for invoice',
         'masterTableURL': masterTableURL,
         'childTableURL': childTableURL,}
-    return render(request, "invoices/invoices_incoming.html", context)
+    return render(request, "invoices/invoices_to_bank_records.html", context)
 
 
 @login_required
@@ -32,5 +32,5 @@ def invoices_outgoing_index(request):
         'child_header': 'Bank records for invoice',
         'masterTableURL': masterTableURL,
         'childTableURL': childTableURL,}
-    return render(request, "invoices/invoices_incoming.html", context)
+    return render(request, "invoices/invoices_to_bank_records.html", context)
 
