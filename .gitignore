@@ -124,4 +124,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/.DS_Store
+
+#only after initial setting of django are downloaded to the production server
+# git rm --cached website/settings/production.py
+# git rm --cached manage.py
+# git rm --cached wsgi.py
+
 production.py
+manage.py
+wsgi.py
