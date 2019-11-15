@@ -34,19 +34,34 @@
     {% url 'invoices:index' as index_url %}
     {% url 'invoices:bank_records_index' as bank_records %}
     {% url 'invoices:invoices_incoming_index' as invoices_incoming_index %}
+    {% url 'invoices:invoices_outgoing_index' as invoices_outgoing_index %}
     {% url 'admin:index' as admin_url %}
     
     <div class="navbar-nav">
-      <a class="nav-item nav-link 
-      {% if request.get_full_path == index_url %} active {% endif %}" 
-      href="{{ index_url }}"> Invoices Out</a>
+      
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Invoices
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item  
+          {% if request.get_full_path == index_url %} active {% endif %}" 
+          href="{{ index_url }}"> Invoices preparation</a>
+          
+          <div class="dropdown-divider"></div>
+
+           <a class="dropdown-item  
+          {% if request.get_full_path == invoices_incoming_index %} active {% endif %}" 
+          href="{{ invoices_incoming_index }}"> Invoices incoming</a>
+
+           <a class="dropdown-item  
+          {% if request.get_full_path == invoices_outgoing_index %} active {% endif %}" 
+          href="{{ invoices_outgoing_index }}"> Invoices outgoing</a>
+        </div>
+      </li>
 
       <a class="nav-item nav-link 
-      {% if request.get_full_path == index_url %} active {% endif %}" 
-      href="{{ invoices_incoming_index }}"> Invoices In</a>
-
-      <a class="nav-item nav-link 
-      {% if request.get_full_path == index_url %} active {% endif %}" 
+      {% if request.get_full_path == bank_records %} active {% endif %}" 
       href="{{ bank_records }}"> Bank records</a>
 
       <a class="nav-item nav-link 
@@ -54,7 +69,7 @@
       href="{{ index_url }}"> Deals</a>
 
     <a class="nav-item nav-link 
-      {% if request.get_full_path == index_url %} active {% endif %}" 
+      {% if request.get_full_path == admin_url %} active {% endif %}" 
       href="{{ admin_url }}"> Settings</a>
 
     </div>

@@ -18,6 +18,7 @@ def invoices_incoming_index(request):
     context = {
         'master_header': 'Invoices incoming', 
         'child_header': 'Bank records for invoice',
+        'default_is_incoming': '1',
         'masterTableURL': masterTableURL,
         'childTableURL': childTableURL,}
     return render(request, "invoices/invoices_to_bank_records.html", context)
@@ -30,6 +31,7 @@ def invoices_outgoing_index(request):
     context = {
         'master_header': 'Invoices outgoing', 
         'child_header': 'Bank records for invoice',
+        'default_is_incoming': '0',
         'masterTableURL': masterTableURL,
         'childTableURL': childTableURL,}
     return render(request, "invoices/invoices_to_bank_records.html", context)

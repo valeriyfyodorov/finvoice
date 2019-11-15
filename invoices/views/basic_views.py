@@ -16,7 +16,7 @@ from django.template.loader import render_to_string
 
 
 @login_required
-def invoices_outgoing_index(request):
+def invoices_creation_index(request):
     if request.method == 'POST':
         form = TemplateChoiceForm(request.POST)
         if form.is_valid():
