@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from invoices.models import *
@@ -6,6 +6,7 @@ from invoices.forms import *
 
 
 @login_required
+@user_passes_test(lambda u:u.is_staff)
 def bank_records_index(request):
     context = {'master_header': 'Accounts', 'child_header': 'Records'}
     return render(request, "invoices/bank_records.html", context)

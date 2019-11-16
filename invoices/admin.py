@@ -1,8 +1,14 @@
 from django.contrib import admin
-
 # Register your models here.
 from .models import Invoice, InvoiceItem, GeneralSetting, Company, Template, TemplateItem
 from .models import Deal, BankRecord, BankAccount, Department, Currency
+from django.urls import reverse_lazy
+
+
+admin.site.site_header = "Seahorse Management.  Settings"
+admin.site.site_title = "Seahorse Management.  Settings"
+admin.site.index_title = "Detailed settings"
+admin.site.site_url = reverse_lazy('invoices:index')
 
 class InvoiceItemsInline(admin.TabularInline):
     model = InvoiceItem
