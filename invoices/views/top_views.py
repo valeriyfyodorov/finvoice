@@ -37,3 +37,19 @@ def invoices_outgoing_index(request):
         'childTableURL': childTableURL,}
     return render(request, "invoices/invoices_to_bank_records.html", context)
 
+
+@login_required
+def deals_index(request):
+    grandMasterTableURL = reverse_lazy('api:deals-list')
+    masterTableURL = reverse_lazy('api:invoices-list')
+    childTableURL = reverse_lazy('api:bank_records-list')
+    context = {
+        'grand_master_header': 'Deals', 
+        'master_header': 'Invoices outgoing', 
+        'child_header': 'Bank records for invoice',
+        'default_is_incoming': '0',
+        'grandMasterTableURL': grandMasterTableURL,
+        'masterTableURL': masterTableURL,
+        'childTableURL': childTableURL,}
+    return render(request, "invoices/deals_invoices_records.html", context)
+

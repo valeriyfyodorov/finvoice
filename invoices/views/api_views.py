@@ -1,7 +1,8 @@
 from rest_framework import viewsets
 from rest_framework.permissions import DjangoModelPermissions
 from invoices.models import Currency, BankAccount, BankRecord, Invoice, Company, Deal
-from invoices.serializers import CurrencySerializer, BankAccountSerializer, BankRecordSerializer, InvoiceSerializer
+from invoices.serializers import (CurrencySerializer, BankAccountSerializer, BankRecordSerializer, 
+    InvoiceSerializer, DealSerializer)
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_datatables_editor.filters import DatatablesFilterBackend
 from rest_framework_datatables_editor.pagination import DatatablesPageNumberPagination
@@ -23,25 +24,62 @@ def get_invoice_options():
 
 class InvoicesIncomingViewSet(DatatablesEditorModelViewSet):
     permission_classes = (DjangoModelPermissions, )
-    queryset = Invoice.objects.incoming().order_by('-number')
     serializer_class = InvoiceSerializer
+    queryset = Invoice.objects
 
     def get_options(self):
         return get_invoice_options()
+
+    def get_queryset(self):
+        deal_selected = self.request.query_params.get('deal_selected', None)
+        if deal_selected is not None:
+            queryset = Invoice.objects.incoming().filter(deal=deal_selected)
+        else:
+            queryset = Invoice.objects.incoming()
+        return queryset
 
     class Meta:
         datatables_extra_json = ('get_options', )
 
 class InvoicesOutgoingViewSet(DatatablesEditorModelViewSet):
     permission_classes = (DjangoModelPermissions, )
-    queryset = Invoice.objects.outgoing().order_by('-number')
     serializer_class = InvoiceSerializer
+    queryset = Invoice.objects
 
     def get_options(self):
         return get_invoice_options()
 
+    def get_queryset(self):
+        deal_selected = self.request.query_params.get('deal_selected', None)
+        if deal_selected is not None:
+            queryset = Invoice.objects.outgoing().filter(deal=deal_selected)
+        else:
+            queryset = Invoice.objects.outgoing()
+        return queryset
+
     class Meta:
         datatables_extra_json = ('get_options', )
+
+
+class InvoicesAllViewSet(DatatablesEditorModelViewSet):
+    permission_classes = (DjangoModelPermissions, )
+    serializer_class = InvoiceSerializer
+    queryset = Invoice.objects
+
+    def get_options(self):
+        return get_invoice_options()
+
+    def get_queryset(self):
+        deal_selected = self.request.query_params.get('deal_selected', None)
+        if deal_selected is not None:
+            queryset = Invoice.objects.all().filter(deal=deal_selected)
+        else:
+            queryset = Invoice.objects.all()
+        return queryset
+
+    class Meta:
+        datatables_extra_json = ('get_options', )
+
 
 class BankRecordViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
@@ -72,13 +110,8 @@ class CurrencyViewSet(viewsets.ViewSet):
     pagination_class = DatatablesPageNumberPagination
     renderer_classes = (DatatablesRenderer,)
 
-    # def list(self, request):
-    #     serializer = self.serializer_class(self.queryset, many=True)
-    #     return Response(serializer.data)
-
-    # def get_options(self):
-    #     return get_invoice_options()
-
-    # class Meta:
-    #     datatables_extra_json = ('get_options', )
+class DealViewSet(viewsets.ModelViewSet):
+    permission_classes = (DjangoModelPermissions, )
+    queryset = Deal.objects.all()
+    serializer_class = DealSerializer
 

@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
-from .models import Currency, BankAccount, BankRecord, Deal, Invoice, Company
+from .models import Currency, BankAccount, BankRecord, Deal, Invoice, Company, Department
 
 class CurrencySerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
@@ -43,8 +43,23 @@ class BankAccountSerializer(serializers.ModelSerializer):
             'id', 'name', 'bank_name', 'bank_swift', 'account_name', 'payment_details', 'currency_name', 'currency',
         )
 
+class DepartmentSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+
+    def to_internal_value(self, data):
+        return get_object_or_404(Department, pk=data['id'])
+    
+    class Meta:
+        model = Department
+        fields = (
+            'id', 'name',
+        )
+        datatables_always_serialize = ('id',)
+
+
 class DealSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
+    department = DepartmentSerializer()
 
     def to_internal_value(self, data):
         return get_object_or_404(Deal, pk=data['id'])
@@ -52,7 +67,7 @@ class DealSerializer(serializers.ModelSerializer):
     class Meta:
         model = Deal
         fields = (
-            'id', 'name', 'started_date', 'department', 'safe_name', 
+            'id', 'name', 'started_date', 'department', 
         )
         datatables_always_serialize = ('id',)
 

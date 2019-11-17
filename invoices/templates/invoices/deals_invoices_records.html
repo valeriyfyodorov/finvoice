@@ -18,73 +18,72 @@
 
   // var csrftoken = Cookies.get('csrftoken');
   $(document).ready( function () {
-
-   var editorMaster = new $.fn.dataTable.Editor( {
-          ajax: {url: "{{masterTableURL}}" + "editor/?format=datatables",
-                headers: {'X-CSRFToken': '{{ csrf_token }}'},
-              },
-          table: "#table_master",
-          fields: [ {
-                  label: "Number:",
-                  name:  "number"
-              }, {
-                  label: "Issued date:",
-                  name:  "issued_date",
-                  type: "datetime",
-                  def: function () { return new Date(); },
-                  displayFormat: "D/M/YYYY",
-                  wireFormat: 'YYYY-MM-DD',
-              }, {
-                    label: "Currency:",
-                    name: "currency.id",
-                    type: "select"
-              }, {
-                    label: "Company:",
-                    name: "company.id",
-                    type: "select"
-              }, {
-                  label: "Total gross:",
-                  name:  "total_gross",
-                  def: "0.00",
-              }, {
-                  label: "VAT percent:",
-                  name:  "vat_percent",
-                  def: 21,
-              }, {
-                  label: "Incoming:",
-                  name:  "is_incoming",
-                  type: "checkbox",
-                  separator: "",
-                  options:   [
-                      { label: '', value: 1 }
-                  ],
-                  unselectedValue: "false",
-                  def: '{{default_is_incoming}}',
-              }, {
-                    label: "Deal:",
-                    name: "deal.id",
-                    type: "select",
-              }, {
-                  label: "Paid:",
-                  name:  "is_paid",
-                  type: "checkbox",
-                  separator: "",
-                  options:   [
-                      { label: '', value: 1 }
-                  ],
-                  unselectedValue: "false",
-                  def: 0,
-              },
-          ]
-      } );
-    
+  
+    var grandMasterTable = $('#grand_table_master').DataTable(
+    {
+        "serverSide": true,
+        "ajax": "{{grandMasterTableURL}}" + "?format=datatables",
+        "columns": [
+            {"data": "name"},
+            {"data": "started_date"},
+            {"data": "department.name", "name": "department.name"},
+            ],
+        columnDefs: [
+            {targets:1, render:function(data){
+              return moment(data).format('DD/MM/YY');
+            }},
+            ],
+        select: {
+            style: 'single'
+          },
+        // dom: 'lfBrtip',
+        // buttons: [
+        //             {extend: "create", editor: editorMaster, text: '<i class="fas fa-plus-square"></i>'},
+        //             {extend: "edit", editor: editorMaster, text: '<i class="fas fa-edit"></i>'},
+        //             {extend: "remove", editor: editorMaster, text: '<i class="fas fa-trash-alt"></i>'},
+        //             {extend: 'excelHtml5', title: 'Data export', text: 'xls'},
+        //             {extend: 'pdfHtml5',title: 'Data export', text: 'pdf'},
+        //         ],
+        "order": [[ 1, "desc" ]],
+        // drawCallback: function () {
+        //     var api = this.api();
+        //     // console.log(api.column( 5, {page:'current'} ).data().sum());
+        //     $( api.column(5).footer() ).html("∑: <b>"+
+        //       api.column( 5, {page:'current'} ).data().sum() + 
+        //       "</b>"
+        //     );
+        // },
+    }
+    );
     $("#table_master").append(
        "<tfoot><tr><td></td><td></td>><td></td>><td></td><td></td><td></td></tr></tfoot>"
     );
     var masterTable = $('#table_master').DataTable(
     {
         "serverSide": true,
-        "ajax": "{{masterTableURL}}" + "?format=datatables",
+        "ajax": {
+              url: "{{masterTableURL}}" + "?format=datatables",
+              type: 'get',
+              data: function ( d ) {
+                  var selected = grandMasterTable.row( { selected: true } );
+                  // console.log("In ajax func");
+                  if ( selected.any() ) {
+                      // console.log("Some selected");
+                      if (selected.data())
+                      {
+                        // console.log(d);
+                        d.deal_selected = selected.data().id;
+                      }
+                      else
+                      {
+                        d.deal_selected = 0;
+                      }
+                  }
+                  else {
+                      d.deal_selected = 0;
+                  }
+              }
+          },
         "columns": [
             {"data": "DT_RowId", "searchable": false, "orderable": false},
             {"data": "number"},
@@ -127,14 +126,14 @@
         select: {
             style: 'single'
           },
-        dom: 'lfBrtip',
-        buttons: [
-                    {extend: "create", editor: editorMaster, text: '<i class="fas fa-plus-square"></i>'},
-                    {extend: "edit", editor: editorMaster, text: '<i class="fas fa-edit"></i>'},
-                    {extend: "remove", editor: editorMaster, text: '<i class="fas fa-trash-alt"></i>'},
-                    {extend: 'excelHtml5', title: 'Data export', text: 'xls'},
-                    {extend: 'pdfHtml5',title: 'Data export', text: 'pdf'},
-                ],
+        // dom: 'lfBrtip',
+        // buttons: [
+        //             {extend: "create", editor: editorMaster, text: '<i class="fas fa-plus-square"></i>'},
+        //             {extend: "edit", editor: editorMaster, text: '<i class="fas fa-edit"></i>'},
+        //             {extend: "remove", editor: editorMaster, text: '<i class="fas fa-trash-alt"></i>'},
+        //             {extend: 'excelHtml5', title: 'Data export', text: 'xls'},
+        //             {extend: 'pdfHtml5',title: 'Data export', text: 'pdf'},
+        //         ],
         "order": [[ 2, "desc" ]],
         drawCallback: function () {
             var api = this.api();
@@ -159,13 +158,13 @@
               url: "{{childTableURL}}" + "?format=datatables",
               type: 'get',
               data: function ( d ) {
-                  var selected = masterTable.row( { selected: true } );
+                  var selected = grandMasterTable.row( { selected: true } );
                   // alert("In ajax func");
                   if ( selected.any() ) {
                       // alert("Some selected");
-                      if (selected.data().deal)
+                      if (selected.data())
                       {
-                        d.deal_selected = selected.data().deal.id;
+                        d.deal_selected = selected.data().id;
                       }
                       else
                       {
@@ -224,12 +223,23 @@
         },
     }
     );
-    masterTable.on( 'select', function () {
+
+    grandMasterTable.on( 'select', function () {
+      masterTable.ajax.reload();
+      masterTable.rows().deselect();
       childTable.ajax.reload();
     } );
-    masterTable.on( 'deselect', function () {
-        childTable.ajax.reload();
+    grandMasterTable.on( 'deselect', function () {
+        masterTable.ajax.reload();
+        childTable.clear();
     } );
+    
+    // masterTable.on( 'select', function () {
+    //   childTable.ajax.reload();
+    // } );
+    // masterTable.on( 'deselect', function () {
+    //     childTable.ajax.reload();
+    // } );
 
     
 
@@ -239,6 +249,21 @@
 
 {% block content %}
  <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      {{grand_master_header}}
+    <table id="grand_table_master" class="display table dataTable table-striped table-sm table-hover" role="grid">
+        <thead>
+         <tr>
+            <th>Name</th>
+             <th>Started </th>
+             <th>Department</th>
+          </tr>
+        </thead>
+      </table>
+    </div> {# end of col #}
+  </div> {# end of row #}
+
   <div class="row">
     <div class="col-md-12">
       {{master_header}}

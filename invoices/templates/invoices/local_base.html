@@ -35,6 +35,7 @@
     {% url 'invoices:bank_records_index' as bank_records %}
     {% url 'invoices:invoices_incoming_index' as invoices_incoming_index %}
     {% url 'invoices:invoices_outgoing_index' as invoices_outgoing_index %}
+    {% url 'invoices:deals_index' as deals_index %}
     {% url 'admin:index' as admin_url %}
     
     <div class="navbar-nav">
@@ -73,7 +74,7 @@
 
       <a class="nav-item nav-link 
       {% if request.get_full_path == index_url %} active {% endif %}" 
-      href="{{ index_url }}"> Deals</a>
+      href="{{ deals_index }}"> Deals</a>
 
     <a class="nav-item nav-link 
       {% if request.get_full_path == admin_url %} active {% endif %}" 
