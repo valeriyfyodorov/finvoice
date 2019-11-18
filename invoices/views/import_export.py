@@ -56,7 +56,7 @@ def import_bank_statement(request):
                     description=description, amount=amount, bank_account=bank_account)
             messages.success(request, 'File imported!')
         else:
-            print("Not valid form")
+            messages.success(request, 'Problem with form')
         return redirect('invoices:import_bank_statement')
 
     else:
