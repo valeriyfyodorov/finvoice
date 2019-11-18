@@ -20,6 +20,7 @@ from django.template.loader import render_to_string
 def invoices_creation_index(request):
     if request.method == 'POST':
         form = TemplateChoiceForm(request.POST)
+        # print(form)
         if form.is_valid():
             # print(form.cleaned_data["template"])
             template = form.cleaned_data['template']

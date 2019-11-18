@@ -7,6 +7,7 @@ app_name = 'invoices'
 urlpatterns = [
     # ex: /invoices/
     path('', login_required(views.invoices_creation_index), name='index'),
+    path('statement_import', login_required(views.import_bank_statement), name='import_bank_statement'),
     path('invoices_incoming', login_required(views.invoices_incoming_index), name='invoices_incoming_index'),
     path('invoices_outgoing', login_required(views.invoices_outgoing_index), name='invoices_outgoing_index'),
     path('deals', login_required(views.deals_index), name='deals_index'),

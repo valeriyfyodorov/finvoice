@@ -51,6 +51,7 @@ class BankAccount(models.Model):
 
 class BankRecord(models.Model):
     name = models.CharField(max_length=30)
+    bank_ref = models.CharField(max_length=30, default="", blank=True)
     recorded_date = models.DateField(default=date.today)
     description = models.CharField(max_length=200)
     amount = models.DecimalField(default=0, max_digits=10, decimal_places=2)

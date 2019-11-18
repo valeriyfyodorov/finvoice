@@ -6,12 +6,6 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, Fieldset, Div, HTML, ButtonHolder, Submit
 from .custom_layout_object import *
 
-
-
-class TemplateChoiceForm(Form):
-    template = ModelChoiceField(queryset=Template.objects.all())
-
-
 class Row(Div):
     css_class = "form-row"
 
