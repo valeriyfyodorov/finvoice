@@ -24,10 +24,10 @@
           <form method="post">
             {% csrf_token %}
             <div class="form-row">
-            <div class="form-group col-md-6 mb-0 text-right">
+            <div class="form-group col-md-9 mb-0 text-right">
               {{ form.template|as_crispy_field }}
             </div>
-            <div class="form-group col-md-6 mb-0 text-left">
+            <div class="form-group col-md-3 mb-0 text-left">
               <br>
               <button type="submit" class="btn btn-primary">Add new</button>
             </div>
