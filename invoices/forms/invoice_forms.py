@@ -1,4 +1,4 @@
-from django.forms import ModelForm, Textarea, Form, ModelChoiceField
+from django.forms import ModelForm, Textarea, Form, ModelChoiceField, HiddenInput, CharField
 from flatpickr import DatePickerInput
 from invoices.models import *
 from django.forms.models import inlineformset_factory
@@ -27,7 +27,8 @@ InvoiceItemFormSet = inlineformset_factory(
 
 
 class InvoiceForm(ModelForm):
-    
+    returnUrl = CharField(widget=HiddenInput(), required=False)
+
     class Meta:
         model = Invoice
         exclude = []
@@ -62,7 +63,7 @@ class InvoiceForm(ModelForm):
             ),
             Row(
                 Field('description', wrapper_class='col-md-3'),
-                Div('', css_class='col-md-3'),
+                Div(css_class='col-md-3'),
                 Field('currency', wrapper_class='col-md-3'),
                 Field('is_incoming', wrapper_class='col-md-3'),
             ),
@@ -92,5 +93,6 @@ class InvoiceForm(ModelForm):
                 HTML("<br>"),
                 Field('is_paid', wrapper_class='col-md-3'),
                 Field('payment_details', wrapper_class='col-md-3'),
+                Field('returnUrl', wrapper_class='col-md-3'),
             )
         )

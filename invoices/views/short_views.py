@@ -17,9 +17,18 @@ class ShortCreateView(LoginRequiredMixin, CreateView):
         context = super(ShortCreateView, self).get_context_data(**kwargs)
         context['headerText'] = "Add new " + self.modelDescriptiveName
         context['submitText'] = "Create new " + self.modelDescriptiveName
-        context['returnUrlHref'] = self.returnUrlHref
+        if len(self.request.GET.get('returnUrl')) > 0:
+            context['returnUrlHref'] = self.request.GET.get('returnUrl')
+        else:
+            context['returnUrlHref'] = self.returnUrlHref
         context['returnUrlText'] = "Return"
         return context
+
+    def get_success_url(self, **kwargs):
+        url = self.success_url
+        if (len(self.request.POST.get('returnUrl')) > 0):
+            url = self.request.POST.get('returnUrl')
+        return url
 
 @method_decorator(user_passes_test(lambda u:u.is_staff), name='dispatch')
 class ShortUpdateView(LoginRequiredMixin, UpdateView):
@@ -33,9 +42,18 @@ class ShortUpdateView(LoginRequiredMixin, UpdateView):
         context = super(ShortUpdateView, self).get_context_data(**kwargs)
         context['headerText'] = "Update " + self.modelDescriptiveName
         context['submitText'] = "Save " + self.modelDescriptiveName
-        context['returnUrlHref'] = self.returnUrlHref
+        if len(self.request.GET.get('returnUrl')) > 0:
+            context['returnUrlHref'] = self.request.GET.get('returnUrl')
+        else:
+            context['returnUrlHref'] = self.returnUrlHref
         context['returnUrlText'] = "Return"
         return context
+
+    def get_success_url(self, **kwargs):
+        url = self.success_url
+        if (len(self.request.POST.get('returnUrl')) > 0):
+            url = self.request.POST.get('returnUrl')
+        return url
 
 class BankAccountCreateView(ShortCreateView):
     model = BankAccount

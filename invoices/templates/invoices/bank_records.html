@@ -40,7 +40,8 @@
             "searchable": false,
             render: function ( data, type, row, meta ) {
                 var url_mask = "{% url 'invoices:bank_account_update' bank_account_id=12345 %}".replace(/12345/, row.id.toString());
-                return '<a href="'+ url_mask + '">'+'Edit'+'</a>';
+                var extraQuery = "?returnUrl=" + "{% url 'invoices:bank_records_index' %}";
+                return '<a href="'+ url_mask + extraQuery + '">'+'Edit'+'</a>';
               }
             },
             ],
@@ -83,7 +84,8 @@
             "searchable": false,
             render: function ( data, type, row, meta ) {
                 var url_mask = "{% url 'invoices:bank_record_update' bank_record_id=12345 %}".replace(/12345/, row.id.toString());
-                return '<a href="'+ url_mask + '">'+'Edit'+'</a>';
+                var extraQuery = "?returnUrl=" + "{% url 'invoices:bank_records_index' %}";
+                return '<a href="'+ url_mask + extraQuery + '">'+'Edit'+'</a>';
               }
             },
             {targets:1, render:function(data){

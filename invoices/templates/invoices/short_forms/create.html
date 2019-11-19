@@ -19,6 +19,7 @@ input[type=number]{
     <form method="post">
     {% csrf_token %}
     {{ form|crispy }}
+    <input type="hidden" name="returnUrl" value="{{request.GET.returnUrl}}" />
     <button type="submit" class="btn btn-success">{{submitText}}</button>
   </form>
     <div class="row">

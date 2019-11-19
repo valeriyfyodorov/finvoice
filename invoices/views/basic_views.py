@@ -33,7 +33,7 @@ def invoices_creation_index(request):
     else:
         invoices = Invoice.objects.outgoing()[:150]
         form = TemplateChoiceForm
-        context = {'invoices': invoices, 'form': form}
+        context = {'invoices': invoices, 'form': form, 'returnUrl': reverse_lazy('invoices:index')}
         return render(request, "invoices/index.html", context)
 
 
@@ -73,7 +73,7 @@ class InvoiceCreate(LoginRequiredMixin, CreateView):
     model = Invoice
     template_name = 'invoices/invoice_create.html'
     form_class = InvoiceForm
-    success_url = None
+    
 
     def get_context_data(self, **kwargs):
         data = super(InvoiceCreate, self).get_context_data(**kwargs)
@@ -95,7 +95,12 @@ class InvoiceCreate(LoginRequiredMixin, CreateView):
         return super(InvoiceCreate, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('invoices:invoice_detail', kwargs={'invoice_id': self.object.pk})
+        url = reverse_lazy('invoices:invoice_detail', kwargs={'invoice_id': self.object.pk})
+        if (len(self.request.POST.get('returnUrl')) > 0):
+            url = self.request.POST.get('returnUrl')
+        return url   
+        # return reverse_lazy('invoices:invoice_detail', kwargs={'invoice_id': self.object.pk})
+
 
 @method_decorator(user_passes_test(lambda u:u.is_staff), name='dispatch')
 class InvoiceUpdate(LoginRequiredMixin, UpdateView):
@@ -103,6 +108,7 @@ class InvoiceUpdate(LoginRequiredMixin, UpdateView):
     form_class = InvoiceForm
     template_name = 'invoices/invoice_create.html'
     pk_url_kwarg = "invoice_id"
+    success_url = reverse_lazy('invoices:index')
 
     def get_context_data(self, **kwargs):
         data = super(InvoiceUpdate, self).get_context_data(**kwargs)
@@ -111,8 +117,14 @@ class InvoiceUpdate(LoginRequiredMixin, UpdateView):
         else:
             data['items'] = InvoiceItemFormSet(instance=self.object)
         return data
+    
+    # def form_invalid(self, form):
+    #     print("form is invalid")
+    #     print(form.errors)
+    #     return HttpResponse("form is invalid.. this is just an HttpResponse object")
 
     def form_valid(self, form):
+        print('SUCCESSFUL URL', self.success_url)
         context = self.get_context_data()
         items = context['items']
         with transaction.atomic():
@@ -124,8 +136,10 @@ class InvoiceUpdate(LoginRequiredMixin, UpdateView):
         return super(InvoiceUpdate, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('invoices:index')
-        # return reverse_lazy('invoices:invoice_detail', kwargs={'invoice_id': self.object.pk})
+        url = self.success_url
+        if (len(self.request.POST.get('returnUrl')) > 0):
+            url = self.request.POST.get('returnUrl')
+        return url           
 
 @method_decorator(user_passes_test(lambda u:u.is_staff), name='dispatch')
 class InvoiceDelete(LoginRequiredMixin, DeleteView):
