@@ -47,7 +47,7 @@ def deals_index(request):
     childTableURL = reverse_lazy('api:bank_records-list')
     context = {
         'grand_master_header': 'Deals', 
-        'master_header': 'Invoices outgoing', 
+        'master_header': 'Invoices related', 
         'child_header': 'Bank records for invoice',
         'default_is_incoming': '0',
         'grandMasterTableURL': grandMasterTableURL,

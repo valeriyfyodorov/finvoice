@@ -5,12 +5,12 @@ from django.db.models import Sum
 from decimal import Decimal
 from .helpers import invoiceAutoNumber
 from .common_models import Company
-from .deal_models import Currency, Deal, BankRecord
+from .deal_models import Currency, Deal, BankRecord, Department
 
 class InvoiceManager(models.Manager):
-    def create_invoice_from_template(self, template, count_part):
+    def create_invoice_from_template(self, template, count_part, header=''):
         invoice = self.create(
-            number=invoiceAutoNumber(count_part),
+            number=header + '' + invoiceAutoNumber(count_part),
             issued_date=date.today(),
             payment_term=date.today() + timedelta(days=7),
             company=template.company,
@@ -139,12 +139,14 @@ class Template(models.Model):
     advance_amount = models.DecimalField(default=0, max_digits=10, decimal_places=2)
     currency = models.ForeignKey(Currency, related_name="templates", on_delete=models.CASCADE, 
         null=False, blank=False, default=1) 
-    
+    department = models.ForeignKey(Department, related_name="templates", on_delete=models.CASCADE, 
+        null=False, blank=False, default=1) 
+
     class Meta:
         ordering = ('description',)
 
     def __str__(self):
-        return self.description + '-' + self.company.name
+        return self.department.name + '-' + self.description + '-' + self.company.name + self.department.name
 
 
     def save(self, *args, **kwargs):

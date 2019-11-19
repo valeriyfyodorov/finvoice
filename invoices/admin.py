@@ -41,7 +41,7 @@ class TemplateAdmin(admin.ModelAdmin):
     inlines = [
         TemplateItemsInline,
     ]
-    list_display = ('company', 'description', 'currency', 'total_vat', 'total_gross', )
+    list_display = ('company', 'department', 'description', 'currency', 'total_vat', 'total_gross', )
     readonly_fields = ["total_net", "total_gross", "total_vat"]
 admin.site.register(Template, TemplateAdmin)
 
