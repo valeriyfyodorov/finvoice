@@ -146,7 +146,7 @@ class Template(models.Model):
         ordering = ('description',)
 
     def __str__(self):
-        return self.department.name + '-' + self.description + '-' + self.company.name + self.department.name
+        return self.currency.name + ' ' + self.department.name[:3] + '-' + self.description + '-' + self.company.name + self.currency.name
 
 
     def save(self, *args, **kwargs):
