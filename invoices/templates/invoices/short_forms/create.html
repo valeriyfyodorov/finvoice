@@ -24,7 +24,7 @@ input[type=number]{
   </form>
     <div class="row">
         <div class="col-md-3">
-            <a href="{{returnUrlHref}}">{{returnUrlText}}</a>
+            <a href="{% if request.GET.returnUrl %}{{request.GET.returnUrl}}{% else %}{{returnUrlHref}}{% endif %}">{{returnUrlText}}</a>
 
 
         </div>

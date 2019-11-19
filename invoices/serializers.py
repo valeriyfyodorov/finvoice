@@ -40,7 +40,9 @@ class BankAccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = BankAccount
         fields = (
-            'id', 'name', 'bank_name', 'bank_swift', 'account_name', 'payment_details', 'currency_name', 'currency',
+            'id', 'name', 'bank_name', 'bank_swift', 
+            'account_name', 'payment_details', 'currency_name', 'currency', 
+            'balance'
         )
 
 class DepartmentSerializer(serializers.ModelSerializer):

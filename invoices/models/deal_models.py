@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import date
 from django.core.validators import MaxLengthValidator
+from django.db.models import Sum
 
 class Department(models.Model):
     name = models.CharField(max_length=30)
@@ -42,12 +43,18 @@ class BankAccount(models.Model):
     payment_details = models.TextField(max_length=300, blank=True,
                                    validators=[MaxLengthValidator(300)])
     currency = models.ForeignKey(Currency, related_name="accounts", on_delete=models.CASCADE)
+    balance = models.DecimalField(default=0, max_digits=10, decimal_places=2)
     
     class Meta:
         ordering = ('bank_name','name',)
 
     def __str__(self):
         return self.name + '-' + self.currency.name
+
+    def save(self, *args, **kwargs):
+        balance = self.records.all().aggregate(Sum('amount'))['amount__sum']
+        self.balance = balance
+        super().save(*args, **kwargs)
 
 class BankRecord(models.Model):
     name = models.CharField(max_length=30)
@@ -65,5 +72,9 @@ class BankRecord(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.bank_account.save()
 
 

@@ -21,7 +21,8 @@ def invoices_incoming_index(request):
         'child_header': 'Bank records for invoice',
         'default_is_incoming': '1',
         'masterTableURL': masterTableURL,
-        'childTableURL': childTableURL,}
+        'childTableURL': childTableURL,
+        'returnUrl': reverse_lazy('invoices:invoices_incoming_index'),}
     return render(request, "invoices/invoices_to_bank_records.html", context)
 
 
@@ -34,7 +35,8 @@ def invoices_outgoing_index(request):
         'child_header': 'Bank records for invoice',
         'default_is_incoming': '0',
         'masterTableURL': masterTableURL,
-        'childTableURL': childTableURL,}
+        'childTableURL': childTableURL,
+        'returnUrl': reverse_lazy('invoices:invoices_outgoing_index'),}
     return render(request, "invoices/invoices_to_bank_records.html", context)
 
 

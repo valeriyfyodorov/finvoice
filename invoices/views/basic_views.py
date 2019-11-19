@@ -109,6 +109,10 @@ class InvoiceUpdate(LoginRequiredMixin, UpdateView):
     template_name = 'invoices/invoice_create.html'
     pk_url_kwarg = "invoice_id"
     success_url = reverse_lazy('invoices:index')
+    
+    def get_initial(self):
+        print(self.request.GET.get('returnUrl'))
+        return {'returnUrl': self.request.GET.get('returnUrl')}
 
     def get_context_data(self, **kwargs):
         data = super(InvoiceUpdate, self).get_context_data(**kwargs)
@@ -124,7 +128,7 @@ class InvoiceUpdate(LoginRequiredMixin, UpdateView):
     #     return HttpResponse("form is invalid.. this is just an HttpResponse object")
 
     def form_valid(self, form):
-        print('SUCCESSFUL URL', self.success_url)
+        # print('SUCCESSFUL URL', self.success_url)
         context = self.get_context_data()
         items = context['items']
         with transaction.atomic():

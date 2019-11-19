@@ -30,6 +30,7 @@
             {"data": "bank_name"},
             {"data": "currency.name", "name": "currency.name"},
             {"data": "account_name"},
+            {"data": "balance"},
             ],
         columnDefs: [
             {
@@ -48,6 +49,11 @@
         "order": [[ 1, "desc" ]]
     }
     );
+
+    $("#table_bank_records").append(
+       "<tfoot><tr><td></td><td></td>><td></td>><td></td><td></td><td></td></tr></tfoot>"
+    );
+
     var childTableRecords = $('#table_bank_records').DataTable(
     {
       "serverSide": true,
@@ -62,6 +68,10 @@
                   if ( selected.any() ) {
                       // alert("Some selected");
                       d.bank_account = selected.data().id;
+                  }
+                  else
+                  {
+                    d.bank_account = 0;
                   }
               }
           },
@@ -104,7 +114,15 @@
             }},
             ],
 
-        "order": [[ 1, "desc" ]]
+        "order": [[ 1, "desc" ]],
+        drawCallback: function () {
+            var api = this.api();
+            // console.log(api.column( 5, {page:'current'} ).data().sum());
+            $( api.column(3).footer() ).html("∑: <b>"+
+              api.column(3, { search: 'applied'} ).data().sum().toFixed(2) + 
+              "</b>"
+            );
+        },
     }
     );
     masterTable.on( 'select', function () {
@@ -131,11 +149,13 @@
              <th>Bank Name </th>
              <th>Currency</th>
              <th>Account</th>
+             <th>Balance</th>
           </tr>
         </thead>
       </table>
     </div> {# end of col #}
   </div> {# end of row #}
+
   <div class="row">
     <div class="col-md-12">
        {{child_header}}

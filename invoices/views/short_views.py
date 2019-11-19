@@ -42,7 +42,7 @@ class ShortUpdateView(LoginRequiredMixin, UpdateView):
         context = super(ShortUpdateView, self).get_context_data(**kwargs)
         context['headerText'] = "Update " + self.modelDescriptiveName
         context['submitText'] = "Save " + self.modelDescriptiveName
-        if len(self.request.GET.get('returnUrl')) > 0:
+        if self.request.GET.get('returnUrl'):
             context['returnUrlHref'] = self.request.GET.get('returnUrl')
         else:
             context['returnUrlHref'] = self.returnUrlHref

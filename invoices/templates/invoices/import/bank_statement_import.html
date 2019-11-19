@@ -70,7 +70,7 @@
     <tr >
     {% for bank_record in bank_records %}
         <td>
-          <a target="_blank" href="{% url 'invoices:bank_record_update' bank_record_id=bank_record.id %}?returnUrl=blahBlah">
+          <a href="{% url 'invoices:bank_record_update' bank_record_id=bank_record.id %}?returnUrl={% url 'invoices:import_bank_statement'%}">
             Info
           </a>
         </td>

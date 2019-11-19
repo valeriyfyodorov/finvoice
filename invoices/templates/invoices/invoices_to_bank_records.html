@@ -106,7 +106,7 @@
             "searchable": false,
             render: function ( data, type, row, meta ) {
                 var url_mask = "{% url 'invoices:invoice_update' invoice_id=12345 %}".replace(/12345/, row.DT_RowId.toString());
-                return '<a target="_blank" href="'+ url_mask + '">'+'Info'+'</a>';
+                return '<a href="'+ url_mask + '?returnUrl={{returnUrl}}">'+'Info'+'</a>';
               }
             },
             {targets:2, render:function(data){
@@ -140,7 +140,7 @@
             var api = this.api();
             // console.log(api.column( 5, {page:'current'} ).data().sum());
             $( api.column(5).footer() ).html("∑: <b>"+
-              api.column( 5, {page:'current'} ).data().sum() + 
+              api.column( 5, {page:'current'} ).data().sum().toFixed(2) + 
               "</b>"
             );
         },
@@ -195,7 +195,7 @@
             "searchable": false,
             render: function ( data, type, row, meta ) {
                 var url_mask = "{% url 'invoices:bank_record_update' bank_record_id=12345 %}".replace(/12345/, row.id.toString());
-                return '<a target="_blank" href="'+ url_mask + '">'+'Info'+'</a>';
+                return '<a href="'+ url_mask + '?returnUrl={{returnUrl}}">'+'Info'+'</a>';
               }
             },
             {targets:1, render:function(data){
@@ -218,7 +218,7 @@
             var api = this.api();
             // console.log(api.column( 5, {page:'current'} ).data().sum());
             $( api.column(3).footer() ).html("∑: <b>"+
-              api.column( 3, {page:'current'} ).data().sum() + 
+              api.column( 3, {page:'current'} ).data().sum().toFixed(2) + 
               "</b>"
             );
         },
