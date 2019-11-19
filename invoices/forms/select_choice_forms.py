@@ -5,7 +5,7 @@ class TemplateChoiceForm(Form):
     template = ModelChoiceField(queryset=Template.objects.all())
 
 class BankAccountChoiceForm(Form):
-    bank_account = ModelChoiceField(queryset=BankAccount.objects.all(), required=False)
+    bank_account = ModelChoiceField(queryset=BankAccount.objects.all())
     file = FileField()
 
 

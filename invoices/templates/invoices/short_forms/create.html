@@ -30,7 +30,7 @@ input[type=number]{
         </div>
         
         <div class="col-md-6">
-            {% if object.id %}
+            {% if object.id and deleteUrlHref %}
             <a class="btn btn-outline-danger" href="{{deleteUrlHref}}">Delete</a>
                 
             {% endif %}

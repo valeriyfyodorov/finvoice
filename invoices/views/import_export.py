@@ -9,6 +9,7 @@ import xml.etree.ElementTree as ET
 from decimal import Decimal
 from datetime import datetime
 from django.contrib import messages
+import re
 
 
 @login_required
@@ -40,17 +41,23 @@ def import_bank_statement(request):
                 is_debit = (record.find('CdtDbtInd').text == 'DBIT')
                 details = record.find('NtryDtls').find('TxDtls')
                 name = 'BANK'
-                if len(details.find('RltdPties')) > 0:
+                if details.find('RltdPties') is not None and (len(details.find('RltdPties')) > 0):
                     if is_debit:
-                        name = details.find('RltdPties').find('Cdtr').find('Nm').text[:12]
+                        name = details.find('RltdPties').find('Cdtr').find('Nm').text
                     else:
-                        name = details.find('RltdPties').find('Dbtr').find('Nm').text[:12]
+                        name = details.find('RltdPties').find('Dbtr').find('Nm').text
+                    name = re.sub('\d{4}\d+', '', name)
+                    name = re.sub('\/', '', name)
+                    name = re.sub('^\s*[\r\n]*\d+', '', name)[:21]
                 if is_debit: 
                     amount = -amount
-                description = details.find('RmtInf').find('Ustrd')
-                description = description.text.lower().replace("maksājumu uzdevuma ", "")
-                description = description.replace("ārvalstu maksājumu ", "")
-                description = description.replace("maksājum", "")[:20]
+                description = ""
+                if details.find('RmtInf') is not None:
+                    description = details.find('RmtInf').find('Ustrd')
+                    description = description.text.lower().replace("maksājumu uzdevuma ", "")
+                    description = description.replace("ārvalstu maksājumu ", "")
+                    description = re.sub('prepayment', '', description, flags=re.IGNORECASE)
+                    description = description.replace("maksājum", "")[:29]
                 # print(name, recorded_date, amount, bank_ref, is_debit, description)
                 BankRecord.objects.create(name=name, bank_ref=bank_ref, recorded_date=recorded_date,
                     description=description, amount=amount, bank_account=bank_account)

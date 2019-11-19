@@ -65,6 +65,7 @@ class BankAccountUpdateView(ShortUpdateView):
     modelDescriptiveName = "account"
     success_url = reverse_lazy('invoices:bank_records_index')
     pk_url_kwarg = "bank_account_id"
+    # deleteUrlHref = reverse_lazy('invoices:invoice_delete' invoice_id=object.id')
     
 class BankRecordCreateView(ShortCreateView):
     model = BankRecord
@@ -76,4 +77,5 @@ class BankRecordUpdateView(ShortUpdateView):
     modelDescriptiveName = "record"
     success_url = reverse_lazy('invoices:bank_records_index')
     pk_url_kwarg = "bank_record_id"
+
     
