@@ -10,6 +10,7 @@ urlpatterns = [
     path('statement_import', login_required(views.import_bank_statement), name='import_bank_statement'),
     path('invoices_incoming', login_required(views.invoices_incoming_index), name='invoices_incoming_index'),
     path('invoices_outgoing', login_required(views.invoices_outgoing_index), name='invoices_outgoing_index'),
+    path('invoices_unpaid', login_required(views.invoices_unpaid_index), name='invoices_unpaid_index'),
     path('deals', login_required(views.deals_index), name='deals_index'),
     path('bank_account/create/', views.BankAccountCreateView.as_view(), name='bank_account_create'),
     path('bank_account/update/<int:bank_account_id>/', views.BankAccountUpdateView.as_view(), name='bank_account_update'),

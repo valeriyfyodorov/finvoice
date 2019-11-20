@@ -1,16 +1,14 @@
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.shortcuts import render, get_object_or_404
-from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 from django.shortcuts import redirect
-from datetime import date
-from invoices.models import BankAccount, BankRecord
+from invoices.models import BankAccount, BankRecord, Invoice
 from invoices.forms import BankAccountChoiceForm
 import xml.etree.ElementTree as ET
 from decimal import Decimal
 from datetime import datetime
 from django.contrib import messages
 import re
-
+from .helpers import set_invoice_deal_on_record_import
 
 @login_required
 def import_bank_statement(request):
@@ -32,12 +30,13 @@ def import_bank_statement(request):
             if (not bank_account):
                 bank_account = BankAccount.objects.filter(account_name=bank_account_name)[0]
             records = root[0].find('Rpt').findall('Ntry')
+            invoices_not_paid = Invoice.objects.filter(is_paid=False)
             for record in records:
                 amount = Decimal(record.find('Amt').text)
                 bank_ref = record.find('AcctSvcrRef').text
                 if BankRecord.objects.filter(bank_ref=bank_ref):
                     continue # next record
-                recorded_date = datetime.strptime(record.find('BookgDt').find('Dt').text, '%Y-%m-%d')
+                recorded_date = datetime.strptime(record.find('BookgDt').find('Dt').text, '%Y-%m-%d').date()
                 is_debit = (record.find('CdtDbtInd').text == 'DBIT')
                 details = record.find('NtryDtls').find('TxDtls')
                 name = 'BANK'
@@ -48,7 +47,7 @@ def import_bank_statement(request):
                         name = details.find('RltdPties').find('Dbtr').find('Nm').text
                     name = re.sub('\d{4}\d+', '', name)
                     name = re.sub('\/', '', name)
-                    name = re.sub('^\s*[\r\n]*\d+', '', name)[:21]
+                    name = re.sub('^\s*[\r\n]*\d+', '', name)[:40]
                 if is_debit: 
                     amount = -amount
                 description = ""
@@ -57,13 +56,15 @@ def import_bank_statement(request):
                     description = description.text.lower().replace("maksājumu uzdevuma ", "")
                     description = description.replace("ārvalstu maksājumu ", "")
                     description = re.sub('prepayment', '', description, flags=re.IGNORECASE)
-                    description = description.replace("maksājum", "")[:29]
+                    description = description.replace("maksājum", "")[:90]
                 # print(name, recorded_date, amount, bank_ref, is_debit, description)
-                BankRecord.objects.create(name=name, bank_ref=bank_ref, recorded_date=recorded_date,
+                bank_record = BankRecord.objects.create(name=name, 
+                    bank_ref=bank_ref, recorded_date=recorded_date, 
                     description=description, amount=amount, bank_account=bank_account)
+                set_invoice_deal_on_record_import(invoices_not_paid, bank_record)
             messages.success(request, 'File imported!')
         else:
-            messages.success(request, 'Problem with form')
+            messages.error(request, 'Problem with form')
         return redirect('invoices:import_bank_statement')
 
     else:

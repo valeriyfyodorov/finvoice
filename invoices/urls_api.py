@@ -14,6 +14,8 @@ router.register(r'bank_accounts', views.BankAccountViewSet, base_name="bank_acco
 router.register(r'bank_records', views.BankRecordViewSet, base_name="bank_records")
 router.register(r'invoices_incoming', views.InvoicesIncomingViewSet, base_name="invoices_incoming")
 router.register(r'invoices_outgoing', views.InvoicesOutgoingViewSet, base_name="invoices_outgoing")
+router.register(r'invoices_unpaid', views.InvoicesUnpaidViewSet, base_name="invoices_unpaid")
+router.register(r'invoices_unpaid', views.InvoicesOutgoingViewSet, base_name="invoices_unpaid")
 router.register(r'invoices', views.InvoicesAllViewSet, base_name="invoices")
 router.register(r'deals', views.DealViewSet, base_name="deals")
 

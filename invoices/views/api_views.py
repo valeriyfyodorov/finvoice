@@ -61,6 +61,25 @@ class InvoicesOutgoingViewSet(DatatablesEditorModelViewSet):
         datatables_extra_json = ('get_options', )
 
 
+class InvoicesUnpaidViewSet(DatatablesEditorModelViewSet):
+    permission_classes = (DjangoModelPermissions, )
+    serializer_class = InvoiceSerializer
+    queryset = Invoice.objects
+
+    def get_options(self):
+        return get_invoice_options()
+
+    def get_queryset(self):
+        deal_selected = self.request.query_params.get('deal_selected', None)
+        if deal_selected is not None:
+            queryset = Invoice.objects.unpaid().filter(deal=deal_selected)
+        else:
+            queryset = Invoice.objects.unpaid()
+        return queryset
+
+    class Meta:
+        datatables_extra_json = ('get_options', )
+
 class InvoicesAllViewSet(DatatablesEditorModelViewSet):
     permission_classes = (DjangoModelPermissions, )
     serializer_class = InvoiceSerializer
@@ -72,6 +91,8 @@ class InvoicesAllViewSet(DatatablesEditorModelViewSet):
     def get_queryset(self):
         deal_selected = self.request.query_params.get('deal_selected', None)
         if deal_selected is not None:
+            if len(deal_selected) == 0:
+                deal_selected = None
             queryset = Invoice.objects.all().filter(deal=deal_selected)
         else:
             queryset = Invoice.objects.all()
@@ -93,6 +114,8 @@ class BankRecordViewSet(viewsets.ModelViewSet):
         else:
             queryset = BankRecord.objects.all()
         if deal_selected is not None:
+            if len(deal_selected) == 0:
+                deal_selected = None
             queryset = queryset.filter(deals__id=deal_selected)
         return queryset
 

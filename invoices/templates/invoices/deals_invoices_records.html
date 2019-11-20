@@ -80,7 +80,7 @@
                       }
                   }
                   else {
-                      d.deal_selected = 0;
+                      d.deal_selected = '';
                   }
               }
           },
@@ -139,7 +139,7 @@
             var api = this.api();
             // console.log(api.column( 5, {page:'current'} ).data().sum());
             $( api.column(5).footer() ).html("∑: <b>"+
-              api.column( 5, {page:'current'} ).data().sum() + 
+              api.column( 5, {page:'current'} ).data().sum().toFixed(2) + 
               "</b>"
             );
         },
@@ -217,7 +217,7 @@
             var api = this.api();
             // console.log(api.column( 5, {page:'current'} ).data().sum());
             $( api.column(3).footer() ).html("∑: <b>"+
-              api.column( 3, {page:'current'} ).data().sum() + 
+              api.column( 3, {page:'current'} ).data().sum().toFixed(2) + 
               "</b>"
             );
         },

@@ -43,6 +43,7 @@
     {% url 'invoices:bank_records_index' as bank_records %}
     {% url 'invoices:invoices_incoming_index' as invoices_incoming_index %}
     {% url 'invoices:invoices_outgoing_index' as invoices_outgoing_index %}
+    {% url 'invoices:invoices_unpaid_index' as invoices_unpaid_index %}
     {% url 'invoices:deals_index' as deals_index %}
     {% url 'invoices:import_bank_statement' as import_bank_statement %}
     {% url 'admin:index' as admin_url %}
@@ -70,6 +71,10 @@
            <a class="dropdown-item  
           {% if request.get_full_path == invoices_outgoing_index %} active {% endif %}" 
           href="{{ invoices_outgoing_index }}"> Invoices outgoing</a>
+
+          <a class="dropdown-item  
+          {% if request.get_full_path == invoices_unpaid_index %} active {% endif %}" 
+          href="{{ invoices_unpaid_index }}"> Invoices unpaid</a>
 {% endif %}
 
         </div>

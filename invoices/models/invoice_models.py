@@ -36,6 +36,9 @@ class InvoiceManager(models.Manager):
     def outgoing(self):
         return self.get_queryset().exclude(is_incoming=True)
 
+    def unpaid(self):
+        return self.get_queryset().exclude(is_paid=True)
+
 
 class Invoice(models.Model):
     objects = InvoiceManager()
@@ -60,29 +63,32 @@ class Invoice(models.Model):
         null=False, blank=False, default=1) 
     deal = models.ForeignKey(Deal, related_name="invoices", on_delete=models.CASCADE, null=True, blank=True) 
     bank_records = models.ManyToManyField(BankRecord, related_name="invoices", blank=True)
-    
-    
+
+
     class Meta:
         ordering = ('-issued_date',)
 
     def __str__(self):
         return self.number
 
-
     def save(self, *args, **kwargs):
         items_total_sum = self.items.all().aggregate(Sum('total'))['total__sum']
-        if self.total_net == 0:
-            self.total_vat = self.total_gross / (Decimal('100.00') + self.vat_percent) * Decimal('100.00')
-            self.total_net = self.total_gross - self.total_vat
+        if self.total_net == 0 or self.total_net is None:
+            self.total_vat = round(self.total_gross / (Decimal('100.00') + self.vat_percent) - Decimal('100.00'),2)
+            self.total_net = round(self.total_gross - self.total_vat, 2)
+        # print("STEP1", self.total_net, self.total_vat, self.total_gross)
         if self.is_incoming:
-            if self.total_net > 0:
-                self.total_net = -self.total_net
-        elif items_total_sum:
+            self.total_net = -abs(self.total_net)
+            self.total_gross = -abs(self.total_gross)
+        elif items_total_sum != 0:
             self.total_net = items_total_sum
+        self.total_net = round(self.total_net, 2)
+        # print("STEP2", self.total_net, self.total_vat, self.total_gross)
         self.total_vat = self.total_net * self.vat_percent / Decimal('100.00')
-        self.total_gross = self.total_net + self.total_vat
+        self.total_gross = round(self.total_net + self.total_vat, 2)
         if self.advance_required:
             self.advance_amount = self.total_gross * self.advance_percent / Decimal('100.00')
+        # print("STEP3", self.total_net, self.total_vat, self.total_gross)
         super().save(*args, **kwargs)
 
 
