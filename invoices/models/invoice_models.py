@@ -5,7 +5,7 @@ from django.db.models import Sum
 from decimal import Decimal
 from .helpers import invoiceAutoNumber
 from .common_models import Company
-from .deal_models import Currency, Deal, BankRecord, Department
+from .deal_models import Currency, Deal, BankAccount, Department
 
 class InvoiceManager(models.Manager):
     def create_invoice_from_template(self, template, count_part, header=''):
@@ -62,8 +62,7 @@ class Invoice(models.Model):
     currency = models.ForeignKey(Currency, related_name="invoices", on_delete=models.CASCADE, 
         null=False, blank=False, default=1) 
     deal = models.ForeignKey(Deal, related_name="invoices", on_delete=models.CASCADE, null=True, blank=True) 
-    bank_records = models.ManyToManyField(BankRecord, related_name="invoices", blank=True)
-
+    
 
     class Meta:
         ordering = ('-issued_date',)
@@ -190,4 +189,28 @@ class TemplateItem(models.Model):
         super().delete(*args, **kwargs)
         template = Template.objects.get(id=id)
         template.save()
+
+
+class BankRecord(models.Model):
+    name = models.CharField(max_length=40)
+    bank_ref = models.CharField(max_length=30, default="", blank=True)
+    recorded_date = models.DateField(default=date.today)
+    description = models.CharField(max_length=200)
+    amount = models.DecimalField(default=0, max_digits=10, decimal_places=2)
+    used_amount = models.DecimalField(default=0, max_digits=10, decimal_places=2)
+    bank_account = models.ForeignKey(BankAccount, related_name="records", on_delete=models.CASCADE)
+    deal_related = models.BooleanField(default=True)
+    deals = models.ManyToManyField(Deal, related_name="bank_records", blank=True)
+    invoices = models.ManyToManyField(Invoice, related_name="bank_records", blank=True)
+
+
+    class Meta:
+        ordering = ('-recorded_date',)
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.bank_account.save()
 

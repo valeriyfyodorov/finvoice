@@ -83,7 +83,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
     deal_name = serializers.ReadOnlyField(source='deal.name')
     DT_RowId = serializers.SerializerMethodField()
     DT_RowAttr = serializers.SerializerMethodField()
-    # id = serializers.IntegerField(read_only=True)
+    id = serializers.IntegerField(read_only=True)
     
     # currency_view = CurrencySerializer(source="currency", read_only=True)
     # bank_records = serializers.SerializerMethodField()
@@ -103,7 +103,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Invoice
         fields = (
-            'DT_RowId', 'DT_RowAttr', 'number', 'issued_date', 'payment_term', 
+            'DT_RowId', 'DT_RowAttr', 'id', 'number', 'issued_date', 'payment_term', 
             'company', 'company_name', 'total_net', 'total_gross', 
             'currency', 'currency_name', 'deal', 'deal_id', 'deal_name', 
             'is_incoming', 'vat_percent', 'is_paid', 
@@ -122,6 +122,6 @@ class BankRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = BankRecord
         fields = (
-            'id', 'recorded_date', 'description', 'amount', 
+            'id', 'recorded_date', 'name', 'description', 'amount', 
             'used_amount', 'deal_related', 'deals', 'bank_account', 'bank_account_name',
         )

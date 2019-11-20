@@ -85,8 +85,9 @@
     {
         "serverSide": true,
         "ajax": "{{masterTableURL}}" + "?format=datatables",
+
         "columns": [
-            {"data": "DT_RowId", "searchable": false, "orderable": false},
+            {"data": "id", "searchable": false, "orderable": false},
             {"data": "number"},
             {"data": "issued_date"},
             {"data": "currency.name", "name": "currency.name"},
@@ -97,6 +98,7 @@
             {"data": "vat_percent", "searchable": false, "orderable": false, "visible": false},
             {"data": "is_incoming", "searchable": false, "orderable": false, "visible": false},
             ],
+        rowId: 'id',
         columnDefs: [
             {
             "targets": 0,
@@ -163,17 +165,18 @@
                   // alert("In ajax func");
                   if ( selected.any() ) {
                       // alert("Some selected");
-                      if (selected.data().deal)
+                      if (selected.data())
                       {
-                        d.deal_selected = selected.data().deal.id;
+                        console.log(selected.data());
+                        d.invoice_selected = selected.data().id;
                       }
                       else
                       {
-                        d.deal_selected = {{childTableEmptyFilter|safe}};
+                        d.invoice_selected = {{childTableEmptyFilter|safe}};
                       }
                   }
                   else {
-                      d.deal_selected = {{childTableEmptyFilter|safe}};
+                      d.invoice_selected = {{childTableEmptyFilter|safe}} ;
                   }
               }
           },

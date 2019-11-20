@@ -49,6 +49,11 @@ class ShortUpdateView(LoginRequiredMixin, UpdateView):
         context['returnUrlText'] = "Return"
         return context
 
+    def form_invalid(self, form):
+        response = super().form_invalid(form)
+        print(form.errors)
+        return response
+
     def get_success_url(self, **kwargs):
         url = self.success_url
         if (len(self.request.POST.get('returnUrl')) > 0):

@@ -16,14 +16,15 @@
 {% block extrajs %}
 <script type="text/javascript">
   $(document).ready( function () {
-    var masterTable = $('#table_bank_accounts').DataTable(
+    var masterTable = $('#table_master').DataTable(
     {
       "serverSide": true,
         // "ajax": "/api/bank_accounts/?format=datatables",
-        "ajax": "{% url 'api:bank_accounts-list' %}" + "?format=datatables",
+        "ajax": "{{masterTableURL}}" + "?format=datatables",
         select: {
             style: 'single'
         },
+        dom: 't',
         "columns": [
             {"data": "id", "searchable": false, "orderable": false},
             {"data": "name"},
@@ -50,11 +51,11 @@
     }
     );
 
-    $("#table_bank_records").append(
+    $("#table_child").append(
        "<tfoot><tr><td></td><td></td>><td></td>><td></td><td></td><td></td></tr></tfoot>"
     );
 
-    var childTableRecords = $('#table_bank_records').DataTable(
+    var childTable = $('#table_child').DataTable(
     {
       "serverSide": true,
         // "ajax": "/api/bank_accounts/?format=datatables",
@@ -71,17 +72,21 @@
                   }
                   else
                   {
-                    d.bank_account = 0;
+                    d.bank_account = {{childTableEmptyFilter|safe}} ;
                   }
               }
-          },
+          }, 
+        select: {
+            style: 'single'
+        },
         "columns": [
             {"data": "id", "searchable": false, "orderable": false},
             {"data": "recorded_date"},
+            {"data": "name"},
             {"data": "description"},
             {"data": "amount"},
-            {"data": "used_amount"},
-            {"data": "deal_related"},
+            // {"data": "used_amount"},
+            // {"data": "deal_related"},
             {"data": "deals", "name": "deals.name", "sortable": false},
             {"data": "bank_account.name", "name": "bank_account.name"},
             ],
@@ -95,13 +100,105 @@
             render: function ( data, type, row, meta ) {
                 var url_mask = "{% url 'invoices:bank_record_update' bank_record_id=12345 %}".replace(/12345/, row.id.toString());
                 var extraQuery = "?returnUrl=" + "{% url 'invoices:bank_records_index' %}";
-                return '<a href="'+ url_mask + extraQuery + '">'+'Edit'+'</a>';
+                return '<a href="'+ url_mask + '?returnUrl={{returnUrl}}">'+'Edit'+'</a>';
               }
             },
             {targets:1, render:function(data){
               return moment(data).format('DD/MM/YY');
             }},
-            {targets:5, render: function(data, type, row) {
+            {targets:2, render: function ( data, type, row ) {
+                return type === 'display' && data.length > 10 ?
+                    data.substr( 0, 10 ) +'…' :
+                    data;
+            }},
+            {targets:3, render: function ( data, type, row ) {
+                return type === 'display' && data.length > 20 ?
+                    data.substr( 0, 20 ) +'…' :
+                    data;
+            }},
+            // {targets:5, render: function(data, type, row) {
+            //   if (type === 'myExport') {
+            //     return data === true ? "Y" : "N";
+            //   }
+            //   if (data === true) {
+            //     return '<input type="checkbox" class="editor-active" onclick="return false;" checked>';
+            //   } else {
+            //     return '<input type="checkbox" onclick="return false;" class="editor-active">';
+            //   }
+            //   return data;
+            // }},
+            ],
+
+        "order": [[ 1, "desc" ]],
+        drawCallback: function () {
+            var api = this.api();
+            // console.log(api.column( 5, {page:'current'} ).data().sum());
+            $( api.column(4).footer() ).html("∑: <b>"+
+              api.column(4, { search: 'applied'} ).data().sum().toFixed(2) + 
+              "</b>"
+            );
+        },
+    }
+    );
+
+
+$("#table_grand_child").append(
+       "<tfoot><tr><td></td><td></td>><td></td>><td></td><td></td><td></td></tr></tfoot>"
+    );
+    var grandChildTable = $('#table_grand_child').DataTable(
+    {
+        "serverSide": true,
+        "ajax": {
+              url: "{{grandChildTableURL}}" + "?format=datatables",
+              type: 'get',
+              data: function ( d ) {
+                  var selected = childTable.row( { selected: true } );
+                  // console.log("In ajax func");
+                  if ( selected.any() ) {
+                      // console.log("Some selected");
+                      if (selected.data())
+                      {
+                        // console.log(d);
+                        d.bank_record_selected = selected.data().id;
+                      }
+                      else
+                      {
+                        d.bank_record_selected = '{{grandChildTableEmptyFilter|safe}}' ;
+                      }
+                  }
+                  else {
+                      d.bank_record_selected = '{{grandChildTableEmptyFilter|safe}}' ;
+                  }
+              }
+          },
+        "columns": [
+            {"data": "DT_RowId", "searchable": false, "orderable": false},
+            {"data": "number"},
+            {"data": "issued_date"},
+            {"data": "currency.name", "name": "currency.name"},
+            {"data": "company.name", "name": "company.name"},
+            {"data": "total_gross"},
+            {"data": "deal.name", "name": "deal.name", "defaultContent": "<i>Not set</i>"},
+            {"data": "is_paid", "name": "is_paid"},
+            {"data": "vat_percent", "searchable": false, "orderable": false, "visible": false},
+            {"data": "is_incoming", "searchable": false, "orderable": false, "visible": false},
+            ],
+        columnDefs: [
+            {
+            "targets": 0,
+            "data": "DT_RowId",          // This does the trick... Adding data ...
+            // "visible": false,      // And making this columns invisible ...
+            "orderable" : false,
+            "searchable": false,
+            render: function ( data, type, row, meta ) {
+                var url_mask = "{% url 'invoices:invoice_update' invoice_id=12345 %}".replace(/12345/, row.DT_RowId.toString());
+                return '<a href="'+ url_mask + '?returnUrl={{returnUrl}}">'+'Info'+'</a>';
+              }
+            },
+            {targets:2, render:function(data){
+              return moment(data).format('DD/MM/YY');
+            }},
+            {targets:7, render: function(data, type, row) {
               if (type === 'myExport') {
                 return data === true ? "Y" : "N";
               }
@@ -113,23 +210,45 @@
               return data;
             }},
             ],
-
-        "order": [[ 1, "desc" ]],
+        select: {
+            style: 'single'
+          },
+        // dom: 'lfBrtip',
+        // buttons: [
+        //             {extend: "create", editor: editorMaster, text: '<i class="fas fa-plus-square"></i>'},
+        //             {extend: "edit", editor: editorMaster, text: '<i class="fas fa-edit"></i>'},
+        //             {extend: "remove", editor: editorMaster, text: '<i class="fas fa-trash-alt"></i>'},
+        //             {extend: 'excelHtml5', title: 'Data export', text: 'xls'},
+        //             {extend: 'pdfHtml5',title: 'Data export', text: 'pdf'},
+        //         ],
+        "order": [[ 2, "desc" ]],
         drawCallback: function () {
             var api = this.api();
             // console.log(api.column( 5, {page:'current'} ).data().sum());
-            $( api.column(3).footer() ).html("∑: <b>"+
-              api.column(3, { search: 'applied'} ).data().sum().toFixed(2) + 
+            $( api.column(5).footer() ).html("∑: <b>"+
+              api.column( 5, {page:'current'} ).data().sum().toFixed(2) + 
               "</b>"
             );
         },
     }
     );
+
     masterTable.on( 'select', function () {
-      childTableRecords.ajax.reload();
+      childTable.ajax.reload();
+      // childTable.rows().deselect();
+      grandChildTable.clear();
     } );
+
     masterTable.on( 'deselect', function () {
-        childTableRecords.ajax.reload();
+        childTable.ajax.reload();
+        // grandChildTable.reload();
+    } );
+
+    childTable.on( 'select', function () {
+      grandChildTable.ajax.reload();
+    } );
+    childTable.on( 'deselect', function () {
+        grandChildTable.clear();
     } );
 
 } );
@@ -141,7 +260,7 @@
   <div class="row">
     <div class="col-md-12">
       {{master_header}}
-    <table id="table_bank_accounts" class="display table dataTable table-striped table-sm table-hover" role="grid">
+    <table id="table_master" class="display table dataTable table-striped table-sm table-hover" role="grid">
         <thead>
          <tr>
             <th>...</th>
@@ -159,7 +278,27 @@
   <div class="row">
     <div class="col-md-12">
        {{child_header}}
-    <table id="table_bank_records" class="display table table-striped table-hover table-sm">
+    <table id="table_child" class="display table table-striped table-hover table-sm">
+        <thead>
+         <tr>
+            <th>...</th>
+             <th>Date</th>
+             <th>Name</th>
+             <th>Details </th>
+             <th>Amount</th>
+             <th>Deals</th>
+             <th>Account name</th>
+          </tr>
+        </thead>
+      </table>
+    </div> {# end of col #}
+  </div> {# end of row #}
+
+
+  <div class="row">
+    <div class="col-md-12">
+       {{grand_child_header}}
+    <table id="table_grand_child" class="display table table-striped table-hover table-sm">
         <thead>
          <tr>
             <th>...</th>
@@ -175,6 +314,7 @@
       </table>
     </div> {# end of col #}
   </div> {# end of row #}
+
 
 </div> {# end of container #}
 

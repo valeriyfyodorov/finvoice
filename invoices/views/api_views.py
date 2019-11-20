@@ -90,12 +90,18 @@ class InvoicesAllViewSet(DatatablesEditorModelViewSet):
 
     def get_queryset(self):
         deal_selected = self.request.query_params.get('deal_selected', None)
+        bank_record_selected = self.request.query_params.get('bank_record_selected', None)
         if deal_selected is not None:
             if len(deal_selected) == 0:
                 deal_selected = None
             queryset = Invoice.objects.all().filter(deal=deal_selected)
         else:
             queryset = Invoice.objects.all()
+        if bank_record_selected is not None:
+            # print("TEST INVOICE 2", invoice_selected, len(invoice_selected))
+            if len(bank_record_selected) == 0:
+                bank_record_selected = None
+            queryset = queryset.filter(bank_records__id=bank_record_selected)
         return queryset
 
     class Meta:
@@ -109,6 +115,7 @@ class BankRecordViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         deal_selected = self.request.query_params.get('deal_selected', None)
         bank_account = self.request.query_params.get('bank_account', None)
+        invoice_selected = self.request.query_params.get('invoice_selected', None)
         if bank_account is not None:
             queryset = BankRecord.objects.all().filter(bank_account=bank_account)
         else:
@@ -117,6 +124,12 @@ class BankRecordViewSet(viewsets.ModelViewSet):
             if len(deal_selected) == 0:
                 deal_selected = None
             queryset = queryset.filter(deals__id=deal_selected)
+        # print("TEST INVOICE 1", invoice_selected)
+        if invoice_selected is not None:
+            # print("TEST INVOICE 2", invoice_selected, len(invoice_selected))
+            if len(invoice_selected) == 0:
+                invoice_selected = None
+            queryset = queryset.filter(invoices__id=invoice_selected)
         return queryset
 
 

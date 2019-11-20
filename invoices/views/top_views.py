@@ -8,7 +8,21 @@ from invoices.forms import *
 @login_required
 @user_passes_test(lambda u:u.is_staff)
 def bank_records_index(request):
-    context = {'master_header': 'Accounts', 'child_header': 'Records'}
+    masterTableURL = reverse_lazy('api:bank_accounts-list')
+    childTableURL = reverse_lazy('api:bank_records-list')
+    grandChildTableURL = reverse_lazy('api:invoices-list')
+    context = {
+        'master_header': 'Accounts', 
+        'child_header': 'Records of account',
+        'grand_child_header': 'Invoices for record',
+        'default_is_incoming': '0',
+        'childTableEmptyFilter': '0',
+        'grandChildTableEmptyFilter': '0',
+        'masterTableURL': masterTableURL,
+        'childTableURL': childTableURL,
+        'grandChildTableURL': grandChildTableURL,
+        'returnUrl': reverse_lazy('invoices:bank_records_index'),
+    }
     return render(request, "invoices/bank_records.html", context)
 
 
@@ -67,6 +81,7 @@ def deals_index(request):
         'default_is_incoming': '0',
         'grandMasterTableURL': grandMasterTableURL,
         'masterTableURL': masterTableURL,
-        'childTableURL': childTableURL,}
+        'childTableURL': childTableURL,
+        'returnUrl': reverse_lazy('invoices:deals_index'),}
     return render(request, "invoices/deals_invoices_records.html", context)
 

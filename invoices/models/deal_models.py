@@ -56,25 +56,5 @@ class BankAccount(models.Model):
         self.balance = balance
         super().save(*args, **kwargs)
 
-class BankRecord(models.Model):
-    name = models.CharField(max_length=30)
-    bank_ref = models.CharField(max_length=30, default="", blank=True)
-    recorded_date = models.DateField(default=date.today)
-    description = models.CharField(max_length=200)
-    amount = models.DecimalField(default=0, max_digits=10, decimal_places=2)
-    used_amount = models.DecimalField(default=0, max_digits=10, decimal_places=2)
-    bank_account = models.ForeignKey(BankAccount, related_name="records", on_delete=models.CASCADE)
-    deal_related = models.BooleanField(default=True)
-    deals = models.ManyToManyField(Deal, related_name="bank_records", blank=True)
-
-    class Meta:
-        ordering = ('-recorded_date',)
-
-    def __str__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        self.bank_account.save()
 
 

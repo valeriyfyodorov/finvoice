@@ -34,4 +34,4 @@ def set_invoice_deal_on_record_import(invoices_not_paid, bank_record):
         invoice.save()
         if invoice.deal:
             bank_record.deals.add(invoice.deal)
-            bank_record.save()
+        bank_record.save()
