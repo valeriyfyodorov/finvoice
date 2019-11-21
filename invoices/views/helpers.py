@@ -1,15 +1,19 @@
 import re
 
-def set_invoice_deal_on_record_import(invoices_not_paid, bank_record):
+def set_invoice_deal_on_record_import(invoices_not_paid, bank_record, bank_deal):
     for invoice in invoices_not_paid:
-        if len(bank_record.description) < 3:
+        name = bank_record.name.lower().strip()
+        if bank_deal and name == "bank":
+            bank_record.deals.add(bank_deal)
+            bank_record.save()
+            continue
+        if len(bank_record.description) < 3 and name != "bank":
             continue
         if invoice.currency != bank_record.bank_account.currency:
             continue
         if invoice.issued_date > bank_record.recorded_date:
             continue
         description = bank_record.description.lower()
-        name = bank_record.name.lower().strip()
         modified_number = re.sub('^[^0-9]+[\s\-]?', '', invoice.number)
         found_number = modified_number.lower().strip() in description
         found_name_maybe = invoice.company.name.lower().strip()[:10].strip() in name

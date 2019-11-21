@@ -123,9 +123,9 @@
               return data;
             }},
             ],
-        select: {
-            style: 'single'
-          },
+        // select: {
+        //     style: 'single'
+        //   },
         // dom: 'lfBrtip',
         // buttons: [
         //             {extend: "create", editor: editorMaster, text: '<i class="fas fa-plus-square"></i>'},
@@ -179,10 +179,11 @@
         "columns": [
             {"data": "id", "searchable": false, "orderable": false},
             {"data": "recorded_date"},
+            {"data": "name"},
             {"data": "description"},
             {"data": "amount"},
-            {"data": "used_amount"},
-            {"data": "deal_related"},
+            // {"data": "used_amount"},
+            // {"data": "deal_related"},
             {"data": "deals", "name": "deals.name", "sortable": false},
             {"data": "bank_account.name", "name": "bank_account.name"},
             ],
@@ -200,24 +201,24 @@
             {targets:1, render:function(data){
               return moment(data).format('DD/MM/YY');
             }},
-            {targets:5, render: function(data, type, row) {
-              if (type === 'myExport') {
-                return data === true ? "Y" : "N";
-              }
-              if (data === true) {
-                return '<input type="checkbox" class="editor-active" onclick="return false;" checked>';
-              } else {
-                return '<input type="checkbox" onclick="return false;" class="editor-active">';
-              }
-              return data;
-            }},
+            // {targets:5, render: function(data, type, row) {
+            //   if (type === 'myExport') {
+            //     return data === true ? "Y" : "N";
+            //   }
+            //   if (data === true) {
+            //     return '<input type="checkbox" class="editor-active" onclick="return false;" checked>';
+            //   } else {
+            //     return '<input type="checkbox" onclick="return false;" class="editor-active">';
+            //   }
+            //   return data;
+            // }},
             ],
         "order": [[ 1, "desc" ]],
         drawCallback: function () {
             var api = this.api();
             // console.log(api.column( 5, {page:'current'} ).data().sum());
-            $( api.column(3).footer() ).html("∑: <b>"+
-              api.column( 3, {page:'current'} ).data().sum().toFixed(2) + 
+            $( api.column(4).footer() ).html("∑: <b>"+
+              api.column( 4, {page:'current'} ).data().sum().toFixed(2) + 
               "</b>"
             );
         },
@@ -231,7 +232,7 @@
     } );
     grandMasterTable.on( 'deselect', function () {
         masterTable.ajax.reload();
-        childTable.clear();
+        childTable.ajax.reload();
     } );
     
     // masterTable.on( 'select', function () {
@@ -294,10 +295,9 @@
          <tr>
             <th>...</th>
              <th>Date</th>
+             <th>Name</th>
              <th>Details </th>
              <th>Amount</th>
-             <th>Used</th>
-             <th>In deals</th>
              <th>Deals</th>
              <th>Account name</th>
           </tr>

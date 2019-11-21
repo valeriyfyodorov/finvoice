@@ -37,6 +37,8 @@ def invoices_incoming_index(request):
         'masterTableURL': masterTableURL,
         'childTableURL': childTableURL,
         'childTableEmptyFilter': '0',
+        'masterTableFilterParameter': "id",
+        'childTableFilterParameter': "invoice_selected",
         'returnUrl': reverse_lazy('invoices:invoices_incoming_index'),}
     return render(request, "invoices/invoices_to_bank_records.html", context)
 
@@ -47,11 +49,13 @@ def invoices_outgoing_index(request):
     childTableURL = reverse_lazy('api:bank_records-list')
     context = {
         'master_header': 'Invoices outgoing', 
-        'child_header': 'Bank records for invoice',
+        'child_header': 'Bank records related to the deal',
         'default_is_incoming': '0',
         'masterTableURL': masterTableURL,
         'childTableURL': childTableURL,
         'childTableEmptyFilter': '0',
+        'masterTableFilterParameter': "id",
+        'childTableFilterParameter': "invoice_selected",
         'returnUrl': reverse_lazy('invoices:invoices_outgoing_index'),}
     return render(request, "invoices/invoices_to_bank_records.html", context)
 
@@ -66,6 +70,8 @@ def invoices_unpaid_index(request):
         'masterTableURL': masterTableURL,
         'childTableURL': childTableURL,
         'childTableEmptyFilter': "''",
+        'masterTableFilterParameter': "deal.id",
+        'childTableFilterParameter': "deal_selected",
         'returnUrl': reverse_lazy('invoices:invoices_unpaid_index'),}
     return render(request, "invoices/invoices_to_bank_records.html", context)
 
@@ -77,7 +83,7 @@ def deals_index(request):
     context = {
         'grand_master_header': 'Deals', 
         'master_header': 'Invoices related', 
-        'child_header': 'Bank records for invoice',
+        'child_header': 'Bank records related to deal',
         'default_is_incoming': '0',
         'grandMasterTableURL': grandMasterTableURL,
         'masterTableURL': masterTableURL,

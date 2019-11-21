@@ -195,7 +195,7 @@ class BankRecord(models.Model):
     name = models.CharField(max_length=40)
     bank_ref = models.CharField(max_length=30, default="", blank=True)
     recorded_date = models.DateField(default=date.today)
-    description = models.CharField(max_length=200)
+    description = models.CharField(max_length=200, blank=True)
     amount = models.DecimalField(default=0, max_digits=10, decimal_places=2)
     used_amount = models.DecimalField(default=0, max_digits=10, decimal_places=2)
     bank_account = models.ForeignKey(BankAccount, related_name="records", on_delete=models.CASCADE)
@@ -203,14 +203,14 @@ class BankRecord(models.Model):
     deals = models.ManyToManyField(Deal, related_name="bank_records", blank=True)
     invoices = models.ManyToManyField(Invoice, related_name="bank_records", blank=True)
 
-
     class Meta:
         ordering = ('-recorded_date',)
 
     def __str__(self):
-        return self.name
+        return self.name + str(self.recorded_date)
 
     def save(self, *args, **kwargs):
+        if (self.id and self.id > 0):
+            self.deal_related = self.deals.exists()
         super().save(*args, **kwargs)
         self.bank_account.save()
-

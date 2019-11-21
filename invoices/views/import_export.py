@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.shortcuts import redirect
-from invoices.models import BankAccount, BankRecord, Invoice
+from invoices.models import BankAccount, BankRecord, Invoice, Deal
 from invoices.forms import BankAccountChoiceForm
 import xml.etree.ElementTree as ET
 from decimal import Decimal
@@ -16,6 +16,7 @@ def import_bank_statement(request):
         form = BankAccountChoiceForm(request.POST, request.FILES)
         # print(form)
         if form.is_valid():
+            bank_deal = Deal.objects.filter(name="BANK").first()
             bank_account = None
             if (form.cleaned_data['bank_account']):
                 bank_account = form.cleaned_data['bank_account']
@@ -58,10 +59,13 @@ def import_bank_statement(request):
                     description = re.sub('prepayment', '', description, flags=re.IGNORECASE)
                     description = description.replace("maksājum", "")[:90]
                 # print(name, recorded_date, amount, bank_ref, is_debit, description)
-                bank_record = BankRecord.objects.create(name=name, 
+                bank_record = BankRecord.objects.create(
+                    name=name, 
                     bank_ref=bank_ref, recorded_date=recorded_date, 
-                    description=description, amount=amount, bank_account=bank_account)
-                set_invoice_deal_on_record_import(invoices_not_paid, bank_record)
+                    description=description, amount=amount, bank_account=bank_account,
+                    deal_related=False
+                )
+                set_invoice_deal_on_record_import(invoices_not_paid, bank_record, bank_deal)
             messages.success(request, 'File imported!')
         else:
             messages.error(request, 'Problem with form')
