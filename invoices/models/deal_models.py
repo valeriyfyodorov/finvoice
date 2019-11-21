@@ -23,7 +23,7 @@ class Deal(models.Model):
         ordering = ('-started_date', 'name',)
 
     def __str__(self):
-        return self.name
+        return self.name + '-' + self.department.name
 
 class Currency(models.Model):
     name = models.CharField(max_length=10)
