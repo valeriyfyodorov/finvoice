@@ -73,21 +73,21 @@ class Invoice(models.Model):
     def save(self, *args, **kwargs):
         items_total_sum = self.items.all().aggregate(Sum('total'))['total__sum']
         if self.total_net == 0 or self.total_net is None:
-            self.total_vat = round(self.total_gross / (Decimal('100.00') + self.vat_percent) - Decimal('100.00'),2)
+            self.total_vat = round(Decimal('100.00') * (self.total_gross - self.total_gross / (Decimal('100.00') + self.vat_percent)),2)
             self.total_net = round(self.total_gross - self.total_vat, 2)
-        # print("STEP1", self.total_net, self.total_vat, self.total_gross)
+        print("STEP1", self.total_net, self.total_vat, self.total_gross)
         if self.is_incoming:
             self.total_net = -abs(self.total_net)
             self.total_gross = -abs(self.total_gross)
-        elif items_total_sum != 0:
+        elif items_total_sum is not None and items_total_sum != 0:
             self.total_net = items_total_sum
         self.total_net = round(self.total_net, 2)
-        # print("STEP2", self.total_net, self.total_vat, self.total_gross)
+        print("STEP2", self.total_net, self.total_vat, self.total_gross)
         self.total_vat = self.total_net * self.vat_percent / Decimal('100.00')
         self.total_gross = round(self.total_net + self.total_vat, 2)
         if self.advance_required:
             self.advance_amount = self.total_gross * self.advance_percent / Decimal('100.00')
-        # print("STEP3", self.total_net, self.total_vat, self.total_gross)
+        print("STEP3", self.total_net, self.total_vat, self.total_gross)
         super().save(*args, **kwargs)
 
 
