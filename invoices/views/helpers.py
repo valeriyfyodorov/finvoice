@@ -24,7 +24,6 @@ def set_invoice_deal_on_record_import(invoices_not_paid, bank_record, bank_deal,
         found_amount = (invoice.total_gross == bank_record.amount)
         found_advance = (invoice.advance_amount == bank_record.amount)
         accept_for_invoice = False
-        accept_for_deal = False
         mark_paid = False
         if (found_name or found_name_maybe) and found_number and found_amount:
             accept_for_invoice = True
@@ -34,15 +33,8 @@ def set_invoice_deal_on_record_import(invoices_not_paid, bank_record, bank_deal,
         elif found_name and found_number and (invoice.total_gross < 0) and (bank_record.amount < 0):
             accept_for_invoice = True
         elif found_name and found_number and (invoice.total_gross > 0) and (bank_record.amount > 0):
-            accept_for_deal = True
-        if not accept_for_invoice and not accept_for_deal:
-            continue
-        if not accept_for_invoice and accept_for_deal:
-            if invoice.deal:
-                bank_record.deals.add(invoice.deal)
-                bank_record.deal_related = True
-                invoice.save()
-                bank_record.save()
+            accept_for_invoice = True
+        if not accept_for_invoice:
             continue
         # some valuable info says bank record belongs to the invoice
         invoice.bank_records.add(bank_record)
