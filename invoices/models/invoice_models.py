@@ -31,13 +31,13 @@ class InvoiceManager(models.Manager):
         return invoice
 
     def incoming(self):
-        return self.get_queryset().filter(is_incoming=True)
+        return self.get_queryset().filter(is_incoming=True).order_by('-issued_date', '-number')
 
     def outgoing(self):
-        return self.get_queryset().exclude(is_incoming=True)
+        return self.get_queryset().exclude(is_incoming=True).order_by('-issued_date', '-number')
 
     def unpaid(self):
-        return self.get_queryset().exclude(is_paid=True)
+        return self.get_queryset().exclude(is_paid=True).order_by('-issued_date', '-number')
 
 
 class Invoice(models.Model):
@@ -64,7 +64,7 @@ class Invoice(models.Model):
     deal = models.ForeignKey(Deal, related_name="invoices", on_delete=models.CASCADE, null=True, blank=True) 
 
     class Meta:
-        ordering = ('-issued_date',)
+        ordering = ('-number', '-issued_date',)
 
     def __str__(self):
         return self.number
