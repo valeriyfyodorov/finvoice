@@ -133,7 +133,7 @@
     );
     var masterTable = $('#table_master').DataTable(
     {
-        "serverSide": true,
+        "serverSide": false,
         "ajax": {
               url: "{{masterTableURL}}" + "?format=datatables",
               type: 'get',

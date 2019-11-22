@@ -69,6 +69,12 @@ class Invoice(models.Model):
     def __str__(self):
         return self.number
 
+    def is_incoming_name(self):
+        if self.is_incoming:
+            return "INCMG"
+        else:
+            return "OUTGG" 
+
     def save(self, *args, **kwargs):
         items_total_sum = self.items.all().aggregate(Sum('total'))['total__sum']
         if self.total_net == 0 or self.total_net is None:

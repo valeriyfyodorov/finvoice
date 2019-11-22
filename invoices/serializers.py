@@ -82,22 +82,22 @@ class InvoiceSerializer(serializers.ModelSerializer):
     company_name = serializers.ReadOnlyField(source='company.name')
     deal = DealSerializer(required=False)
     deal_name = serializers.ReadOnlyField(source='deal.name')
-    is_incoming_name = serializers.SerializerMethodField(read_only=True)
     DT_RowId = serializers.SerializerMethodField()
     DT_RowAttr = serializers.SerializerMethodField()
     id = serializers.IntegerField(read_only=True)
-     # currency_view = CurrencySerializer(source="currency", read_only=True)
+    is_incoming_name = serializers.CharField(read_only=True)
+    # currency_view = CurrencySerializer(source="currency", read_only=True)
     # bank_records = serializers.SerializerMethodField()
 
     # @staticmethod
     # def get_bank_records(invoice):
     #     return ', '.join([str(bank_record) for bank_record in invoice.bank_record.all()])
 
-    def get_is_incoming_name(self, obj):
-        if obj.is_incoming:
-            return "INCMG"
-        else:
-            return "OUTGG" 
+    # def get_is_incoming_name(invoice):
+    #     if invoice.is_incoming:
+    #         return "INCMG"
+    #     else:
+    #         return "OUTGG" 
 
     @staticmethod
     def get_DT_RowId(invoice):
