@@ -62,7 +62,6 @@ class Invoice(models.Model):
     currency = models.ForeignKey(Currency, related_name="invoices", on_delete=models.CASCADE, 
         null=False, blank=False, default=1) 
     deal = models.ForeignKey(Deal, related_name="invoices", on_delete=models.CASCADE, null=True, blank=True) 
-    
 
     class Meta:
         ordering = ('-issued_date',)
@@ -84,9 +83,10 @@ class Invoice(models.Model):
         # print("STEP1", self.total_net, self.total_vat, self.total_gross)
         if self.is_incoming:
             self.total_net = -abs(self.total_net)
-            self.total_gross = -abs(self.total_gross)
         elif items_total_sum is not None and items_total_sum != 0:
             self.total_net = items_total_sum
+        elif not self.is_incoming:
+            self.total_net = abs(self.total_net)
         self.total_net = round(self.total_net, 2)
         # print("STEP2", self.total_net, self.total_vat, self.total_gross)
         self.total_vat = self.total_net * self.vat_percent / Decimal('100.00')
