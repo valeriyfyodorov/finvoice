@@ -1,10 +1,12 @@
 import re
 
-def set_invoice_deal_on_record_import(invoices_not_paid, bank_record, bank_deal):
+def set_invoice_deal_on_record_import(invoices_not_paid, bank_record, bank_deal, internal_invoice):
     for invoice in invoices_not_paid:
         name = bank_record.name.lower().strip()
         if bank_deal and name == "bank":
             bank_record.deals.add(bank_deal)
+            if internal_invoice:
+                bank_record.invoices.add(internal_invoice)
             bank_record.deal_related = True
             bank_record.save()
             continue

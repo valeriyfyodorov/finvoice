@@ -17,6 +17,7 @@ def import_bank_statement(request):
         # print(form)
         if form.is_valid():
             bank_deal = Deal.objects.filter(name="BANK").first()
+            internal_invoice = Invoice.objects.filter(name="INTERNAL").first()
             bank_account = None
             if (form.cleaned_data['bank_account']):
                 bank_account = form.cleaned_data['bank_account']
@@ -65,7 +66,11 @@ def import_bank_statement(request):
                     description=description, amount=amount, bank_account=bank_account,
                     deal_related=False
                 )
-                set_invoice_deal_on_record_import(invoices_not_paid, bank_record, bank_deal)
+                set_invoice_deal_on_record_import(
+                    invoices_not_paid, 
+                    bank_record, 
+                    bank_deal,
+                    internal_invoice)
             messages.success(request, 'File imported!')
         else:
             messages.error(request, 'Problem with form')
