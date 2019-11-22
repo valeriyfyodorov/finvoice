@@ -141,8 +141,68 @@
     }
     );
 
+    var editorGrandChild = new $.fn.dataTable.Editor( {
+          ajax: {url: "{{grandChildTableURL}}" + "editor/?format=datatables",
+                headers: {'X-CSRFToken': '{{ csrf_token }}'},
+              },
+          table: "#table_grand_child",
+          fields: [ {
+                  label: "Number:",
+                  name:  "number"
+              }, {
+                  label: "Issued date:",
+                  name:  "issued_date",
+                  type: "datetime",
+                  def: function () { return new Date(); },
+                  displayFormat: "D/M/YYYY",
+                  wireFormat: 'YYYY-MM-DD',
+              }, {
+                    label: "Currency:",
+                    name: "currency.id",
+                    type: "select"
+              }, {
+                    label: "Company:",
+                    name: "company.id",
+                    type: "select"
+              }, {
+                  label: "Total gross:",
+                  name:  "total_gross",
+                  def: "0.00",
+              }, {
+                  label: "VAT percent:",
+                  name:  "vat_percent",
+                  def: 0,
+              }, {
+                  label: "Incoming:",
+                  name:  "is_incoming",
+                  type: "checkbox",
+                  separator: "",
+                  options:   [
+                      { label: '', value: 1 }
+                  ],
+                  unselectedValue: "false",
+                  def: '{{default_is_incoming}}',
+              }, {
+                    label: "Deal:",
+                    name: "deal.id",
+                    type: "select",
+                    def: 0,
+              }, {
+                  label: "Paid:",
+                  name:  "is_paid",
+                  type: "checkbox",
+                  separator: "",
+                  options:   [
+                      { label: '', value: 1 }
+                  ],
+                  unselectedValue: "false",
+                  def: 0,
+              },
+          ]
+      } );
 
-$("#table_grand_child").append(
+
+    $("#table_grand_child").append(
        "<tfoot><tr><td></td><td></td>><td></td>><td></td><td></td><td></td></tr></tfoot>"
     );
     var grandChildTable = $('#table_grand_child').DataTable(
@@ -230,6 +290,16 @@ $("#table_grand_child").append(
               "</b>"
             );
         },
+        buttons: [
+                    // {extend: "create", editor: editorGrandChild, text: '<i class="fas fa-plus-square"></i>'},
+                    {extend: "edit", editor: editorGrandChild, text: '<i class="fas fa-edit"></i>'},
+                    // {extend: "remove", editor: editorGrandChild, text: '<i class="fas fa-trash-alt"></i>'},
+                    {extend: 'excelHtml5', title: 'Data export', text: 'xls'},
+                    {extend: 'pdfHtml5',title: 'Data export', text: 'pdf'},
+                ],
+        "initComplete": function(settings, json) {
+            grandChildTable.buttons().container().appendTo("#table_grand_child_wrapper .col-md-6:eq(0)");
+        }
     }
     );
 
