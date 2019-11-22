@@ -99,6 +99,8 @@ class Invoice(models.Model):
         self.total_gross = round(self.total_net + self.total_vat, 2)
         if self.advance_required:
             self.advance_amount = self.total_gross * self.advance_percent / Decimal('100.00')
+        else:
+            self.advance_amount = 0
         # print("STEP3", self.total_net, self.total_vat, self.total_gross)
         super().save(*args, **kwargs)
 

@@ -65,7 +65,7 @@ def invoices_unpaid_index(request):
     childTableURL = reverse_lazy('api:bank_records-list')
     context = {
         'master_header': 'Invoices unpaid', 
-        'child_header': 'Bank records for invoice',
+        'child_header': 'Check below bank records for deal - maybe paid?',
         'default_is_incoming': '0',
         'masterTableURL': masterTableURL,
         'childTableURL': childTableURL,
