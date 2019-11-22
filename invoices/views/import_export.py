@@ -17,7 +17,7 @@ def import_bank_statement(request):
         # print(form)
         if form.is_valid():
             bank_deal = Deal.objects.filter(name="BANK").first()
-            internal_invoice = Invoice.objects.filter(name="INTERNAL").first()
+            internal_invoice = Invoice.objects.filter(number="INTERNAL").first()
             bank_account = None
             if (form.cleaned_data['bank_account']):
                 bank_account = form.cleaned_data['bank_account']
