@@ -68,6 +68,7 @@ class DealSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Deal
+        depth = 0
         fields = (
             'id', 'name', 'started_date', 'department', 
         )
@@ -79,13 +80,12 @@ class InvoiceSerializer(serializers.ModelSerializer):
     currency_name = serializers.ReadOnlyField(source='currency.name')
     company = CompanySerializer()
     company_name = serializers.ReadOnlyField(source='company.name')
-    deal = DealSerializer(required=False)
+    # deal = DealSerializer(required=False)
     deal_name = serializers.ReadOnlyField(source='deal.name')
     DT_RowId = serializers.SerializerMethodField()
     DT_RowAttr = serializers.SerializerMethodField()
     id = serializers.IntegerField(read_only=True)
-    
-    # currency_view = CurrencySerializer(source="currency", read_only=True)
+     # currency_view = CurrencySerializer(source="currency", read_only=True)
     # bank_records = serializers.SerializerMethodField()
 
     # @staticmethod
@@ -99,9 +99,10 @@ class InvoiceSerializer(serializers.ModelSerializer):
     @staticmethod
     def get_DT_RowAttr(invoice):
         return {'data-pk': invoice.pk}
-    
+
     class Meta:
         model = Invoice
+        depth = 1
         fields = (
             'DT_RowId', 'DT_RowAttr', 'id', 'number', 'issued_date', 'payment_term', 
             'company', 'company_name', 'total_net', 'total_gross', 
