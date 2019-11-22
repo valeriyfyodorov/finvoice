@@ -84,7 +84,7 @@ def deals_index(request):
         'grand_master_header': 'Deals', 
         'master_header': 'Invoices related', 
         'child_header': 'Bank records related to deal',
-        'default_is_incoming': '0',
+        'default_is_incoming': '1',
         'grandMasterTableURL': grandMasterTableURL,
         'masterTableURL': masterTableURL,
         'childTableURL': childTableURL,
