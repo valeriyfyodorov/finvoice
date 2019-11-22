@@ -80,7 +80,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
     currency_name = serializers.ReadOnlyField(source='currency.name')
     company = CompanySerializer()
     company_name = serializers.ReadOnlyField(source='company.name')
-    # deal = DealSerializer(required=False)
+    deal = DealSerializer(required=False)
     deal_name = serializers.ReadOnlyField(source='deal.name')
     DT_RowId = serializers.SerializerMethodField()
     DT_RowAttr = serializers.SerializerMethodField()
@@ -102,7 +102,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Invoice
-        depth = 1
+        # depth = 1 # removed to write new invoices
         fields = (
             'DT_RowId', 'DT_RowAttr', 'id', 'number', 'issued_date', 'payment_term', 
             'company', 'company_name', 'total_net', 'total_gross', 
