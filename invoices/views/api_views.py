@@ -129,10 +129,7 @@ class BankRecordViewSet(viewsets.ModelViewSet):
             # print("TEST INVOICE 2", invoice_selected, len(invoice_selected))
             if len(invoice_selected) == 0:
                 invoice_selected = None
-                queryset = queryset.filter(invoices__id=invoice_selected) \
-                    .filter(deal_related=False)
-            else:
-                queryset = queryset.filter(invoices__id=invoice_selected)
+            queryset = queryset.filter(invoices__id=invoice_selected)
         return queryset
 
 
