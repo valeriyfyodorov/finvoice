@@ -36,7 +36,7 @@ def invoices_incoming_index(request):
         'default_is_incoming': '1',
         'masterTableURL': masterTableURL,
         'childTableURL': childTableURL,
-        'childTableEmptyFilter': '0',
+        'childTableEmptyFilter': '',
         'masterTableFilterParameter': "id",
         'childTableFilterParameter': "invoice_selected",
         'returnUrl': reverse_lazy('invoices:invoices_incoming_index'),}
@@ -53,7 +53,7 @@ def invoices_outgoing_index(request):
         'default_is_incoming': '0',
         'masterTableURL': masterTableURL,
         'childTableURL': childTableURL,
-        'childTableEmptyFilter': '0',
+        'childTableEmptyFilter': '',
         'masterTableFilterParameter': "id",
         'childTableFilterParameter': "invoice_selected",
         'returnUrl': reverse_lazy('invoices:invoices_outgoing_index'),}
@@ -69,7 +69,7 @@ def invoices_unpaid_index(request):
         'default_is_incoming': '0',
         'masterTableURL': masterTableURL,
         'childTableURL': childTableURL,
-        'childTableEmptyFilter': "''",
+        'childTableEmptyFilter': '',
         'masterTableFilterParameter': "deal.id",
         'childTableFilterParameter': "deal_selected",
         'returnUrl': reverse_lazy('invoices:invoices_unpaid_index'),}
