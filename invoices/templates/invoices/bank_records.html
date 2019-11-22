@@ -150,6 +150,16 @@
                   label: "Number:",
                   name:  "number"
               }, {
+                  label: "Paid:",
+                  name:  "is_paid",
+                  type: "checkbox",
+                  separator: "",
+                  options:   [
+                      { label: '', value: 1 }
+                  ],
+                  unselectedValue: "false",
+                  def: 0,
+              }, {
                   label: "Issued date:",
                   name:  "issued_date",
                   type: "datetime",
@@ -187,17 +197,7 @@
                     name: "deal.id",
                     type: "select",
                     def: 0,
-              }, {
-                  label: "Paid:",
-                  name:  "is_paid",
-                  type: "checkbox",
-                  separator: "",
-                  options:   [
-                      { label: '', value: 1 }
-                  ],
-                  unselectedValue: "false",
-                  def: 0,
-              },
+              }, 
           ]
       } );
 
