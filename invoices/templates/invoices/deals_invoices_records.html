@@ -165,10 +165,11 @@
             {"data": "company.name", "name": "company.name"},
             {"data": "total_gross"},
             {"data": "deal.name", "name": "deal.name", "defaultContent": "<i>Not set</i>"},
-            {"data": "is_paid", "name": "is_paid"},
+            {"data": "is_paid", "name": "is_paid", "searchable": false,},
             {"data": "is_incoming_name", "name": "is_incoming_name"},
-            {"data": "vat_percent", "searchable": false, "orderable": false, "visible": false},
             {"data": "is_incoming", "searchable": false, "orderable": false, "visible": false},
+            {"data": "vat_percent", "searchable": false, "orderable": false, "visible": false},
+            
             ],
         columnDefs: [
             {
@@ -182,9 +183,9 @@
                 return '<a href="'+ url_mask + '?returnUrl={{returnUrl}}">'+'Info'+'</a>';
               }
             },
-            {targets:2, render:function(data){
-              return moment(data).format('DD/MM/YY');
-            }},
+            // {targets:2, render:function(data){
+            //   return moment(data).format('DD/MM/YY');
+            // }},
             {targets:7, render: function(data, type, row) {
               if (type === 'myExport') {
                 return data === true ? "Y" : "N";
@@ -196,6 +197,17 @@
               }
               return data;
             }},
+            // {targets:8, render: function(data, type, row) {
+            //   if (type === 'myExport') {
+            //     return data === true ? "Y" : "N";
+            //   }
+            //   if (data === true) {
+            //     return '<input type="checkbox" class="editor-active" onclick="return false;" checked>';
+            //   } else {
+            //     return '<input type="checkbox" onclick="return false;" class="editor-active">';
+            //   }
+            //   return data;
+            // }},
             ],
         select: {
             style: 'single'
@@ -372,8 +384,8 @@
              <th>Deal</th>
              <th>Paid</th>
              <th>Direction</th>
-             <th>VAT percent </th>
              <th>Incoming </th>
+             <th>VAT percent </th>
           </tr>
         </thead>
       </table>

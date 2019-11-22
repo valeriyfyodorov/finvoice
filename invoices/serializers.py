@@ -114,7 +114,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
             'DT_RowId', 'DT_RowAttr', 'id', 'number', 'issued_date', 'payment_term', 
             'company', 'company_name', 'total_net', 'total_gross', 
             'currency', 'currency_name', 'deal', 'deal_id', 'deal_name', 
-            'is_incoming', 'is_incoming_name', 'vat_percent', 'is_paid', 
+            'is_incoming', 'vat_percent', 'is_paid', 'is_incoming_name'
         )
 
 class BankRecordSerializer(serializers.ModelSerializer):
