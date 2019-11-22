@@ -88,6 +88,7 @@ def deals_index(request):
         'grandMasterTableURL': grandMasterTableURL,
         'masterTableURL': masterTableURL,
         'childTableURL': childTableURL,
+        'childTableEmptyFilter': '',
         'returnUrl': reverse_lazy('invoices:deals_index'),}
     return render(request, "invoices/deals_invoices_records.html", context)
 
