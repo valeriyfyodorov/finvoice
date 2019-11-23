@@ -58,7 +58,7 @@ def import_bank_statement(request):
                     description = description.text.lower().replace("maksājumu uzdevuma ", "")
                     description = description.replace("ārvalstu maksājumu ", "")
                     description = re.sub('prepayment', '', description, flags=re.IGNORECASE)
-                    description = description.replace("maksājum", "")[:90]
+                    description = description.replace("maksājum", "")[:100]
                 # print(name, recorded_date, amount, bank_ref, is_debit, description)
                 bank_record = BankRecord.objects.create(
                     name=name, 
