@@ -262,13 +262,19 @@
               url: "{{childTableURL}}" + "?format=datatables",
               type: 'get',
               data: function ( d ) {
-                  var selected = grandMasterTable.row( { selected: true } );
+                  var selectedGrandMaster = grandMasterTable.row( { selected: true } );
+                  var selectedMaster = masterTable.row( { selected: true } );
                   // alert("In ajax func");
-                  if ( selected.any() ) {
+                  if ( selectedGrandMaster.any() ) {
                       // alert("Some selected");
-                      if (selected.data())
+                      if (selectedMaster.data())
                       {
-                        d.deal_selected = selected.data().id;
+                        // console.log(selectedMaster.data());
+                        d.invoice_selected = selectedMaster.data().id;
+                      }
+                      else if (selectedGrandMaster.data())
+                      {
+                        d.deal_selected = selectedGrandMaster.data().id;
                       }
                       else
                       {
@@ -349,12 +355,12 @@
         childTable.ajax.reload();
     } );
     
-    // masterTable.on( 'select', function () {
-    //   childTable.ajax.reload();
-    // } );
-    // masterTable.on( 'deselect', function () {
-    //     childTable.ajax.reload();
-    // } );
+    masterTable.on( 'select', function () {
+      childTable.ajax.reload();
+    } );
+    masterTable.on( 'deselect', function () {
+        childTable.ajax.reload();
+    } );
 
     
 

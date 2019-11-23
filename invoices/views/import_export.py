@@ -8,7 +8,7 @@ from decimal import Decimal
 from datetime import datetime
 from django.contrib import messages
 import re
-from .helpers import set_invoice_deal_on_record_import
+from .helpers import set_invoice_deal_on_record_import, mark_invoices_with_funds_enough_complete
 
 @login_required
 def import_bank_statement(request):
@@ -72,6 +72,7 @@ def import_bank_statement(request):
                     bank_deal,
                     internal_invoice)
             messages.success(request, 'File imported!')
+            mark_invoices_with_funds_enough_complete()
         else:
             messages.error(request, 'Problem with form')
         return redirect('invoices:import_bank_statement')

@@ -127,9 +127,9 @@
             }},
             ],
         select: {
-            style: 'single'
+            style: 'os'
           },
-        dom: 'lfBrtip',
+        // dom: 'lfBrtip',
         buttons: [
                     {extend: "create", editor: editorMaster, text: '<i class="fas fa-plus-square"></i>'},
                     {extend: "edit", editor: editorMaster, text: '<i class="fas fa-edit"></i>'},
@@ -145,7 +145,17 @@
               api.column( 5, {page:'current'} ).data().sum().toFixed(2) + 
               "</b>"
             );
+
+            // var rows = api.rows( { selected: true } ).indexes();
+            // var data = api.cells( rows, 5, { page: 'current' } );
+            // // var sm = masterTable.column(5, {selected: true}).data().sum()
+            // console.log(rows);
+            // console.log(data);
+            // // console.log(sm);
         },
+        "initComplete": function(settings, json) {
+            masterTable.buttons().container().appendTo("#table_master_wrapper .col-md-6:eq(0)");
+        }, 
     }
     );
 
@@ -238,11 +248,54 @@
         },
     }
     );
+
+    function showSelectedInFooter(masterTable)
+    {
+      var api = masterTable;
+      var resultText = '';
+      var companyName = '';
+      var invoiceNumbers = '';
+      var selected = masterTable.rows( { selected: true } );
+      var selectedFirstRow = masterTable.row( { selected: true } );
+      if ( selected.any() ) {
+          var rows = masterTable.rows( { selected: true } ).indexes();
+          var data = masterTable.cells( rows, 5, { page: 'current' } );
+          companyName = selectedFirstRow.data().company.name + ' ' + selectedFirstRow.data().currency.name;
+          resultText = data.data().sum().toFixed(2);
+          masterTable.rows( { selected: true } ).every( function ( rowIdx, tableLoop, rowLoop ) {
+              invoiceNumbers += this.data().number + ' ';
+              // ... do something with data(), or this.node(), etc
+          } );
+          // for (i = 0; i < rows.count(); i++)
+          // {
+          //   console.log(i);
+          //   line = masterTable.cells( rows, i, { page: 'current' } ).data().number;
+          //   console.log(line);
+          // }
+          
+      }
+      else {
+          resultText = '';
+          companyName = '';
+          invoiceNumbers = '';
+      }
+      $( api.column(1).footer() ).html(
+        companyName
+      );
+      $( api.column(2).footer() ).html(
+        invoiceNumbers
+      );
+      $( api.column(3).footer() ).html(
+        resultText 
+      );
+    }
     masterTable.on( 'select', function () {
       childTable.ajax.reload();
+      showSelectedInFooter(masterTable);
     } );
     masterTable.on( 'deselect', function () {
         childTable.ajax.reload();
+        showSelectedInFooter(masterTable);
     } );
 
     

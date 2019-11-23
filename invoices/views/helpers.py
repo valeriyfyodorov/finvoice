@@ -1,4 +1,26 @@
 import re
+from invoices.models import BankRecord, Invoice
+from django.db.models import Sum
+# from django.db import transaction
+
+
+def mark_invoices_with_funds_enough_complete():
+    invoices_not_paid = Invoice.objects.filter(is_paid=False)
+    for invoice in invoices_not_paid:
+        if not invoice.deal or invoice.is_paid:
+            continue
+        bank_records_for_deal = BankRecord.objects \
+            .filter(deals=invoice.deal).filter(name__icontains=invoice.company.name)
+        invoices_for_deal = Invoice.objects \
+            .filter(company=invoice.company).filter(deal=invoice.deal)
+        if not bank_records_for_deal:
+            continue
+        sum_of_paid_for_company = bank_records_for_deal.aggregate(Sum('amount'))['amount__sum']
+        sum_of_invoices_for_company = invoices_for_deal.aggregate(Sum('total_gross'))['total_gross__sum']
+        if sum_of_invoices_for_company == sum_of_paid_for_company:
+            invoices_for_deal.update(is_paid=True)
+                
+
 
 def set_invoice_deal_on_record_import(invoices_not_paid, bank_record, bank_deal, internal_invoice):
     for invoice in invoices_not_paid:
