@@ -190,12 +190,12 @@
               if (type === 'myExport') {
                 return data === true ? "Y" : "N";
               }
-              if (data === true) {
-                return '<input type="checkbox" class="editor-active" onclick="return false;" checked>';
-              } else {
-                return '<input type="checkbox" onclick="return false;" class="editor-active">';
-              }
-              return data;
+              // if (data === true) {
+              //   return '<input type="checkbox" class="editor-active" onclick="return false;" checked>';
+              // } else {
+              //   return '<input type="checkbox" onclick="return false;" class="editor-active">';
+              // }
+              return data === true ? "X" : " ";
             }},
             // {targets:8, render: function(data, type, row) {
             //   if (type === 'myExport') {
