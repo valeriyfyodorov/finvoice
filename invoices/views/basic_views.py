@@ -25,7 +25,7 @@ def invoices_creation_index(request):
             # print(form.cleaned_data["template"])
             template = form.cleaned_data['template']
             first_jan = date(date.today().year, 1, 1)
-            count_part = Invoice.objects.filter(issued_date__gte=first_jan, deal__department=template.department).count()
+            count_part = Invoice.objects.filter(issued_date__gte=first_jan, deal__department=template.department).distinct().count()
             count_part += 1
             invoice = Invoice.objects.create_invoice_from_template(template, count_part, 
                 header=template.department.name[:1].upper())
