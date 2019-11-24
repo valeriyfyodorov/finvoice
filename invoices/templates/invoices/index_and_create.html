@@ -7,7 +7,7 @@
   $(document).ready( function () {
     $('#table_id').DataTable(
     {
-        "order": [[ 1, "desc" ], [0, "desc"]]
+        "order": [[ 3, "desc" ], [0, "desc"]]
     }
       );
 } );
@@ -50,6 +50,7 @@
     <thead>
  <tr>
      <th>number</th>
+     <th>Type</th>
      <th>issued_date </th>
      <th>paid</th>
      <th>company</th>
@@ -66,6 +67,7 @@
     <tr >
     {% for invoice in invoices %}
         <td>{{ invoice.number }}</td>
+        <td>{{ invoice.deal.department.name }}</td>
         <td data-sort='{{ invoice.issued_date|date:"Y-m-d" }}'> {{ invoice.issued_date }}</td>
         <td>
           {% if invoice.is_paid %}
