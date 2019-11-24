@@ -167,7 +167,7 @@
             //   "</b>"
             // );
 
-            child_sum = api.column( 5, {page:'all'} ).data().sum();
+            child_sum = api.column( 5, {page:'all', search: 'applied'} ).data().sum();
             // console.log("Called grand child?:", called_child);
             if (!called_grand_child) grand_child_sum = 0;
             // console.log(1 * (childTable.column(5).footer()).innerText.replace("∑: ", ""));
@@ -337,7 +337,7 @@
         drawCallback: function () {
             var api = this.api();
             // console.log(api.column( 5, {page:'current'} ).data().sum());
-            grand_child_sum = api.column( 5, {page:'all'} ).data().sum();
+            grand_child_sum = api.column( 5, {page:'all', search: 'applied'} ).data().sum();
             // console.log("Called child?:", called_child);
             if (!called_child) child_sum = 0;
             // console.log(1 * (childTable.column(5).footer()).innerText.replace("∑: ", ""));
