@@ -27,7 +27,7 @@ class CompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = Company
         fields = (
-            'id', 'name', 'vat_number',
+            'id', 'name', 'eu_country', 'vat_number',
         )
         datatables_always_serialize = ('id',)
 
@@ -44,6 +44,7 @@ class BankAccountSerializer(serializers.ModelSerializer):
             'account_name', 'payment_details', 'currency_name', 'currency', 
             'balance'
         )
+
 
 class DepartmentSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)

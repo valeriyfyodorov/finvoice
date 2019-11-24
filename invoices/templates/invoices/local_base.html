@@ -45,13 +45,17 @@
     {% url 'invoices:invoices_outgoing_index' as invoices_outgoing_index %}
     {% url 'invoices:invoices_unpaid_index' as invoices_unpaid_index %}
     {% url 'invoices:deals_index' as deals_index %}
+    {% url 'invoices:companies_accounts' as companies_accounts %}
     {% url 'invoices:import_bank_statement' as import_bank_statement %}
     {% url 'admin:index' as admin_url %}
     
     <div class="navbar-nav">
       
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle 
+        {% if 'invoices_' in request.get_full_path|lower %} active {% endif %} " 
+        href="#" id="navbarDropdown" role="button" data-toggle="dropdown" 
+        aria-haspopup="true" aria-expanded="false">
           Invoices
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -90,9 +94,13 @@
       {% if request.get_full_path == deals_index %} active {% endif %}" 
       href="{{ deals_index }}"> Deals</a>
 
+      <a class="nav-item nav-link 
+      {% if request.get_full_path == companies_accounts %} active {% endif %}" 
+      href="{{ companies_accounts }}"> Companies debts</a>
+
     <a class="nav-item nav-link 
       {% if request.get_full_path == import_bank_statement %} active {% endif %}" 
-      href="{{ import_bank_statement }}"> Bank statement</a>
+      href="{{ import_bank_statement }}"> Import bank</a>
 
     <a class="nav-item nav-link 
       {% if request.get_full_path == admin_url %} active {% endif %}" 

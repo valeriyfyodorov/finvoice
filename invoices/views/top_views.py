@@ -25,6 +25,25 @@ def bank_records_index(request):
     }
     return render(request, "invoices/bank_records.html", context)
 
+@login_required
+@user_passes_test(lambda u:u.is_staff)
+def companies_accounts(request):
+    masterTableURL = reverse_lazy('api:companies-list')
+    childTableURL = reverse_lazy('api:bank_records-list')
+    grandChildTableURL = reverse_lazy('api:invoices-list')
+    context = {
+        'master_header': 'Companies', 
+        'child_header': 'Bank remittances related',
+        'grand_child_header': 'Invoices for company',
+        'default_is_incoming': '0',
+        'childTableEmptyFilter': '0',
+        'grandChildTableEmptyFilter': '0',
+        'masterTableURL': masterTableURL,
+        'childTableURL': childTableURL,
+        'grandChildTableURL': grandChildTableURL,
+        'returnUrl': reverse_lazy('invoices:companies_accounts'),
+    }
+    return render(request, "invoices/companies_accounts.html", context)
 
 @login_required
 def invoices_incoming_index(request):

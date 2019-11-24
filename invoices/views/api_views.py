@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import DjangoModelPermissions
 from invoices.models import Currency, BankAccount, BankRecord, Invoice, Company, Deal
 from invoices.serializers import (CurrencySerializer, BankAccountSerializer, BankRecordSerializer, 
-    InvoiceSerializer, DealSerializer)
+    InvoiceSerializer, DealSerializer, CompanySerializer)
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_datatables_editor.filters import DatatablesFilterBackend
 from rest_framework_datatables_editor.pagination import DatatablesPageNumberPagination
@@ -14,6 +14,11 @@ from rest_framework.response import Response
 class BankAccountViewSet(viewsets.ModelViewSet):
     queryset = BankAccount.objects.all().order_by('name')
     serializer_class = BankAccountSerializer
+
+
+class CompanyViewSet(viewsets.ModelViewSet):
+    queryset = Company.objects.all().order_by('name')
+    serializer_class = CompanySerializer
 
 def get_invoice_options():
     return "options", {
@@ -91,6 +96,7 @@ class InvoicesAllViewSet(DatatablesEditorModelViewSet):
     def get_queryset(self):
         deal_selected = self.request.query_params.get('deal_selected', None)
         bank_record_selected = self.request.query_params.get('bank_record_selected', None)
+        company_selected = self.request.query_params.get('company_selected', None)
         if deal_selected is not None:
             if len(deal_selected) == 0:
                 deal_selected = None
@@ -98,10 +104,14 @@ class InvoicesAllViewSet(DatatablesEditorModelViewSet):
         else:
             queryset = Invoice.objects.all()
         if bank_record_selected is not None:
-            # print("TEST INVOICE 2", invoice_selected, len(invoice_selected))
             if len(bank_record_selected) == 0:
                 bank_record_selected = None
             queryset = queryset.filter(bank_records__id=bank_record_selected)
+        if company_selected is not None:
+            # print("TEST INVOICE 2", invoice_selected, len(invoice_selected))
+            if len(company_selected) == 0:
+                company_selected = None
+            queryset = queryset.filter(company=company_selected)
         return queryset
 
     class Meta:
@@ -116,6 +126,7 @@ class BankRecordViewSet(viewsets.ModelViewSet):
         deal_selected = self.request.query_params.get('deal_selected', None)
         bank_account = self.request.query_params.get('bank_account', None)
         invoice_selected = self.request.query_params.get('invoice_selected', None)
+        company_selected = self.request.query_params.get('company_selected', None)
         if bank_account is not None:
             queryset = BankRecord.objects.all().filter(bank_account=bank_account)
         else:
@@ -130,6 +141,11 @@ class BankRecordViewSet(viewsets.ModelViewSet):
             if len(invoice_selected) == 0:
                 invoice_selected = None
             queryset = queryset.filter(invoices__id=invoice_selected)
+        if company_selected is not None:
+            # print("TEST INVOICE 2", invoice_selected, len(invoice_selected))
+            if len(company_selected) == 0:
+                company_selected = None
+            queryset = queryset.filter(invoices__company=company_selected).distinct()
         return queryset
 
 
