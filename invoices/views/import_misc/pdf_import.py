@@ -62,7 +62,7 @@ def invoice_dictionary_from_file(file, company):
     ).strip()
     invoiceAmount = invoiceAmount.replace(company.invoiceAmounCommaCharacter, '.')
     invoiceAmountStr = invoiceAmount.replace(' ', '')
-    invoiceAmountStr = invoiceAmount.replace(u"\u00A0", "").replace(u"\u2028", "")
+    invoiceAmountStr = invoiceAmountStr.replace(u"\u00A0", "").replace(u"\u2028", "")
     try:
         invoiceAmount = Decimal(invoiceAmountStr)
     except InvalidOperation:
