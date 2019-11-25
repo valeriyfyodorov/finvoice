@@ -14,9 +14,9 @@ def invoice_already_exists(invoice):
         issued_date=invoice.issued_date, 
         total_gross=total_gross
     )
-    print(invoices_available)
+    # print(invoices_available)
     invoices_available_count = invoices_available.count()
-    print("count: ", invoices_available_count)
+    # print("count: ", invoices_available_count)
     return invoices_available_count > 0
 
 
