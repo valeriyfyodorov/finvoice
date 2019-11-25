@@ -1,14 +1,61 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.shortcuts import redirect
-from invoices.models import BankAccount, BankRecord, Invoice, Deal
-from invoices.forms import BankAccountChoiceForm
+from invoices.models import BankAccount, BankRecord, Invoice, Deal, Template
+from invoices.forms import BankAccountChoiceForm, CompanyChoiceForm
 import xml.etree.ElementTree as ET
 from decimal import Decimal
 from datetime import datetime
 from django.contrib import messages
 import re
-from .helpers import set_invoice_deal_on_record_import, mark_invoices_with_funds_enough_complete
+from .helpers import (
+    set_invoice_deal_on_record_import, 
+    mark_invoices_with_funds_enough_complete,
+    new_incoming_invoice_object_from_pdf,
+    invoice_already_exists
+)
+
+@login_required
+def import_pdf_invoice(request):
+    if request.method == 'POST':
+        form = CompanyChoiceForm(request.POST, request.FILES)
+        found_errors = False
+        error_text = "Problem with form / file"
+        if form.is_valid():
+            company = None
+            if (form.cleaned_data['company']):
+                company = form.cleaned_data['company']
+                deal = form.cleaned_data['deal']
+            else:
+                return redirect('invoices:import_pdf_invoice')
+            files = request.FILES.getlist('files')
+            # file = (request.FILES['file'])
+            for file in files:
+                invoice = new_incoming_invoice_object_from_pdf(company, file)
+                if (invoice.total_gross != 0 and len(invoice.number) > 1):
+                    if not invoice_already_exists(invoice):
+                        invoice.deal = deal
+                        invoice.save()
+                    else:
+                        found_errors = True
+                        error_text = "Invoice already existed"
+                else:
+                    found_errors = True
+                    error_text = "PDF file could not get all data"
+        else:
+            found_errors = True
+            error_text = "Form not validated"
+        if found_errors:
+            messages.error(request, error_text)
+        else:
+            messages.success(request, 'File(s) imported')
+        return redirect('invoices:invoices_incoming_index')
+
+    else:
+        form = CompanyChoiceForm
+        context = {'form': form, "headingText": "Import invoice data from pdf"}
+        return render(request, "invoices/import/company_selection_import.html", context)
+
 
 @login_required
 def import_bank_statement(request):
@@ -82,3 +129,4 @@ def import_bank_statement(request):
         form = BankAccountChoiceForm
         context = {'bank_records': bank_records, 'form': form}
         return render(request, "invoices/import/bank_statement_import.html", context)
+

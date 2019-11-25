@@ -1,8 +1,37 @@
 import re
 from invoices.models import BankRecord, Invoice
 from django.db.models import Sum
-# from django.db import transaction
+import datetime
+from .import_misc.pdf_import import invoice_dictionary_from_file
 
+
+def invoice_already_exists(invoice):
+    total_gross = -abs(invoice.total_gross)
+    invoices_available = Invoice.objects.filter(
+        is_incoming=invoice.is_incoming, 
+        company=invoice.company,
+        number=invoice.number,
+        issued_date=invoice.issued_date, 
+        total_gross=total_gross
+    )
+    print(invoices_available)
+    invoices_available_count = invoices_available.count()
+    print("count: ", invoices_available_count)
+    return invoices_available_count > 0
+
+
+def new_incoming_invoice_object_from_pdf(company, file):
+    parsed_invoice = invoice_dictionary_from_file(file, company)
+    invoice = Invoice(
+        number=parsed_invoice['number'],
+        issued_date=parsed_invoice['issued_date'],
+        total_gross=parsed_invoice['total_gross'],
+        is_incoming=True,
+        company=company,
+        vat_percent=0,
+        advance_required=False,
+    )
+    return invoice
 
 def mark_invoices_with_funds_enough_complete():
     invoices_not_paid = Invoice.objects.filter(is_paid=False)

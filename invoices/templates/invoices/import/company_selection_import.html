@@ -1,0 +1,53 @@
+{% extends "invoices/local_base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block extrajs %}
+
+{% endblock extrajs %}
+
+{% block content %}
+ <div class="container-fluid">
+
+
+  {% if form %}
+    <div class="row mt-1 text-left">
+      <div class="col-md-12">
+        <h4> {{headingText}}</h4>
+          <form enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+            <div class="form-row">
+            <div class="form-group col-md-4 mb-0 text-right">
+              {{ form.company|as_crispy_field }}
+            </div>
+            <div class="form-group col-md-3 mb-0 text-right">
+              {{ form.deal|as_crispy_field }}
+            </div>
+            <div class="form-group col-md-3 mb-0 text-right">
+              {{ form.files|as_crispy_field }}
+            </div>
+            <div class="form-group col-md-2 mb-0 text-left">
+              <br>
+              <button type="submit" class="btn btn-primary">Import file</button>
+            </div>
+                </div>
+            
+        </form>
+      </div>
+    </div>
+    {% endif %}
+  <div class="row">
+  <div class="col-md-12" style="margin-top: 20px;">
+
+
+
+</div> {# end of col #}
+
+</div> {# end of row #}
+
+</div> {# end of container #}
+
+  {% endblock content %}
+
+
+ 

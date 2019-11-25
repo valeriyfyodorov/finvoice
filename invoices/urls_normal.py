@@ -18,6 +18,7 @@ urlpatterns = [
     path('bank_record/update/<int:bank_record_id>/', views.BankRecordUpdateView.as_view(), name='bank_record_update'),
     path('bank_records', login_required(views.bank_records_index), name='bank_records_index'),
     path('statement_import', login_required(views.import_bank_statement), name='import_bank_statement'),
+    path('import_pdf_invoice', login_required(views.import_pdf_invoice), name='import_pdf_invoice'),
     path('<int:invoice_id>/', views.InvoiceDetailView.as_view(), name='invoice_detail'),
     path('<int:invoice_id>/<int:use_stamp>/', views.InvoiceDetailView.as_view(), name='invoice_stamped_detail'),
     path('update/<int:invoice_id>/', views.InvoiceUpdate.as_view(), name='invoice_update'),

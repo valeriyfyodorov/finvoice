@@ -47,6 +47,7 @@
     {% url 'invoices:deals_index' as deals_index %}
     {% url 'invoices:companies_accounts' as companies_accounts %}
     {% url 'invoices:import_bank_statement' as import_bank_statement %}
+    {% url 'invoices:import_pdf_invoice' as import_pdf_invoice %}
     {% url 'admin:index' as admin_url %}
     
     <div class="navbar-nav">
@@ -79,6 +80,12 @@
           <a class="dropdown-item  
           {% if request.get_full_path == invoices_unpaid_index %} active {% endif %}" 
           href="{{ invoices_unpaid_index }}"> Invoices unpaid</a>
+
+          <div class="dropdown-divider"></div>
+
+          <a class="dropdown-item  
+          {% if request.get_full_path == import_pdf_invoice %} active {% endif %}" 
+          href="{{ import_pdf_invoice }}"> Import incoming from pdf</a>
 {% endif %}
 
         </div>
