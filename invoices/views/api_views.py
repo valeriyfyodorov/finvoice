@@ -40,7 +40,7 @@ class InvoicesIncomingViewSet(DatatablesEditorModelViewSet):
         if deal_selected is not None:
             queryset = Invoice.objects.incoming().filter(deal=deal_selected)
         else:
-            queryset = Invoice.objects.incoming()
+            queryset = Invoice.objects.incoming().exclude(deal__name__icontains="Internal")
         return queryset
 
     class Meta:
@@ -59,7 +59,7 @@ class InvoicesOutgoingViewSet(DatatablesEditorModelViewSet):
         if deal_selected is not None:
             queryset = Invoice.objects.outgoing().filter(deal=deal_selected)
         else:
-            queryset = Invoice.objects.outgoing()
+            queryset = Invoice.objects.outgoing().exclude(deal__name__icontains="Internal")
         return queryset
 
     class Meta:
@@ -79,7 +79,7 @@ class InvoicesUnpaidViewSet(DatatablesEditorModelViewSet):
         if deal_selected is not None:
             queryset = Invoice.objects.unpaid().filter(deal=deal_selected)
         else:
-            queryset = Invoice.objects.unpaid()
+            queryset = Invoice.objects.unpaid().exclude(deal__name__icontains="Internal")
         return queryset
 
     class Meta:

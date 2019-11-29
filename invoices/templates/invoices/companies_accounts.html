@@ -104,9 +104,9 @@
                   }
               }
           }, 
-        select: {
-            style: 'single'
-        },
+        // select: {
+        //     style: 'single'
+        // },
         "columns": [
             {"data": "id", "searchable": false, "orderable": false},
             {"data": "recorded_date"},
@@ -183,6 +183,16 @@
             };
             called_child = true;
             // console.log("C:", child_sum, grand_child_sum);
+        },
+        buttons: [
+                    // {extend: "create", editor: editorGrandChild, text: '<i class="fas fa-plus-square"></i>'},
+                    // {extend: "edit", editor: editorGrandChild, text: '<i class="fas fa-edit"></i>'},
+                    // {extend: "remove", editor: editorGrandChild, text: '<i class="fas fa-trash-alt"></i>'},
+                    {extend: 'excelHtml5', title: 'Data export', text: 'xls'},
+                    {extend: 'pdfHtml5',title: 'Data export', text: 'pdf'},
+                ],
+        "initComplete": function(settings, json) {
+            childTable.buttons().container().appendTo("#table_child_wrapper .col-md-6:eq(0)");
         },
     }
     );
@@ -356,14 +366,14 @@
         },
         buttons: [
                     // {extend: "create", editor: editorGrandChild, text: '<i class="fas fa-plus-square"></i>'},
-                    {extend: "edit", editor: editorGrandChild, text: '<i class="fas fa-edit"></i>'},
+                    // {extend: "edit", editor: editorGrandChild, text: '<i class="fas fa-edit"></i>'},
                     // {extend: "remove", editor: editorGrandChild, text: '<i class="fas fa-trash-alt"></i>'},
                     {extend: 'excelHtml5', title: 'Data export', text: 'xls'},
                     {extend: 'pdfHtml5',title: 'Data export', text: 'pdf'},
                 ],
-        // "initComplete": function(settings, json) {
-        //     grandChildTable.buttons().container().appendTo("#table_grand_child_wrapper .col-md-6:eq(0)");
-        // },
+        "initComplete": function(settings, json) {
+            grandChildTable.buttons().container().appendTo("#table_grand_child_wrapper .col-md-6:eq(0)");
+        },
     }
     );
 
