@@ -76,8 +76,14 @@ class InvoicesUnpaidViewSet(DatatablesEditorModelViewSet):
 
     def get_queryset(self):
         deal_selected = self.request.query_params.get('deal_selected', None)
+        company_name = self.request.query_params.get('company_name', None)
         if deal_selected is not None:
-            queryset = Invoice.objects.unpaid().filter(deal=deal_selected)
+            if company_name is not None:
+                company_name = company_name[:20]
+                print("Compamy name:", company_name)
+                queryset = Invoice.objects.unpaid().filter(deal=deal_selected).filter(company__name__icontains=company_name)
+            else:
+                queryset = Invoice.objects.unpaid().filter(deal=deal_selected)
         else:
             queryset = Invoice.objects.unpaid().exclude(deal__name__icontains="Bank")
         return queryset
@@ -127,6 +133,7 @@ class BankRecordViewSet(viewsets.ModelViewSet):
         bank_account = self.request.query_params.get('bank_account', None)
         invoice_selected = self.request.query_params.get('invoice_selected', None)
         company_selected = self.request.query_params.get('company_selected', None)
+        company_name = self.request.query_params.get('company_name', None)
         if bank_account is not None:
             queryset = BankRecord.objects.all().filter(bank_account=bank_account)
         else:
@@ -135,6 +142,9 @@ class BankRecordViewSet(viewsets.ModelViewSet):
             if len(deal_selected) == 0:
                 deal_selected = None
             queryset = queryset.filter(deals__id=deal_selected)
+            if company_name is not None:
+                company_name = company_name[:20]
+                queryset = queryset.filter(name__icontains=company_name)
         # print("TEST INVOICE 1", invoice_selected)
         if invoice_selected is not None:
             # print("TEST INVOICE 2", invoice_selected, len(invoice_selected))

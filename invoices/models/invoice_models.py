@@ -52,6 +52,7 @@ class Invoice(models.Model):
     vat_percent = models.DecimalField(default=0, max_digits=6, decimal_places=2)
     total_vat = models.DecimalField(default=0, max_digits=10, decimal_places=2)
     total_gross = models.DecimalField(default=0, max_digits=10, decimal_places=2)
+    total_not_paid = models.DecimalField(default=0, max_digits=10, decimal_places=2)
     advance_required = models.BooleanField(default=False)
     advance_percent = models.DecimalField(default=0, max_digits=5, decimal_places=2)
     advance_amount = models.DecimalField(default=0, max_digits=10, decimal_places=2)
@@ -101,6 +102,10 @@ class Invoice(models.Model):
             self.advance_amount = self.total_gross * self.advance_percent / Decimal('100.00')
         else:
             self.advance_amount = 0
+        bank_records_total_sum = self.bank_records.all().aggregate(Sum('amount'))['amount__sum']
+        if bank_records_total_sum is None:
+            bank_records_total_sum = 0
+        self.total_not_paid = self.total_gross - bank_records_total_sum
         # print("STEP3", self.total_net, self.total_vat, self.total_gross)
         super().save(*args, **kwargs)
 
@@ -166,7 +171,6 @@ class Template(models.Model):
 
     def __str__(self):
         return self.currency.name + ' ' + self.department.name[:3] + '-' + self.description + '-' + self.company.name + self.currency.name
-
 
     def save(self, *args, **kwargs):
         items_total_sum = self.items.all().aggregate(Sum('total'))['total__sum']

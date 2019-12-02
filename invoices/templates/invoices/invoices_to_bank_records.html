@@ -95,6 +95,7 @@
             {"data": "total_gross"},
             {"data": "deal.name", "name": "deal.name", "defaultContent": "<i>Not set</i>"},
             {"data": "is_paid", "name": "is_paid"},
+            {"data": "total_not_paid", "name": "total_not_paid"},
             {"data": "vat_percent", "searchable": false, "orderable": false, "visible": false},
             {"data": "is_incoming", "searchable": false, "orderable": false, "visible": false},
             ],
@@ -175,10 +176,13 @@
                   // alert("In ajax func");
                   if ( selected.any() ) {
                       // alert("Some selected");
-                      if (selected.data())
+                      if (selected.data() && selected.data().{{masterTableFilterParentParameter}})
                       {
                         // console.log(selected.data());
                         d.{{childTableFilterParameter}} = selected.data().{{masterTableFilterParameter}};
+                        {% if useParameter2 %}
+                          d.{{childTableFilterParameter2}} = selected.data().{{masterTableFilterParameter2}};
+                        {% endif %}
                       }
                       else
                       {
@@ -320,7 +324,7 @@
              <th>Amount</th>
              <th>Deal</th>
              <th>Paid</th>
-             {# <th>Deal id </th> #}
+             <th>Balance</th>
              <th>VAT percent </th>
              <th>Incoming </th>
           </tr>

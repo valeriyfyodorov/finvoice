@@ -33,8 +33,8 @@ class InvoiceForm(ModelForm):
         model = Invoice
         exclude = []
         widgets = {
-            'description': Textarea(attrs={'cols': 40, 'rows': 1}),
-            'payment_details': Textarea(attrs={'cols': 40, 'rows': 1}),
+            'description': Textarea(attrs={'cols': 40, 'rows': 2}),
+            'payment_details': Textarea(attrs={'cols': 20, 'rows': 1}),
             'issued_date': DatePickerInput(
                 options={
                     "dateFormat":"d/m/Y",
@@ -62,8 +62,8 @@ class InvoiceForm(ModelForm):
                 Field('company', wrapper_class='col-md-3'),
             ),
             Row(
-                Field('description', wrapper_class='col-md-3'),
-                Div(css_class='col-md-3'),
+                Field('description', wrapper_class='col-md-4'),
+                Div(css_class='col-md-2'),
                 Field('currency', wrapper_class='col-md-3'),
                 Field('is_incoming', wrapper_class='col-md-3'),
             ),
@@ -72,7 +72,6 @@ class InvoiceForm(ModelForm):
                 Field('vat_percent', wrapper_class='col-md-3'),
                 Field('total_vat', wrapper_class='col-md-3'),
                 Field('total_gross', wrapper_class='col-md-3'),
-                
             ),
             Row(
                 Field('advance_required', wrapper_class='col-md-3'),
@@ -91,8 +90,9 @@ class InvoiceForm(ModelForm):
             HTML("<br>"),
             Row(
                 HTML("<br>"),
-                Field('is_paid', wrapper_class='col-md-3'),
-                Field('payment_details', wrapper_class='col-md-3'),
+                Field('is_paid', wrapper_class='col-md-2'),
+                Field('payment_details', wrapper_class='col-md-4'),
                 Field('returnUrl', wrapper_class='col-md-3'),
+                Field('total_not_paid', wrapper_class='col-md-3'),
             )
         )
