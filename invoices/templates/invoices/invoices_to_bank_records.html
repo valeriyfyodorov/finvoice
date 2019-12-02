@@ -132,11 +132,11 @@
           },
         // dom: 'lfBrtip',
         buttons: [
-                    {extend: "create", editor: editorMaster, text: '<i class="fas fa-plus-square"></i>'},
-                    {extend: "edit", editor: editorMaster, text: '<i class="fas fa-edit"></i>'},
-                    {extend: "remove", editor: editorMaster, text: '<i class="fas fa-trash-alt"></i>'},
-                    {extend: 'excelHtml5', title: 'Data export', text: 'xls'},
-                    {extend: 'pdfHtml5',title: 'Data export', text: 'pdf'},
+                    {extend: "create", editor: editorMaster, text: '<i class="fas fa-plus-square"></i>', className: 'btn-sm'},
+                    {extend: "edit", editor: editorMaster, text: '<i class="fas fa-edit"></i>', className: 'btn-sm'},
+                    {extend: "remove", editor: editorMaster, text: '<i class="fas fa-trash-alt"></i>', className: 'btn-sm'},
+                    {extend: 'excelHtml5', title: 'Data export', text: 'xls', className: 'btn-sm'},
+                    {extend: 'pdfHtml5',title: 'Data export', text: 'pdf', className: 'btn-sm'},
                 ],
         "order": [[ 2, "desc" ]],
         drawCallback: function () {
@@ -155,8 +155,8 @@
             // // console.log(sm);
         },
         "initComplete": function(settings, json) {
-            masterTable.buttons().container().appendTo("#table_master_wrapper .col-md-6:eq(0)");
-        }, 
+            masterTable.buttons().container().prependTo("#table_master_length");
+        }
     }
     );
 
@@ -310,7 +310,7 @@
 
 {% block content %}
  <div class="container-fluid">
-  <div class="row">
+  <div class="row shadow-sm">
     <div class="col-md-12">
       {{master_header}}
     <table id="table_master" class="display table dataTable table-striped table-sm table-hover" role="grid">
@@ -332,7 +332,8 @@
       </table>
     </div> {# end of col #}
   </div> {# end of row #}
-  <div class="row">
+<hr>
+ <div class="row shadow-sm">
     <div class="col-md-12">
        {{child_header}}
     <table id="table_child" class="display table table-striped table-hover table-sm">

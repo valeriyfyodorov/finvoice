@@ -88,7 +88,7 @@
             // {"data": "used_amount"},
             // {"data": "deal_related"},
             {"data": "deals", "name": "deals.name", "sortable": false},
-            {"data": "bank_account.name", "name": "bank_account.name"},
+            // {"data": "bank_account.name", "name": "bank_account.name"},
             ],
         columnDefs: [
             {
@@ -138,6 +138,16 @@
               "</b>"
             );
         },
+        buttons: [
+                    // {extend: "create", editor: editorGrandChild, text: '<i class="fas fa-plus-square"></i>'},
+                    // {extend: "edit", editor: editorGrandChild, text: '<i class="fas fa-edit"></i>'},
+                    // {extend: "remove", editor: editorGrandChild, text: '<i class="fas fa-trash-alt"></i>'},
+                    {extend: 'excelHtml5', title: 'Data export', text: 'xls', className: 'btn-sm'},
+                    {extend: 'pdfHtml5',title: 'Data export', text: 'pdf', className: 'btn-sm'},
+                ],
+        "initComplete": function(settings, json) {
+            childTable.buttons().container().prependTo("#table_child_length ");
+        }
     }
     );
 
@@ -273,14 +283,6 @@
         select: {
             style: 'single'
           },
-        // dom: 'lfBrtip',
-        // buttons: [
-        //             {extend: "create", editor: editorMaster, text: '<i class="fas fa-plus-square"></i>'},
-        //             {extend: "edit", editor: editorMaster, text: '<i class="fas fa-edit"></i>'},
-        //             {extend: "remove", editor: editorMaster, text: '<i class="fas fa-trash-alt"></i>'},
-        //             {extend: 'excelHtml5', title: 'Data export', text: 'xls'},
-        //             {extend: 'pdfHtml5',title: 'Data export', text: 'pdf'},
-        //         ],
         "order": [[ 2, "desc" ]],
         drawCallback: function () {
             var api = this.api();
@@ -292,13 +294,13 @@
         },
         buttons: [
                     // {extend: "create", editor: editorGrandChild, text: '<i class="fas fa-plus-square"></i>'},
-                    {extend: "edit", editor: editorGrandChild, text: '<i class="fas fa-edit"></i>'},
+                    {extend: "edit", editor: editorGrandChild, text: '<i class="fas fa-edit"></i>', className: 'btn-sm'},
                     // {extend: "remove", editor: editorGrandChild, text: '<i class="fas fa-trash-alt"></i>'},
-                    {extend: 'excelHtml5', title: 'Data export', text: 'xls'},
-                    {extend: 'pdfHtml5',title: 'Data export', text: 'pdf'},
+                    {extend: 'excelHtml5', title: 'Data export', text: 'xls', className: 'btn-sm'},
+                    {extend: 'pdfHtml5',title: 'Data export', text: 'pdf', className: 'btn-sm'},
                 ],
         "initComplete": function(settings, json) {
-            grandChildTable.buttons().container().appendTo("#table_grand_child_wrapper .col-md-6:eq(0)");
+            grandChildTable.buttons().container().prependTo("#table_grand_child_length");
         }
     }
     );
@@ -327,7 +329,7 @@
 
 {% block content %}
  <div class="container-fluid">
-  <div class="row">
+  <div class="row shadow-sm">
     <div class="col-md-12">
       {{master_header}}
     <table id="table_master" class="display table dataTable table-striped table-sm table-hover" role="grid">
@@ -344,8 +346,8 @@
       </table>
     </div> {# end of col #}
   </div> {# end of row #}
-
-  <div class="row">
+<hr>
+  <div class="row shadow-sm">
     <div class="col-md-12">
        {{child_header}}
     <table id="table_child" class="display table table-striped table-hover table-sm">
@@ -357,15 +359,15 @@
              <th>Details </th>
              <th>Amount</th>
              <th>Deals</th>
-             <th>Account name</th>
+             {# <th>Account name</th> #}
           </tr>
         </thead>
       </table>
     </div> {# end of col #}
   </div> {# end of row #}
 
-
-  <div class="row">
+<hr>
+  <div class="row shadow-sm">
     <div class="col-md-12">
        {{grand_child_header}}
     <table id="table_grand_child" class="display table table-striped table-hover table-sm">
