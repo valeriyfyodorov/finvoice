@@ -112,9 +112,9 @@
                 return '<a href="'+ url_mask + '?returnUrl={{returnUrl}}">'+'Info'+'</a>';
               }
             },
-            {targets:2, render:function(data){
-              return moment(data).format('DD/MM/YY');
-            }},
+            // {targets:2, render:function(data){
+            //   return moment(data).format('DD/MM/YY');
+            // }},
             {targets:7, render: function(data, type, row) {
               if (type === 'myExport') {
                 return data === true ? "Y" : "N";

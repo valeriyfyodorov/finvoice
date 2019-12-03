@@ -36,6 +36,7 @@ def invoice_dictionary_from_file(file, company):
         invoiceDate.find(company.invoiceDateSignalString2) + \
         len(company.invoiceDateSignalString2) + company.invoiceDateSkipCharacters
     # print(invoiceDate)
+
     invoiceDateStr = (
         invoiceDate[
             invoiceDateStartLocation:
@@ -50,6 +51,7 @@ def invoice_dictionary_from_file(file, company):
         invoiceDate = datetime.date.today()
     # print("---" + invoiceDateStr + "---")
     # print(invoiceDate)
+
     invoiceAmount = inner_text[inner_text.find(company.invoiceAmountSignalString1):]
     invoiceAmountStartLocation = \
         invoiceAmount.find(company.invoiceAmountSignalString2) + \
@@ -67,8 +69,8 @@ def invoice_dictionary_from_file(file, company):
         invoiceAmount = Decimal(invoiceAmountStr)
     except InvalidOperation:
         invoiceAmount = 0
-
     # print("---" + invoiceAmountStr + "---")
+
     result = {'number': invoiceNumber, 'issued_date': invoiceDate, 'total_gross': invoiceAmount}
     # print(result)
     return result
