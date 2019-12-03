@@ -102,10 +102,11 @@ class Invoice(models.Model):
             self.advance_amount = self.total_gross * self.advance_percent / Decimal('100.00')
         else:
             self.advance_amount = 0
-        bank_records_total_sum = self.bank_records.all().aggregate(Sum('amount'))['amount__sum']
-        if bank_records_total_sum is None:
-            bank_records_total_sum = 0
-        self.total_not_paid = self.total_gross - bank_records_total_sum
+        if (self.id):
+            bank_records_total_sum = self.bank_records.all().aggregate(Sum('amount'))['amount__sum']
+            if bank_records_total_sum is None:
+                bank_records_total_sum = 0
+            self.total_not_paid = self.total_gross - bank_records_total_sum
         # print("STEP3", self.total_net, self.total_vat, self.total_gross)
         super().save(*args, **kwargs)
 
