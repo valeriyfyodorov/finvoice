@@ -20,6 +20,8 @@ class Company(models.Model):
                                    validators=[MaxLengthValidator(300)])
     payment_address = models.TextField(max_length=300, blank=True,
                                    validators=[MaxLengthValidator(300)])
+    country_code = models.TextField(max_length=3, blank=True,
+                                   validators=[MaxLengthValidator(3)])
     eu_country = models.BooleanField(default=False)
     vat_number = models.CharField(max_length=30, blank=True, null=True,)
     

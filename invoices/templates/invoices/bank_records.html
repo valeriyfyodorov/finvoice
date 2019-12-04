@@ -247,6 +247,7 @@
             {"data": "issued_date"},
             {"data": "currency.name", "name": "currency.name"},
             {"data": "company.name", "name": "company.name"},
+            {"data": "company.country_code", "searchable": false, "orderable": false},
             {"data": "total_gross"},
             {"data": "deal.name", "name": "deal.name", "defaultContent": "<i>Not set</i>"},
             {"data": "is_paid", "name": "is_paid"},
@@ -268,7 +269,7 @@
             {targets:2, render:function(data){
               return moment(data).format('DD/MM/YY');
             }},
-            {targets:7, render: function(data, type, row) {
+            {targets:8, render: function(data, type, row) {
               if (type === 'myExport') {
                 return data === true ? "Y" : "N";
               }
@@ -378,6 +379,7 @@
              <th>Dated </th>
              <th>Currency</th>
              <th>Company</th>
+             <th> </th>
              <th>Total amount</th>
              <th>Deals</th>
              <th>Paid</th>

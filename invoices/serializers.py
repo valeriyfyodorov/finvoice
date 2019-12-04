@@ -27,7 +27,7 @@ class CompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = Company
         fields = (
-            'id', 'name', 'eu_country', 'vat_number',
+            'id', 'name', 'eu_country', 'vat_number', 'country_code',
         )
         datatables_always_serialize = ('id',)
 
