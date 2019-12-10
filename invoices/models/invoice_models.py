@@ -104,7 +104,8 @@ class Invoice(models.Model):
             self.advance_amount = 0
         bank_records_total_sum = 0
         if (self.id):
-            bank_records_total_sum = self.bank_records.all().aggregate(Sum('amount'))['amount__sum']
+            bank_records_total_sum = self.bank_records.all().aggregate(Sum('amount'))['amount__sum'] or 0
+            # print("Sum:" + bank_records_total_sum)
         # if bank_records_total_sum is None:
         #     bank_records_total_sum = 0
         self.total_not_paid = self.total_gross - bank_records_total_sum
