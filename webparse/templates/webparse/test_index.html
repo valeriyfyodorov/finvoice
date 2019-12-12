@@ -1,0 +1,62 @@
+{% extends "webparse/local_base.html" %}
+{% load static %}
+
+{% block extrajs %}
+
+{% endblock extrajs %}
+
+{% block content %}
+ <div class="container-fluid">
+<div class="row">
+  <div class="col-md-12">
+
+{% if invoices %}
+
+<table id="table_id" class="display table table-striped table-hover table-sm">
+
+    <caption>Indications</caption>
+
+    <thead>
+ <tr>
+     <th>ticket</th>
+     <th>name</th>
+     <th>updated </th>
+     <th>open</th>
+     <th>close</th>
+     <th>high</th>
+     <th>low</th>
+     <th>average</th>
+  </tr>
+ </thead>
+<tbody>
+    <tr >
+    {% for indication in indications %}
+        <td>{{ indication.symbol.ticket }}</td>
+        <td>{{ indication.symbol.name }}</td>
+        <td>{{ indication.updated_at }}</td>
+        <td>{{ indication.price_open }}</td>
+        <td>{{ indication.price_close }}</td>
+        <td>{{ indication.price_high }}</td>
+        <td>{{ indication.price_low }}</td>
+        <td>{{ indication.price_average }}</td>
+        
+    </tr>
+   {% endfor %}
+</tbody>
+    </table>
+
+
+{% else %}
+    <p>No indicators data is available.</p>
+{% endif %}
+
+</div> {# end of col #}
+
+</div> {# end of row #}
+
+</div> {# end of container #}
+
+  {% endblock content %}
+
+
+ 

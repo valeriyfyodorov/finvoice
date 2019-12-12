@@ -69,6 +69,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     'frontside',
     'invoices',
+    'webparse',
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 

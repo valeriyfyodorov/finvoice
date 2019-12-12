@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extracss %}
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
+<style type="text/css">
+    .navbar-brand,
+.navbar-nav a {
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+
+.darker {
+    background-color: #fafafa;
+}
+
+</style>
+  {% block specificcss %}
+  {% endblock specificcss %}
+
+
+{% endblock extracss %}
+
+ {% block navbar %}
+        
+
+<nav class="navbar navbar-expand-sm navbar-light bg-light">
+  <a class="navbar-brand" href="#">Tests are here</a>
+  
+  
+</nav>
+
+{% endblock %}

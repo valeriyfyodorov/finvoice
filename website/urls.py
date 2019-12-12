@@ -21,6 +21,7 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('invoices/', include('invoices.urls_normal')),
+    path('webparse/', include('webparse.urls_normal')),
     path(
         'accounts/login/', LoginView.as_view(
             template_name='admin/login.html',
