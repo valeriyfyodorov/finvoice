@@ -1,0 +1,42 @@
+{% extends "webparse/local_base.html" %}
+{% load static %}
+
+{% block extrajs %}
+
+{% endblock extrajs %}
+
+{% block content %}
+ <div class="container-fluid">
+<div class="row">
+  <div class="col-md-12">
+
+{% if indication %}
+
+<p>
+        <h1>{{ indication.symbol.ticket }}</h1>
+        <h3>{{ indication.symbol.name }}</h3>
+        <h5>{{ indication.updated_at }}</h5>
+        <li>Open: {{ indication.price_open }}</li>
+        <li>Close: {{ indication.price_close }}</li>
+        <li>High: {{ indication.price_high }}</li>
+        <li>Low: {{ indication.price_low }}</li>
+        <li>Last: {{ indication.price_high }}</li>
+        <li>Previous: {{ indication.price_low }}</li>
+        <li>Average: {{ indication.price_average }}</li>
+        
+    </p>
+
+{% else %}
+    <p>No indicators data is available.</p>
+{% endif %}
+
+</div> {# end of col #}
+
+</div> {# end of row #}
+
+</div> {# end of container #}
+
+  {% endblock content %}
+
+
+ 
