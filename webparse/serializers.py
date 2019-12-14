@@ -29,7 +29,7 @@ class QuoteIndicationSerializer(serializers.ModelSerializer):
         model = QuoteIndication
         fields = (
             'id', 'symbol_name', 'symbol_ticket', 'price_open', 'price_close', 'price_low', 'price_high', 
-            'price_last', 'price_previous', 'price_average', 'updated_at', 
+            'price_last', 'price_previous', 'price_change', 'price_average', 'updated_at', 
             'symbol'
         )
 

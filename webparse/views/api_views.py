@@ -8,8 +8,7 @@ from webparse.serializers import SymbolSerializer, QuoteIndicationSerializer
 # from rest_framework_datatables_editor.renderers import DatatablesRenderer
 from rest_framework_datatables_editor.viewsets import DatatablesEditorModelViewSet
 # from rest_framework.response import Response
-from datetime import datetime, timedelta, timezone
-from webparse.views.helpers import raw_page_source
+from webparse.views.helpers import update_or_create_indication, find_latest_ticket_for_commodity
 
 
 class SymbolViewSet(viewsets.ModelViewSet):
@@ -24,7 +23,6 @@ def get_quote_indication_options():
 
 
 class QuoteIndicationsAllViewSet(DatatablesEditorModelViewSet):
-    permission_classes = (DjangoModelPermissions, )
     serializer_class = QuoteIndicationSerializer
     queryset = QuoteIndication.objects
 
@@ -32,26 +30,67 @@ class QuoteIndicationsAllViewSet(DatatablesEditorModelViewSet):
         return get_quote_indication_options()
 
     def get_queryset(self):
-        symbol_ticket = self.request.query_params.get('symbol_ticket', None)
-        if symbol_ticket is not None:
-            if len(symbol_ticket) == 0:
-                symbol_ticket = None
+        ticket = self.request.query_params.get('ticket', None)
+        if ticket is not None:
+            if len(ticket) == 0:
+                ticket = None
             else:
-                symbol_ticket = symbol_ticket.upper()
-                indications = QuoteIndication.objects.filter(symbol__ticket=symbol_ticket)
-                if indications:
-                    indication = indications.latest('created_at', 'updated_at')
-                    # print(datetime.now(timezone.utc), indication.updated_at, datetime.now(timezone.utc) - indication.updated_at)
-                    if (datetime.now(timezone.utc) - indication.updated_at) > timedelta(hours=2):
-                        raw_page_source(indication)
-                        # print(indication.ticket)
-            queryset = QuoteIndication.objects.all().filter(symbol__ticket=symbol_ticket)
+                update_or_create_indication(ticket)
+            queryset = QuoteIndication.objects.all().filter(symbol__ticket=ticket)
         else:
             queryset = QuoteIndication.objects.all()
         return queryset
 
     class Meta:
         datatables_extra_json = ('get_options', )
+
+class CommodityIndicationLatestViewSet(DatatablesEditorModelViewSet):
+    serializer_class = QuoteIndicationSerializer
+    queryset = QuoteIndication.objects
+
+    def get_options(self):
+        return get_quote_indication_options()
+
+    def get_queryset(self):
+        prefix = self.request.query_params.get('prefix', None)
+        if prefix is not None:
+            if len(prefix) == 0:
+                prefix = None
+            else:
+                ticket = find_latest_ticket_for_commodity(prefix)
+                update_or_create_indication(ticket)
+            queryset = QuoteIndication.objects.all().filter(symbol__ticket=ticket)[:1]
+        else:
+            queryset = QuoteIndication.objects.all()
+        return queryset
+
+    class Meta:
+        datatables_extra_json = ('get_options', )
+
+class CommodityIndicationFutureViewSet(DatatablesEditorModelViewSet):
+    serializer_class = QuoteIndicationSerializer
+    queryset = QuoteIndication.objects
+
+    def get_options(self):
+        return get_quote_indication_options()
+
+    def get_queryset(self):
+        prefix = self.request.query_params.get('prefix', None)
+        if prefix is not None:
+            if len(prefix) == 0:
+                prefix = None
+            else:
+                ticket = find_latest_ticket_for_commodity(prefix, use_one_later=True)
+                update_or_create_indication(ticket)
+            queryset = QuoteIndication.objects.all().filter(symbol__ticket=ticket)[:1]
+        else:
+            queryset = QuoteIndication.objects.all()
+        return queryset
+
+    class Meta:
+        datatables_extra_json = ('get_options', )
+
+
 
 
 
