@@ -82,7 +82,7 @@ class QuoteIndication(models.Model):
             self.price_close = self.price_previous
         if self.price_close == 0:
             self.price_close = self.price_open
-        if self.price_change == 0 and self.price_previous > 0 and self.price_last > 0:
+        if self.price_previous > 0 and self.price_last > 0:
             self.price_change = self.price_last - self.price_previous
         self.price_average = round((self.price_close + self.price_open + self.price_last) / Decimal('3.0'), 0)
         # print(self.price_average)

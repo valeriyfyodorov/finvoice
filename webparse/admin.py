@@ -1,5 +1,7 @@
 from django.contrib import admin
 from .models import Symbol, QuoteIndication, SymbolPeriod, SymbolCommodity
+
+
 # Register your models here.
 class SymbolAdmin(admin.ModelAdmin):
     pass

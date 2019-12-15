@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from rest_framework.permissions import DjangoModelPermissions
+# from rest_framework.permissions import DjangoModelPermissions
 from webparse.models import Symbol, QuoteIndication
 from webparse.serializers import SymbolSerializer, QuoteIndicationSerializer
 # from django_filters.rest_framework import DjangoFilterBackend

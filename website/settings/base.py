@@ -63,6 +63,7 @@ THIRD_PARTY_APPS = [
     'crispy_forms',
     'flatpickr',
     'rest_framework',
+    'rest_framework.authtoken',
     'django_filters',
     'rest_framework_datatables_editor',
 ]
@@ -167,6 +168,10 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework_datatables_editor.pagination.DatatablesPageNumberPagination',
     'PAGE_SIZE': 50,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
