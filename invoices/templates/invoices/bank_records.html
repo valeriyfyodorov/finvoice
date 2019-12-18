@@ -213,7 +213,7 @@
 
 
     $("#table_grand_child").append(
-       "<tfoot><tr><td></td><td></td><td></td>><td></td><td></td><td></td></tr></tfoot>"
+       "<tfoot><tr><td></td><td></td><td></td>><td></td><td></td><td></td><td></td></tr></tfoot>"
     );
     var grandChildTable = $('#table_grand_child').DataTable(
     {
@@ -310,8 +310,8 @@
         drawCallback: function () {
             var api = this.api();
             // console.log(api.column( 5, {page:'current'} ).data().sum());
-            $( api.column(5).footer() ).html("∑: <b>"+
-              api.column( 5, {page:'current'} ).data().sum().toFixed(2) + 
+            $( api.column(6).footer() ).html("∑: <b>"+
+              api.column( 6, {page:'current'} ).data().sum().toFixed(2) + 
               "</b>"
             );
         },
