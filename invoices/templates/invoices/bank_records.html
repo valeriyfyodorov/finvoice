@@ -251,8 +251,10 @@
             {"data": "total_gross"},
             {"data": "deal.name", "name": "deal.name", "defaultContent": "<i>Not set</i>"},
             {"data": "is_paid", "name": "is_paid"},
+            {"data": "id", "name": "id", "searchable": false, "orderable": false},
             {"data": "vat_percent", "searchable": false, "orderable": false, "visible": false},
             {"data": "is_incoming", "searchable": false, "orderable": false, "visible": false},
+            
             ],
         columnDefs: [
             {
@@ -279,8 +281,28 @@
                 return '<input type="checkbox" onclick="return false;" class="editor-active">';
               }
               return data;
-            }},
+            }},{
+            "targets": 9,
+            "data": "id",          // This does the trick... Adding data ...
+            // "visible": false,      // And making this columns invisible ...
+            "orderable" : false,
+            "searchable": false,
+            render: function ( data, type, row, meta ) {
+                var url_mask = "{% url 'invoices:print_detail' invoice_id=12345 %}".replace(/12345/, row.id.toString());
+                if (row.total_gross > 0)
+                {
+                  return '<a href="'+ url_mask + '?returnUrl={{returnUrl}}">'+'<i class="fas fa-fw fa-file-pdf"> </i>'+'</a>';
+                }
+                else
+                {
+                  return 'INCMG';
+                }
+
+
+              }
+            },
             ],
+            
         select: {
             style: 'single'
           },
@@ -383,6 +405,7 @@
              <th>Total amount</th>
              <th>Deals</th>
              <th>Paid</th>
+             <th>PDF</th>
           </tr>
         </thead>
       </table>
