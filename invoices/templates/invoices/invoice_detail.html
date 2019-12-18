@@ -62,7 +62,7 @@ VAT #: LV40203217446
 <br>
 Ph: +371-26355555, email: office@sea-hm.com
 <br>
-EUR IBAN account: LV33PARX0022617360001
+IBAN account: LV33PARX0022617360001
 <br>
 CITADELE BANKA, PARXLV22
         </td>
@@ -155,7 +155,7 @@ CITADELE BANKA, PARXLV22
           SUMMA NETO / TOTAL NET:
         </td>
         <td colspan="2" class="text-right">
-          EUR
+          {{invoice.currency.name}}
         </td>
         <td class="text-right">
           {{invoice.total_net}}
@@ -169,7 +169,7 @@ CITADELE BANKA, PARXLV22
           {{invoice.vat_percent.normalize}} %
         </td>
         <td class="text-right">
-          EUR
+          {{invoice.currency.name}}
         </td>
         <td class="text-right">
           {{invoice.total_vat}}
@@ -181,7 +181,7 @@ CITADELE BANKA, PARXLV22
           SUMMA KOPĀ APMAKSAI / TOTAL TO PAY
         </th>
         <th colspan="2" class="text-right">
-          EUR
+          {{invoice.currency.name}}
         </th>
         <th class="text-right">
           {{invoice.total_gross}}
@@ -206,7 +206,7 @@ CITADELE BANKA, PARXLV22
           {{invoice.advance_percent.normalize}} %
         </td>
         <td class="text-right">
-          EUR
+          {{invoice.currency.name}}
         </td>
         <td class="text-right">
           {{invoice.advance_amount}}
