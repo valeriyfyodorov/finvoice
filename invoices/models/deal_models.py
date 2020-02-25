@@ -37,9 +37,10 @@ class Deal(models.Model):
         invoices_total_sum = 0
         if (self.id):
             bank_records_total_sum = self.bank_records.all().aggregate(Sum('used_amount'))['used_amount__sum'] or 0
-            print("bank_records_total_sum:", bank_records_total_sum)
-            invoices_total_sum = -self.invoices.incoming().aggregate(Sum('total_gross'))['total_gross__sum'] or 0
-            print("invoices_total_sum:", invoices_total_sum)
+            # print("bank_records_total_sum:", bank_records_total_sum)
+            invoices_total_sum = self.invoices.incoming().aggregate(Sum('total_gross'))['total_gross__sum'] or 0
+            invoices_total_sum = -invoices_total_sum
+            # print("invoices_total_sum:", invoices_total_sum)
             self.total_received = bank_records_total_sum
             self.total_invoiced = invoices_total_sum
             self.total_balance = self.total_invoiced - self.total_received
