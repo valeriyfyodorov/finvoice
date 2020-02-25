@@ -63,6 +63,7 @@ class DepartmentSerializer(serializers.ModelSerializer):
 class DealSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     department = DepartmentSerializer()
+    client = CompanySerializer()
 
     def to_internal_value(self, data):
         return get_object_or_404(Deal, pk=data['id'])
@@ -72,6 +73,8 @@ class DealSerializer(serializers.ModelSerializer):
         depth = 0
         fields = (
             'id', 'name', 'started_date', 'department', 
+            'completed_date', 'client', 
+            'total_received', 'total_invoiced', 'total_balance'
         )
         datatables_always_serialize = ('id',)
 
@@ -87,6 +90,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
     DT_RowAttr = serializers.SerializerMethodField()
     id = serializers.IntegerField(read_only=True)
     is_incoming_name = serializers.CharField(read_only=True)
+    is_advance_name = serializers.CharField(read_only=True)
     # currency_view = CurrencySerializer(source="currency", read_only=True)
     # bank_records = serializers.SerializerMethodField()
 
@@ -115,7 +119,8 @@ class InvoiceSerializer(serializers.ModelSerializer):
             'DT_RowId', 'DT_RowAttr', 'id', 'number', 'issued_date', 'payment_term', 
             'company', 'company_name', 'total_net', 'total_gross', 
             'currency', 'currency_name', 'deal', 'deal_id', 'deal_name', 
-            'is_incoming', 'vat_percent', 'is_paid', 'is_incoming_name', 'total_not_paid'
+            'is_incoming', 'vat_percent', 'is_paid', 'is_incoming_name', 'is_advance_name', 
+            'total_not_paid'
         )
 
 class BankRecordSerializer(serializers.ModelSerializer):

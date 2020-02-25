@@ -28,6 +28,11 @@
             {"data": "name", "name": "name"},
             {"data": "started_date", "name": "started_date"},
             {"data": "department.name", "name": "department.name"},
+            {"data": "completed_date"},
+            {"data": "client.name", "name": "client.name"},
+            {"data": "total_invoiced"},
+            {"data": "total_received"},
+            {"data": "total_balance"},
             ],
         columnDefs: [
             {
@@ -57,7 +62,7 @@
         //             {extend: 'excelHtml5', title: 'Data export', text: 'xls'},
         //             {extend: 'pdfHtml5',title: 'Data export', text: 'pdf'},
         //         ],
-        "order": [[ 1, "desc" ]],
+        "order": [[ 4, "desc" ]],
         // drawCallback: function () {
         //     var api = this.api();
         //     // console.log(api.column( 5, {page:'current'} ).data().sum());
@@ -147,6 +152,7 @@
     var masterTable = $('#table_master').DataTable(
     {
         "serverSide": false,
+        "pageLength": 25,
         "ajax": {
               url: "{{masterTableURL}}" + "?format=datatables",
               type: 'get',
@@ -179,6 +185,7 @@
             {"data": "total_gross"},
             {"data": "deal.name", "name": "deal.name", "defaultContent": "<i>Not set</i>"},
             {"data": "is_paid", "name": "is_paid"},
+            {"data": "is_advance_name", "name": "is_advance_name"},
             {"data": "is_incoming_name", "name": "is_incoming_name"},
             {"data": "is_incoming", "searchable": false, "orderable": false, "visible": false},
             {"data": "vat_percent", "searchable": false, "orderable": false, "visible": false},
@@ -269,6 +276,7 @@
     var childTable = $('#table_child').DataTable(
     {
       "serverSide": true,
+      "pageLength": 25,
         // "ajax": "/api/bank_accounts/?format=datatables",
         // "ajax": "{% url 'api:bank_records-list' %}" + "?format=datatables" ,
         "ajax": {
@@ -391,8 +399,13 @@
          <tr>
             <th>...</th>
             <th>Name</th>
-             <th class="uk_date">Started </th>
+             <th class="uk_date">From </th>
              <th>Department</th>
+             <th>Dated</th>
+             <th>Client</th>
+             <th>Total</th>
+             <th>Advanced</th>
+             <th>Balance</th>
           </tr>
         </thead>
       </table>
@@ -413,6 +426,7 @@
              <th>Amount</th>
              <th>Deal</th>
              <th>Paid</th>
+             <th>Adv/Fin</th>
              <th>Direction</th>
              <th>Incoming </th>
              <th>VAT percent </th>

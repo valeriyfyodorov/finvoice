@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from rest_framework.permissions import DjangoModelPermissions
-from invoices.models import Currency, BankAccount, BankRecord, Invoice, Company, Deal
+from invoices.models import Currency, BankAccount, BankRecord, Invoice, Company, Deal, Department
 from invoices.serializers import (CurrencySerializer, BankAccountSerializer, BankRecordSerializer, 
     InvoiceSerializer, DealSerializer, CompanySerializer)
 from django_filters.rest_framework import DjangoFilterBackend
@@ -24,6 +24,13 @@ def get_invoice_options():
     return "options", {
         "currency.id": [{'label': obj.name, 'value': obj.pk} for obj in Currency.objects.all()],
         "company.id": [{'label': obj.name, 'value': obj.pk} for obj in Company.objects.all()],
+        "deal.id": [{'label': obj.name, 'value': obj.pk} for obj in Deal.objects.all()],
+    }
+
+def get_deal_options():
+    return "options", {
+        "department.id": [{'label': obj.name, 'value': obj.pk} for obj in Department.objects.all()],
+        "client.id": [{'label': obj.name, 'value': obj.pk} for obj in Company.objects.all()],
         "deal.id": [{'label': obj.name, 'value': obj.pk} for obj in Deal.objects.all()],
     }
 
@@ -176,4 +183,10 @@ class DealViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
     queryset = Deal.objects.all()
     serializer_class = DealSerializer
+
+    def get_options(self):
+        return get_deal_options()
+
+    class Meta:
+        datatables_extra_json = ('get_options', )
 

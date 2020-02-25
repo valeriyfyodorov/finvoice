@@ -77,6 +77,12 @@ class Invoice(models.Model):
         else:
             return "OUTGG" 
 
+    def is_advance_name(self):
+        if self.is_advance:
+            return "ADV"
+        else:
+            return "FIN" 
+
     def save(self, *args, **kwargs):
         items_total_sum = self.items.all().aggregate(Sum('total'))['total__sum']
         if self.total_net == 0 or self.total_net is None:
