@@ -62,7 +62,8 @@ class Invoice(models.Model):
                                    validators=[MaxLengthValidator(100)])
     currency = models.ForeignKey(Currency, related_name="invoices", on_delete=models.CASCADE, 
         null=False, blank=False, default=1) 
-    deal = models.ForeignKey(Deal, related_name="invoices", on_delete=models.CASCADE, null=True, blank=True) 
+    deal = models.ForeignKey(Deal, related_name="invoices", on_delete=models.CASCADE, null=True, blank=True)
+    is_advance = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('-number', '-issued_date',)

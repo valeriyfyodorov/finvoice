@@ -1,6 +1,5 @@
 from django.db import models
 from django.core.validators import MaxLengthValidator
-from .deal_models import Department
 
 class GeneralSetting(models.Model):
     settingname = models.CharField(max_length=300)
