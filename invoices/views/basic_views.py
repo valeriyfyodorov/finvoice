@@ -157,3 +157,14 @@ class InvoiceDelete(LoginRequiredMixin, DeleteView):
     template_name = 'invoices/confirm_delete.html'
     success_url = reverse_lazy('invoices:index')
 
+
+class DealDetailView(LoginRequiredMixin, DetailView):
+    model = Deal
+    template_name = 'invoices/deal_detail.html'
+    pk_url_kwarg = "deal_id"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        self.object.save()
+        context["title"] = "Kalkulācija " + context["deal"].name
+        return context

@@ -66,6 +66,7 @@ THIRD_PARTY_APPS = [
     'rest_framework.authtoken',
     'django_filters',
     'rest_framework_datatables_editor',
+    'mathfilters',
 ]
 LOCAL_APPS = [
     'frontside',

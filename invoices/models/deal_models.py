@@ -38,8 +38,9 @@ class Deal(models.Model):
         if (self.id):
             bank_records_total_sum = self.bank_records.all().aggregate(Sum('used_amount'))['used_amount__sum'] or 0
             # print("bank_records_total_sum:", bank_records_total_sum)
-            invoices_total_sum = self.invoices.incoming().aggregate(Sum('total_gross'))['total_gross__sum'] or 0
+            invoices_total_sum = self.invoices.compensated().aggregate(Sum('total_gross'))['total_gross__sum'] or 0
             invoices_total_sum = -invoices_total_sum
+            invoices_total_sum += self.invoices.charged().aggregate(Sum('total_gross'))['total_gross__sum'] or 0
             # print("invoices_total_sum:", invoices_total_sum)
             self.total_received = bank_records_total_sum
             self.total_invoiced = invoices_total_sum

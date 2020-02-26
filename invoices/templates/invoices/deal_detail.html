@@ -1,0 +1,301 @@
+{% extends "invoices/local_base.html" %}
+{% load static %}
+{% load mathfilters %}
+
+{% block extracss %}
+<style type="text/css">
+  
+  body {font-family:Arial,sans-serif;}
+
+
+  .logofont {
+    font-family:'Kaushan Script',-apple-system,BlinkMacSystemFont,'Segoe UI', Roboto,'Helvetica Neue',Arial,sans-serif,
+  'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji';
+  font-size: 20px;}
+
+  .smallright{
+    font-size: 14px;
+    text-align: right;
+  }
+  .smaller{
+    font-size: 10px;
+  }
+</style>
+
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container" style="margin-left: 50px; padding-right: 50px;">
+
+<div class="row mt-4">
+  <div class="col-md-12">
+   
+  </div>
+</div>
+<table class="table table-sm">
+        <!--for inline added titles-->
+  <tbody> 
+
+      <tr>
+        <td class="logofont" >Seahorse Management 
+        </td>
+        <td class="text-center">
+          <h4>Kalkulācija</h4>
+        </td>
+        <td class="text-right">
+          <h4>
+          # {{deal.name}}
+        </h4>
+        </td>
+      </tr>
+
+  <tr>
+        <td>Rīga, {{deal.completed_date|date:"d.m.Y"}} </span>
+        </td>
+        
+        <td class="smallright" colspan=2>
+         SIA ‘Seahorse Management’
+         <br>
+Edžiņa gatve 3-6, Rīga, LV-1015
+<br>
+Reģ Nr: 40203217446
+<br>
+PVN #: LV40203217446
+
+        </td>
+  </tr>
+
+<tr>
+  <td>
+    Klients:
+  </td>
+  <td colspan="2">
+    {{deal.client.receiver_address|linebreaks}}
+  </td>
+</tr>
+
+<tr>
+  <td>
+    Ref:  {{deal.department.name}}-{{deal.name}}
+  </td>
+  
+  <td colspan="2">
+    {{deal.description|linebreaks}}
+  </td>
+</tr>
+</tbody>
+</table>
+
+
+{% if deal.invoices.compensated %}
+<table class="table table-sm table-bordered smaller">
+        
+  <tbody> 
+
+    <tr>
+      <td colspan="5">
+        <h6> Klienta izdevumu kompensācija: atmaksātu reķiņu saraksts:</h6>
+      </td>
+      
+    </tr>
+
+    <tr>
+      <td>
+        #
+      </td>
+      <td>
+        Piegādātājs
+      </td>
+      <td>
+        numurs
+      </td>
+      <td>
+        datums
+      </td>
+      <td>
+        izdevumu summa, EUR
+      </td>
+      
+      
+    </tr>
+
+        {% for invoice in deal.invoices.compensated %}
+
+          <tr>
+            <td class="text-right">
+              {{forloop.counter}}
+            </td>
+            <td>
+              {{invoice.company.name}}
+            </td>
+            <td class="text-right">
+              {{invoice.number}}
+            </td>
+            <td class="text-right">
+              {{invoice.issued_date|date:"d.m.Y"}}
+            </td>
+            <td class="text-right">
+              {{invoice.total_gross|abs}}
+            </td>
+            
+          </tr>
+        
+        {% endfor %}
+        
+
+      </tbody>
+</table>
+
+{% endif %}
+
+{% if deal.invoices.charged %}
+<table class="table table-sm table-bordered smaller">
+        
+  <tbody> 
+
+    <tr>
+      <td colspan="7">
+        <h6> Izsniegto reķiņu saraksts:</h6>
+      </td>
+      
+    </tr>
+
+    <tr>
+      <td>
+        #
+      </td>
+      <td>
+        Piegādātājs
+      </td>
+      <td>
+        numurs
+      </td>
+      <td>
+        datums
+      </td>
+      <td>
+        summa neto
+      </td>
+      <td>
+        PVN
+      </td>
+      <td>
+        kopā, EUR
+      </td>
+      
+      
+    </tr>
+
+        {% for invoice in deal.invoices.charged %}
+
+          <tr>
+            <td class="text-right">
+              {{forloop.counter}}
+            </td>
+            <td>
+              {{invoice.company.name}}
+            </td>
+            <td class="text-right">
+              {{invoice.number}}
+            </td>
+            <td class="text-right">
+              {{invoice.issued_date|date:"d.m.Y"}}
+            </td>
+            <td class="text-right">
+              {{invoice.total_net}}
+            </td>
+            <td class="text-right">
+              {{invoice.total_vat}}
+            </td>
+            <td class="text-right">
+              {{invoice.total_gross}}
+            </td>
+            
+          </tr>
+        
+        {% endfor %}
+        
+
+      </tbody>
+</table>
+
+{% endif %}
+
+
+<table class="table table-sm">
+        <!--for inline added titles-->
+  <tbody> 
+
+      <tr>
+        <td colspan="2" class="text-left">
+          IZDEVUMU KOPĒJĀ SUMMA:
+        </td>
+        <td colspan="2" class="text-right">
+          EUR
+        </td>
+        <td class="text-right">
+          {{deal.total_invoiced|floatformat:2}}
+        </td>
+      </tr>
+       <tr>
+        <td colspan="2" class="text-left">
+          SAŅĒMTO AVANSU KOPĒJĀ SUMMA:
+        </td>
+        <td colspan="2" class="text-right">
+          EUR
+        </td>
+        <td class="text-right">
+          {{deal.total_received|floatformat:2}}
+        </td>
+      
+      <tr>
+        <th colspan="2" class="text-left">
+          BILANCE KOPĀ APMAKSAI 
+        </th>
+        <th colspan="2" class="text-right">
+          EUR
+        </th>
+        <th class="text-right">
+          {{deal.total_balance|floatformat:2}}
+        </th>
+      </tr>
+
+      
+
+
+    </tbody>
+  </table>
+
+  
+
+  
+
+<div class="row mt-5">
+    <div class="col-md-12 text-center">
+     {% if use_stamp %}
+      
+       SIA 'SEAHORSE MANAGEMENT'  
+      <br> 
+      Valērijs Fjodorovs    
+      
+      <img width="290px" src="{% static 'img/stamp_with_signature.jpg' %}">
+
+      {% else %}
+<span class="small">
+      
+    </span>
+    {% endif %}
+    </div>
+  </div>
+
+
+
+
+ 
+</div>
+
+  {% endblock content %}
+
+

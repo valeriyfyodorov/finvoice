@@ -91,10 +91,11 @@ class InvoiceForm(ModelForm):
             HTML("<br>"),
             Row(
                 HTML("<br>"),
+                Field('is_reissued', wrapper_class='col-md-2'),
                 Field('is_advance', wrapper_class='col-md-2'),
                 Field('is_paid', wrapper_class='col-md-1'),
                 Field('payment_details', wrapper_class='col-md-4'),
-                Field('returnUrl', wrapper_class='col-md-3'),
-                Field('total_not_paid', wrapper_class='col-md-3'),
+                Field('returnUrl', wrapper_class='col-md-1'),
+                Field('total_not_paid', wrapper_class='col-md-2'),
             )
         )

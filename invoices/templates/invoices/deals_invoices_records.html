@@ -33,6 +33,7 @@
             {"data": "total_invoiced"},
             {"data": "total_received"},
             {"data": "total_balance"},
+            {"data": "id", "searchable": false, "orderable": false},
             ],
         columnDefs: [
             {
@@ -45,6 +46,14 @@
                 var url_mask = "{% url 'invoices:deal_update' deal_id=12345 %}".replace(/12345/, row.id.toString());
                 var extraQuery = "?returnUrl=" + "{% url 'invoices:deals_index' %}";
                 return '<a href="'+ url_mask + extraQuery + '">'+'Info'+'</a>';
+              }
+            },
+            {
+            "targets": 9,
+            render: function ( data, type, row, meta ) {
+                var url_mask = "{% url 'invoices:deal_detail' deal_id=12345 %}".replace(/12345/, row.id.toString());
+                var extraQuery = "?returnUrl=" + "{% url 'invoices:deals_index' %}";
+                return '<a href="'+ url_mask + extraQuery + '" target="_blank">'+'Calc'+'</a>';
               }
             },
             // {targets:"uk_date", render:function(data){
@@ -406,6 +415,7 @@
              <th>Total</th>
              <th>Advanced</th>
              <th>Balance</th>
+             <th>...</th>
           </tr>
         </thead>
       </table>

@@ -33,8 +33,14 @@ class InvoiceManager(models.Manager):
     def incoming(self):
         return self.get_queryset().filter(is_incoming=True).order_by('-issued_date', '-number')
 
+    def compensated(self):
+        return self.get_queryset().filter(is_reissued=True).filter(is_incoming=True).exclude(is_advance=True).order_by('company__name', '-number')
+
     def outgoing(self):
         return self.get_queryset().exclude(is_incoming=True).order_by('-issued_date', '-number')
+
+    def charged(self):
+        return self.get_queryset().exclude(is_incoming=True).exclude(is_advance=True).order_by('company__name', '-number')
 
     def unpaid(self):
         return self.get_queryset().exclude(is_paid=True).order_by('-issued_date', '-number')
@@ -58,12 +64,14 @@ class Invoice(models.Model):
     advance_amount = models.DecimalField(default=0, max_digits=10, decimal_places=2)
     is_paid = models.BooleanField(default=False)
     is_incoming = models.BooleanField(default=False)
+    is_advance = models.BooleanField(default=False)
+    is_reissued = models.BooleanField(default=True)
     payment_details = models.TextField(max_length=100, blank=True,
                                    validators=[MaxLengthValidator(100)])
     currency = models.ForeignKey(Currency, related_name="invoices", on_delete=models.CASCADE, 
         null=False, blank=False, default=1) 
     deal = models.ForeignKey(Deal, related_name="invoices", on_delete=models.CASCADE, null=True, blank=True)
-    is_advance = models.BooleanField(default=False)
+    
 
     class Meta:
         ordering = ('-number', '-issued_date',)
