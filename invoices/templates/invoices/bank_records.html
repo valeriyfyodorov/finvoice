@@ -254,6 +254,9 @@
             {"data": "id", "name": "id", "searchable": false, "orderable": false},
             {"data": "vat_percent", "searchable": false, "orderable": false, "visible": false},
             {"data": "is_incoming", "searchable": false, "orderable": false, "visible": false},
+            {"data": "is_incoming_name", "searchable": false, "orderable": false, "visible": false},
+            {"data": "file", "searchable": false, "orderable": false, "visible": false},
+            {"data": "file_size", "searchable": false, "orderable": false, "visible": false},
             
             ],
         columnDefs: [
@@ -282,8 +285,8 @@
               }
               return data;
             }},{
-            "targets": 'printing',
-            "data": "id",          // This does the trick... Adding data ...
+            "targets": 9,
+            // "data": "id",          // This does the trick... Adding data ...
             // "visible": false,      // And making this columns invisible ...
             "orderable" : false,
             "searchable": false,
@@ -295,7 +298,12 @@
                 }
                 else
                 {
-                  return 'INCMG';
+                  if (row.file_size > 0)
+                  {
+                    return '<a href="'+ row.file + '" target="_blank">'+row.is_incoming_name+'</a>';
+                  }
+                  else
+                    {return row.is_incoming_name;}
                 }
 
 
@@ -406,6 +414,11 @@
              <th>Deals</th>
              <th class="checking">Paid</th>
              <th class="printing">PDF</th>
+             <th>VAT</th>
+             <th>Incoming?</th>
+             <th>Incoming</th>
+             <th>File</th>
+             <th>file size</th>
           </tr>
         </thead>
       </table>
