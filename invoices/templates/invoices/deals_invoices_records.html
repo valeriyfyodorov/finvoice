@@ -198,7 +198,8 @@
             {"data": "is_incoming_name", "name": "is_incoming_name"},
             {"data": "is_incoming", "searchable": false, "orderable": false, "visible": false},
             {"data": "vat_percent", "searchable": false, "orderable": false, "visible": false},
-            
+            {"data": "file", "searchable": false, "orderable": false, "visible": false},
+            {"data": "file_size", "searchable": false, "orderable": false, "visible": false},
             ],
         columnDefs: [
             {
@@ -226,17 +227,17 @@
               // }
               return data === true ? "X" : "_";
             }},
-            // {targets:8, render: function(data, type, row) {
-            //   if (type === 'myExport') {
-            //     return data === true ? "Y" : "N";
-            //   }
-            //   if (data === true) {
-            //     return '<input type="checkbox" class="editor-active" onclick="return false;" checked>';
-            //   } else {
-            //     return '<input type="checkbox" onclick="return false;" class="editor-active">';
-            //   }
-            //   return data;
-            // }},
+            {targets:9, render: function(data, type, row) {
+              if (row.file_size > 0)
+              {
+                return '<a href="'+ row.file + '" target="_blank">'+row.is_incoming_name+'</a>';
+              }
+              else
+                {return row.is_incoming_name;}
+
+            }},
+
+            
             ],
         select: {
             style: 'single'
@@ -440,6 +441,8 @@
              <th>Direction</th>
              <th>Incoming </th>
              <th>VAT percent </th>
+             <th>... </th>
+             <th>File size</th>
           </tr>
         </thead>
       </table>

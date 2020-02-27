@@ -96,10 +96,12 @@
             {"data": "deal.name", "name": "deal.name", "defaultContent": "<i>Not set</i>"},
             {"data": "is_paid", "name": "is_paid"},
             {"data": "total_not_paid", "name": "total_not_paid"},
-            {"data": "is_advance_name", "name": "is_advance_name"},
-            {"data": "id", "name": "id", "searchable": false, "orderable": false},
+            {"data": "is_advance_name", "name": "is_advance_name", "searchable": false, "orderable": false},
+            {"data": "is_incoming_name", "searchable": false, "orderable": false},
             {"data": "vat_percent", "searchable": false, "orderable": false, "visible": false},
             {"data": "is_incoming", "searchable": false, "orderable": false, "visible": false},
+            {"data": "file", "searchable": false, "orderable": false, "visible": false},
+            {"data": "file_size", "searchable": false, "orderable": false, "visible": false},
             ],
         rowId: 'id',
         columnDefs: [
@@ -129,8 +131,8 @@
               return data;
             }},
             {
-            "targets": 'printing',
-            "data": "id",          // This does the trick... Adding data ...
+            "targets": 10,
+            // "data": "id",          // This does the trick... Adding data ...
             // "visible": false,      // And making this columns invisible ...
             "orderable" : false,
             "searchable": false,
@@ -142,7 +144,12 @@
                 }
                 else
                 {
-                  return 'INCMG';
+                  if (row.file_size > 0)
+                  {
+                    return '<a href="'+ row.file + '" target="_blank">'+row.is_incoming_name+'</a>';
+                  }
+                  else
+                    {return row.is_incoming_name;}
                 }
 
 
@@ -337,7 +344,7 @@
     <table id="table_master" class="display table dataTable table-striped table-sm table-hover" role="grid">
         <thead>
          <tr>
-            <th>...</th>
+             <th>...</th>
              <th>Number</th>
              <th>Issued </th>
              <th>Currency</th>
@@ -349,7 +356,9 @@
              <th>Adv/Fin</th>
              <th class="printing"> </th>
              <th>VAT percent </th>
-             <th>Incoming </th>
+             <th>Is incoming </th>
+             <th>File </th>
+             <th>File size</th>
           </tr>
         </thead>
       </table>

@@ -71,7 +71,7 @@ class Invoice(models.Model):
     currency = models.ForeignKey(Currency, related_name="invoices", on_delete=models.CASCADE, 
         null=False, blank=False, default=1) 
     deal = models.ForeignKey(Deal, related_name="invoices", on_delete=models.CASCADE, null=True, blank=True)
-    
+    file = models.FileField(upload_to='invoice_files/')
 
     class Meta:
         ordering = ('-number', '-issued_date',)
@@ -81,15 +81,21 @@ class Invoice(models.Model):
 
     def is_incoming_name(self):
         if self.is_incoming:
-            return "INCMG"
+            return "INCM"
         else:
-            return "OUTGG" 
+            return "OTGG" 
 
     def is_advance_name(self):
         if self.is_advance:
             return "ADV"
         else:
             return "FIN" 
+
+    def file_size(self):
+        try:
+            return self.file.size
+        except OSError:
+            return 0
 
     def save(self, *args, **kwargs):
         items_total_sum = self.items.all().aggregate(Sum('total'))['total__sum']

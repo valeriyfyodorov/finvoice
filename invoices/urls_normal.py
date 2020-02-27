@@ -28,6 +28,5 @@ urlpatterns = [
     path('delete/<int:invoice_id>/', views.InvoiceDelete.as_view(), name='invoice_delete'),
     path('create/', views.InvoiceCreate.as_view(), name='invoice_create'),
     # ex: /print/invoices/5/
-    path('print/<int:invoice_id>/', views.print_detail, name='print_detail'),
-    
+    path('print/<int:invoice_id>/', views.print_detail, name='print_detail'),  
 ]

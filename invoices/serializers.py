@@ -91,6 +91,8 @@ class InvoiceSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     is_incoming_name = serializers.CharField(read_only=True)
     is_advance_name = serializers.CharField(read_only=True)
+    file = serializers.FileField()
+    file_size = serializers.CharField(read_only=True)
     # currency_view = CurrencySerializer(source="currency", read_only=True)
     # bank_records = serializers.SerializerMethodField()
 
@@ -120,7 +122,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
             'company', 'company_name', 'total_net', 'total_gross', 
             'currency', 'currency_name', 'deal', 'deal_id', 'deal_name', 
             'is_incoming', 'vat_percent', 'is_paid', 'is_incoming_name', 'is_advance_name', 
-            'total_not_paid'
+            'total_not_paid', 'file', 'file_size', 
         )
 
 class BankRecordSerializer(serializers.ModelSerializer):

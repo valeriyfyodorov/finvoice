@@ -74,10 +74,11 @@ class InvoiceForm(ModelForm):
                 Field('total_gross', wrapper_class='col-md-3'),
             ),
             Row(
-                Field('advance_required', wrapper_class='col-md-3'),
-                Field('advance_percent', wrapper_class='col-md-3'),
+                Field('advance_required', wrapper_class='col-md-2'),
+                Field('advance_percent', wrapper_class='col-md-2'),
                 Field('advance_amount', wrapper_class='col-md-3'),
                 Field('deal', wrapper_class='col-md-3'),
+
             ),
             Div(
                 Fieldset('Add items',
@@ -94,8 +95,9 @@ class InvoiceForm(ModelForm):
                 Field('is_reissued', wrapper_class='col-md-2'),
                 Field('is_advance', wrapper_class='col-md-2'),
                 Field('is_paid', wrapper_class='col-md-1'),
-                Field('payment_details', wrapper_class='col-md-4'),
+                Field('payment_details', wrapper_class='col-md-3'),
                 Field('returnUrl', wrapper_class='col-md-1'),
                 Field('total_not_paid', wrapper_class='col-md-2'),
+                Field('file', wrapper_class='col-md-2'),
             )
         )
