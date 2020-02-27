@@ -71,7 +71,7 @@ class Invoice(models.Model):
     currency = models.ForeignKey(Currency, related_name="invoices", on_delete=models.CASCADE, 
         null=False, blank=False, default=1) 
     deal = models.ForeignKey(Deal, related_name="invoices", on_delete=models.CASCADE, null=True, blank=True)
-    file = models.FileField(upload_to='invoice_files/')
+    file = models.FileField(upload_to='invoice_files/', blank=True)
 
     class Meta:
         ordering = ('-number', '-issued_date',)
@@ -95,6 +95,8 @@ class Invoice(models.Model):
         try:
             return self.file.size
         except OSError:
+            return 0
+        except ValueError:
             return 0
 
     def save(self, *args, **kwargs):
