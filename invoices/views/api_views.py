@@ -124,7 +124,7 @@ class InvoicesAllViewSet(DatatablesEditorModelViewSet):
             # print("TEST INVOICE 2", invoice_selected, len(invoice_selected))
             if len(company_selected) == 0:
                 company_selected = None
-            queryset = queryset.filter(company=company_selected)
+            queryset = queryset.filter(company=company_selected).exclude(is_advance=True)
         return queryset
 
     class Meta:
