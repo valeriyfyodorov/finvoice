@@ -98,6 +98,41 @@ class InvoicesUnpaidViewSet(DatatablesEditorModelViewSet):
     class Meta:
         datatables_extra_json = ('get_options', )
 
+
+class InvoicesFinancialViewSet(DatatablesEditorModelViewSet):
+    permission_classes = (DjangoModelPermissions, )
+    serializer_class = InvoiceSerializer
+    queryset = Invoice.objects
+
+    def get_options(self):
+        return get_invoice_options()
+
+    def get_queryset(self):
+        deal_selected = self.request.query_params.get('deal_selected', None)
+        bank_record_selected = self.request.query_params.get('bank_record_selected', None)
+        company_selected = self.request.query_params.get('company_selected', None)
+        if deal_selected is not None:
+            if len(deal_selected) == 0:
+                deal_selected = None
+            queryset = Invoice.objects.financial().filter(deal=deal_selected)
+        else:
+            queryset = Invoice.objects.financial()
+        if bank_record_selected is not None:
+            if len(bank_record_selected) == 0:
+                bank_record_selected = None
+            queryset = queryset.filter(bank_records__id=bank_record_selected)
+        if company_selected is not None:
+            # print("TEST INVOICE 2", invoice_selected, len(invoice_selected))
+            if len(company_selected) == 0:
+                company_selected = None
+            queryset = queryset.filter(company=company_selected)
+        return queryset
+
+
+    class Meta:
+        datatables_extra_json = ('get_options', )
+
+
 class InvoicesAllViewSet(DatatablesEditorModelViewSet):
     permission_classes = (DjangoModelPermissions, )
     serializer_class = InvoiceSerializer
@@ -124,7 +159,7 @@ class InvoicesAllViewSet(DatatablesEditorModelViewSet):
             # print("TEST INVOICE 2", invoice_selected, len(invoice_selected))
             if len(company_selected) == 0:
                 company_selected = None
-            queryset = queryset.filter(company=company_selected).exclude(is_advance=True)
+            queryset = queryset.filter(company=company_selected)
         return queryset
 
     class Meta:

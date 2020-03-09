@@ -47,6 +47,10 @@
                   name:  "total_gross",
                   def: "0.00",
               }, {
+                  label: "To pay:",
+                  name:  "total_to_pay",
+                  def: "0.00",
+              }, {
                   label: "VAT percent:",
                   name:  "vat_percent",
                   def: 0,
@@ -92,6 +96,7 @@
             {"data": "issued_date", "name": "issued_date"},
             {"data": "currency.name", "name": "currency.name"},
             {"data": "company.name", "name": "company.name"},
+            {"data": "total_to_pay"},
             {"data": "total_gross"},
             {"data": "deal.name", "name": "deal.name", "defaultContent": "<i>Not set</i>"},
             {"data": "is_paid", "name": "is_paid"},
@@ -131,7 +136,7 @@
               return data;
             }},
             {
-            "targets": 10,
+            "targets": 11,
             // "data": "id",          // This does the trick... Adding data ...
             // "visible": false,      // And making this columns invisible ...
             "orderable" : false,
@@ -349,7 +354,8 @@
              <th>Issued </th>
              <th>Currency</th>
              <th>Company</th>
-             <th>Amount</th>
+             <th>To pay</th>
+             <th>Total</th>
              <th>Deal</th>
              <th class="checking">Paid</th>
              <th>Balance</th>

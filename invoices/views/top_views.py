@@ -27,21 +27,43 @@ def bank_records_index(request):
 
 @login_required
 @user_passes_test(lambda u:u.is_staff)
-def companies_accounts(request):
+def companies_accounts_payments(request):
     masterTableURL = reverse_lazy('api:companies-list')
     childTableURL = reverse_lazy('api:bank_records-list')
     grandChildTableURL = reverse_lazy('api:invoices-list')
     context = {
-        'master_header': 'Companies', 
+        'master_header': 'Companies - debts per payments', 
         'child_header': 'Bank remittances related',
         'grand_child_header': 'Invoices for company',
+        'grand_child_calc_field_id': '5',
         'default_is_incoming': '0',
         'childTableEmptyFilter': '0',
         'grandChildTableEmptyFilter': '0',
         'masterTableURL': masterTableURL,
         'childTableURL': childTableURL,
         'grandChildTableURL': grandChildTableURL,
-        'returnUrl': reverse_lazy('invoices:companies_accounts'),
+        'returnUrl': reverse_lazy('invoices:companies_accounts_payments'),
+    }
+    return render(request, "invoices/companies_accounts.html", context)
+
+@login_required
+@user_passes_test(lambda u:u.is_staff)
+def companies_accounts_financial(request):
+    masterTableURL = reverse_lazy('api:companies-list')
+    childTableURL = reverse_lazy('api:bank_records-list')
+    grandChildTableURL = reverse_lazy('api:invoices_financial-list')
+    context = {
+        'master_header': 'Companies - balance per financial invoices', 
+        'child_header': 'Bank remittances related',
+        'grand_child_header': 'Invoices for company',
+        'grand_child_calc_field_id': '6',
+        'default_is_incoming': '0',
+        'childTableEmptyFilter': '0',
+        'grandChildTableEmptyFilter': '0',
+        'masterTableURL': masterTableURL,
+        'childTableURL': childTableURL,
+        'grandChildTableURL': grandChildTableURL,
+        'returnUrl': reverse_lazy('invoices:companies_accounts_financial'),
     }
     return render(request, "invoices/companies_accounts.html", context)
 

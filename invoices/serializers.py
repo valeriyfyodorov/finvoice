@@ -121,7 +121,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
         # depth = 1 # removed to write new invoices
         fields = (
             'DT_RowId', 'DT_RowAttr', 'id', 'number', 'issued_date', 'payment_term', 
-            'company', 'company_name', 'total_net', 'total_gross', 
+            'company', 'company_name', 'total_net', 'total_gross', 'total_to_pay', 
             'currency', 'currency_name', 'deal', 'deal_id', 'deal_name', 
             'is_incoming', 'vat_percent', 'is_paid', 'is_incoming_name', 'is_advance_name', 
             'total_not_paid', 

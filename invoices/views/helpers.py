@@ -45,7 +45,7 @@ def mark_invoices_with_funds_enough_complete():
         invoices_for_deal = Invoice.objects \
             .filter(company=invoice.company).filter(deal=invoice.deal)
         sum_of_paid_for_company = bank_records_for_deal.aggregate(Sum('amount'))['amount__sum']
-        sum_of_invoices_for_company = invoices_for_deal.aggregate(Sum('total_gross'))['total_gross__sum']
+        sum_of_invoices_for_company = invoices_for_deal.aggregate(Sum('total_to_pay'))['total_to_pay__sum']
         if sum_of_invoices_for_company == sum_of_paid_for_company:
             invoices_for_deal.update(is_paid=True)    
 
@@ -71,7 +71,7 @@ def set_invoice_deal_on_record_import(invoices_not_paid, bank_record, bank_deal,
         found_number = modified_number.lower().strip() in description
         found_name_maybe = invoice.company.name.lower().strip()[:10].strip() in name
         found_name = invoice.company.name.lower().strip() in name
-        found_amount = (invoice.total_gross == bank_record.amount)
+        found_amount = (invoice.total_to_pay == bank_record.amount)
         found_advance = (invoice.advance_amount == bank_record.amount)
         accept_for_invoice = False
         mark_paid = False
@@ -80,9 +80,9 @@ def set_invoice_deal_on_record_import(invoices_not_paid, bank_record, bank_deal,
             mark_paid = True
         elif (found_name or found_name_maybe) and found_number and (found_amount or found_advance):
             accept_for_invoice = True
-        elif found_name and found_number and (invoice.total_gross < 0) and (bank_record.amount < 0):
+        elif found_name and found_number and (invoice.total_to_pay < 0) and (bank_record.amount < 0):
             accept_for_invoice = True
-        elif found_name and found_number and (invoice.total_gross > 0) and (bank_record.amount > 0):
+        elif found_name and found_number and (invoice.total_to_pay > 0) and (bank_record.amount > 0):
             accept_for_invoice = True
         if not accept_for_invoice:
             continue

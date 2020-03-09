@@ -68,10 +68,11 @@ class InvoiceForm(ModelForm):
                 Field('is_incoming', wrapper_class='col-md-3'),
             ),
             Row(
-                Field('total_net', wrapper_class='col-md-3'),
-                Field('vat_percent', wrapper_class='col-md-3'),
-                Field('total_vat', wrapper_class='col-md-3'),
+                Field('total_net', wrapper_class='col-md-2'),
+                Field('vat_percent', wrapper_class='col-md-2'),
+                Field('total_vat', wrapper_class='col-md-2'),
                 Field('total_gross', wrapper_class='col-md-3'),
+                Field('total_to_pay', wrapper_class='col-md-3'),
             ),
             Row(
                 Field('advance_required', wrapper_class='col-md-2'),

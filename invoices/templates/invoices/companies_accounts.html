@@ -23,7 +23,7 @@
   $(document).ready( function () {
 
     $("#table_master").append(
-       "<tfoot><tr><td></td>><td></td><td></td><td></td></tr></tfoot>"
+       "<tfoot><tr> <td></td><td></td><td></td><td></td> </tr></tfoot>"
     );
 
     var masterTable = $('#table_master').DataTable(
@@ -72,7 +72,7 @@
     );
 
     $("#table_child").append(
-       "<tfoot><tr><td></td><td></td>><td></td><td></td><td></td><td></td></tr></tfoot>"
+       "<tfoot><tr> <td></td><td></td><td></td><td></td><td></td><td></td><td></td> </tr></tfoot>"
     );
 
     
@@ -259,7 +259,7 @@
 
 
     $("#table_grand_child").append(
-       "<tfoot><tr><td></td><td></td><td></td>><td></td><td></td><td></td></tr></tfoot>"
+       "<tfoot><tr> <td></td><td></td><td></td><td></td><td></td><td></td><td></td> </tr></tfoot>"
     );
     var grandChildTable = $('#table_grand_child').DataTable(
     {
@@ -297,8 +297,9 @@
             {"data": "DT_RowId", "searchable": false, "orderable": false},
             {"data": "issued_date"},
             {"data": "number"},
-            {"data": "company.name", "name": "company.name"},
+            {"data": "is_advance_name", "name": "is_advance_name"},
             {"data": "currency.name", "name": "currency.name"},
+            {"data": "total_to_pay"},
             {"data": "total_gross"},
             {"data": "deal.name", "name": "deal.name", "defaultContent": "<i>Not set</i>"},
             {"data": "is_paid", "name": "is_paid"},
@@ -320,7 +321,7 @@
             // {targets:2, render:function(data){
             //   return moment(data).format('DD/MM/YY');
             // }},
-            {targets:7, render: function(data, type, row) {
+            {targets:8, render: function(data, type, row) {
               if (type === 'myExport') {
                 return data === true ? "Y" : "N";
               }
@@ -347,11 +348,11 @@
         drawCallback: function () {
             var api = this.api();
             // console.log(api.column( 5, {page:'current'} ).data().sum());
-            grand_child_sum = api.column( 5, {page:'all', search: 'applied'} ).data().sum();
+            grand_child_sum = api.column( {{grand_child_calc_field_id}}, {page:'all', search: 'applied'} ).data().sum();
             // console.log("Called child?:", called_child);
             if (!called_child) child_sum = 0;
             // console.log(1 * (childTable.column(5).footer()).innerText.replace("∑: ", ""));
-            $( api.column(5).footer() ).html("∑: <b>"+
+            $( api.column({{grand_child_calc_field_id}}).footer() ).html("∑: <b>"+
               grand_child_sum.toFixed(2) + 
               "</b>"
             );
@@ -456,9 +457,10 @@
             <th>...</th>
              <th>Dated </th>
              <th>Number</th>
-             <th>Company</th>
+             <th>Deal type</th>
              <th>Currency</th>
-             <th>Total amount</th>
+             <th>To pay</th>
+             <th>Invoice amount</th>
              <th>Deals</th>
              <th>Paid</th>
           </tr>

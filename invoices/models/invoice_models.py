@@ -22,6 +22,8 @@ class InvoiceManager(models.Manager):
             advance_percent=template.advance_percent,
             advance_amount=template.advance_amount,
             is_paid=False,
+            is_advance=template.is_advance,
+            is_reissued=template.is_reissued,
             is_incoming=False,
             payment_details="",
             currency=template.currency,
@@ -45,6 +47,9 @@ class InvoiceManager(models.Manager):
     def unpaid(self):
         return self.get_queryset().exclude(is_paid=True).order_by('-issued_date', '-number')
 
+    def financial(self):
+        return self.get_queryset().exclude(is_advance=True).order_by('-issued_date', '-number')
+
 
 class Invoice(models.Model):
     objects = InvoiceManager()
@@ -62,6 +67,7 @@ class Invoice(models.Model):
     advance_required = models.BooleanField(default=False)
     advance_percent = models.DecimalField(default=0, max_digits=5, decimal_places=2)
     advance_amount = models.DecimalField(default=0, max_digits=10, decimal_places=2)
+    total_to_pay = models.DecimalField(default=0, max_digits=10, decimal_places=2)
     is_paid = models.BooleanField(default=False)
     is_incoming = models.BooleanField(default=False)
     is_advance = models.BooleanField(default=False)
@@ -87,9 +93,9 @@ class Invoice(models.Model):
 
     def is_advance_name(self):
         if self.is_advance:
-            return "ADV"
+            return "ADVC"
         else:
-            return "FIN" 
+            return "FNNN" 
 
     def file_size(self):
         try:
@@ -131,7 +137,11 @@ class Invoice(models.Model):
             # print("Sum:" + bank_records_total_sum)
         # if bank_records_total_sum is None:
         #     bank_records_total_sum = 0
-        self.total_not_paid = self.total_gross - bank_records_total_sum
+        if self.total_to_pay is None:
+            self.total_to_pay = self.total_gross
+        if not (self.id) and self.total_to_pay == 0:
+            self.total_to_pay = self.total_gross
+        self.total_not_paid = self.total_to_pay - bank_records_total_sum
         # print("STEP3", self.total_net, self.total_vat, self.total_gross)
         super().save(*args, **kwargs)
 
@@ -190,7 +200,9 @@ class Template(models.Model):
     currency = models.ForeignKey(Currency, related_name="templates", on_delete=models.CASCADE, 
         null=False, blank=False, default=1) 
     department = models.ForeignKey(Department, related_name="templates", on_delete=models.CASCADE, 
-        null=False, blank=False, default=1) 
+        null=False, blank=False, default=1)
+    is_advance = models.BooleanField(default=False)
+    is_reissued = models.BooleanField(default=True)
 
     class Meta:
         ordering = ('description',)

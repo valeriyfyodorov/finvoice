@@ -53,7 +53,8 @@ hr{
     {% url 'invoices:invoices_outgoing_index' as invoices_outgoing_index %}
     {% url 'invoices:invoices_unpaid_index' as invoices_unpaid_index %}
     {% url 'invoices:deals_index' as deals_index %}
-    {% url 'invoices:companies_accounts' as companies_accounts %}
+    {% url 'invoices:companies_accounts_payments' as companies_accounts_payments %}
+    {% url 'invoices:companies_accounts_financial' as companies_accounts_financial %}
     {% url 'invoices:import_bank_statement' as import_bank_statement %}
     {% url 'invoices:import_pdf_invoice' as import_pdf_invoice %}
     {% url 'admin:index' as admin_url %}
@@ -109,9 +110,26 @@ hr{
       {% if request.get_full_path == deals_index %} active {% endif %}" 
       href="{{ deals_index }}"> Deals</a>
 
-      <a class="nav-item nav-link 
-      {% if request.get_full_path == companies_accounts %} active {% endif %}" 
-      href="{{ companies_accounts }}"> Companies debts</a>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle 
+        {% if 'invoices_' in request.get_full_path|lower %} active {% endif %} " 
+        href="#" id="navbarDropdown" role="button" data-toggle="dropdown" 
+        aria-haspopup="true" aria-expanded="false">
+          Companies debts
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item  
+          {% if request.get_full_path == companies_accounts_payments %} active {% endif %}" 
+          href="{{ companies_accounts_payments }}"> Payments balance</a>
+
+          <a class="dropdown-item  
+          {% if request.get_full_path == companies_accounts_financial %} active {% endif %}" 
+          href="{{ companies_accounts_financial }}"> Invoices balance</a>
+
+        </div>
+      </li>
+
+     
 
     <a class="nav-item nav-link 
       {% if request.get_full_path == import_bank_statement %} active {% endif %}" 
