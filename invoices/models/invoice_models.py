@@ -72,6 +72,7 @@ class Invoice(models.Model):
     is_incoming = models.BooleanField(default=False)
     is_advance = models.BooleanField(default=False)
     is_reissued = models.BooleanField(default=True)
+    is_credit = models.BooleanField(default=False)
     payment_details = models.TextField(max_length=100, blank=True,
                                    validators=[MaxLengthValidator(100)])
     currency = models.ForeignKey(Currency, related_name="invoices", on_delete=models.CASCADE, 
@@ -143,6 +144,9 @@ class Invoice(models.Model):
             self.total_to_pay = self.total_gross
         self.total_not_paid = self.total_to_pay - bank_records_total_sum
         # print("STEP3", self.total_net, self.total_vat, self.total_gross)
+        if self.is_credit:
+            self.total_net = -self.total_net
+            self.total_gross = -self.total_gross
         super().save(*args, **kwargs)
 
 

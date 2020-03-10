@@ -34,7 +34,7 @@ class InvoiceForm(ModelForm):
         exclude = []
         widgets = {
             'description': Textarea(attrs={'cols': 40, 'rows': 2}),
-            'payment_details': Textarea(attrs={'cols': 20, 'rows': 1}),
+            'payment_details': Textarea(attrs={'cols': 30, 'rows': 1}),
             'issued_date': DatePickerInput(
                 options={
                     "dateFormat":"d/m/Y",
@@ -62,10 +62,9 @@ class InvoiceForm(ModelForm):
                 Field('company', wrapper_class='col-md-3'),
             ),
             Row(
-                Field('description', wrapper_class='col-md-4'),
-                Div(css_class='col-md-2'),
+                Field('description', wrapper_class='col-md-8'),
+                Div(css_class='col-md-1'),
                 Field('currency', wrapper_class='col-md-3'),
-                Field('is_incoming', wrapper_class='col-md-3'),
             ),
             Row(
                 Field('total_net', wrapper_class='col-md-2'),
@@ -86,19 +85,23 @@ class InvoiceForm(ModelForm):
                     Formset('items')),
             ),
             Row(
+                HTML("<br>"),
+                Field('is_incoming', wrapper_class='col-md-2'),
+                Field('is_advance', wrapper_class='col-md-2'),
+                Field('is_credit', wrapper_class='col-md-2'),
+                Field('is_reissued', wrapper_class='col-md-3'),
+                Field('is_paid', wrapper_class='col-md-3'),
+            ),
+            Row(
+                Field('payment_details', wrapper_class='col-md-6'),
+                Field('returnUrl', wrapper_class='col-md-1'),
+                Field('total_not_paid', wrapper_class='col-md-2'),
+                Field('file', wrapper_class='col-md-3'),
+            ),
+            Row(
                 ButtonHolder(Submit('submit', 'Save')),
                 HTML("<br>"),
 
             ),
             HTML("<br>"),
-            Row(
-                HTML("<br>"),
-                Field('is_reissued', wrapper_class='col-md-2'),
-                Field('is_advance', wrapper_class='col-md-2'),
-                Field('is_paid', wrapper_class='col-md-1'),
-                Field('payment_details', wrapper_class='col-md-3'),
-                Field('returnUrl', wrapper_class='col-md-1'),
-                Field('total_not_paid', wrapper_class='col-md-2'),
-                Field('file', wrapper_class='col-md-2'),
-            )
         )
