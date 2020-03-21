@@ -83,11 +83,12 @@
       } );
     
     $("#table_master").append(
-       "<tfoot><tr><td></td><td></td><td></td>><td></td><td></td><td></td></tr></tfoot>"
+       "<tfoot><tr><td></td><td></td><td></td>><td></td><td></td><td></td><td></td><td></td></tr></tfoot>"
     );
     var masterTable = $('#table_master').DataTable(
     {
-        "serverSide": true,
+        "serverSide": false,
+        // "pageLength": 20,
         "ajax": "{{masterTableURL}}" + "?format=datatables",
 
         "columns": [
@@ -101,7 +102,7 @@
             {"data": "deal.name", "name": "deal.name", "defaultContent": "<i>Not set</i>"},
             {"data": "is_paid", "name": "is_paid"},
             {"data": "total_not_paid", "name": "total_not_paid"},
-            {"data": "is_advance_name", "name": "is_advance_name", "searchable": false, "orderable": false},
+            {"data": "is_advance_name", "name": "is_advance_name"},
             {"data": "is_incoming_name", "searchable": false, "orderable": false},
             {"data": "vat_percent", "searchable": false, "orderable": false, "visible": false},
             {"data": "is_incoming", "searchable": false, "orderable": false, "visible": false},
@@ -175,8 +176,12 @@
         drawCallback: function () {
             var api = this.api();
             // console.log(api.column( 5, {page:'current'} ).data().sum());
-            $( api.column(5).footer() ).html("∑: <b>"+
-              api.column( 5, {page:'current'} ).data().sum().toFixed(2) + 
+            $( api.column(5).footer() ).html("<b>"+
+              api.column( 5, {page:'all', search: 'applied'} ).data().sum().toFixed(2) + 
+              "</b>"
+            );
+            $( api.column(6).footer() ).html("<b>"+
+              api.column( 6, {page:'all', search: 'applied'} ).data().sum().toFixed(2) + 
               "</b>"
             );
 
@@ -198,7 +203,7 @@
     );
     var childTable = $('#table_child').DataTable(
     {
-      "serverSide": true,
+      "serverSide": false,
         // "ajax": "/api/bank_accounts/?format=datatables",
         // "ajax": "{% url 'api:bank_records-list' %}" + "?format=datatables" ,
         "ajax": {
@@ -278,8 +283,8 @@
         drawCallback: function () {
             var api = this.api();
             // console.log(api.column( 5, {page:'current'} ).data().sum());
-            $( api.column(4).footer() ).html("∑: <b>"+
-              api.column( 4, {page:'current'} ).data().sum().toFixed(2) + 
+            $( api.column(4).footer() ).html("<b>"+
+              api.column( 4, {page:'all', search: 'applied'} ).data().sum().toFixed(2) + 
               "</b>"
             );
         },

@@ -162,7 +162,7 @@
         drawCallback: function () {
             var api = this.api();
             // console.log(api.column( 5, {page:'current'} ).data().sum());
-            // $( api.column(5).footer() ).html("∑: <b>"+
+            // $( api.column(5).footer() ).html("<b>"+
             //   api.column(5, { search: 'applied'} ).data().sum().toFixed(2) + 
             //   "</b>"
             // );
@@ -170,8 +170,8 @@
             child_sum = api.column( 5, {page:'all', search: 'applied'} ).data().sum();
             // console.log("Called grand child?:", called_child);
             if (!called_grand_child) grand_child_sum = 0;
-            // console.log(1 * (childTable.column(5).footer()).innerText.replace("∑: ", ""));
-            $( api.column(5).footer() ).html("∑: <b>"+
+            // console.log(1 * (childTable.column(5).footer()).innerText.replace("", ""));
+            $( api.column(5).footer() ).html("<b>"+
               child_sum.toFixed(2) + 
               "</b>"
             );
@@ -351,8 +351,8 @@
             grand_child_sum = api.column( {{grand_child_calc_field_id}}, {page:'all', search: 'applied'} ).data().sum();
             // console.log("Called child?:", called_child);
             if (!called_child) child_sum = 0;
-            // console.log(1 * (childTable.column(5).footer()).innerText.replace("∑: ", ""));
-            $( api.column({{grand_child_calc_field_id}}).footer() ).html("∑: <b>"+
+            // console.log(1 * (childTable.column(5).footer()).innerText.replace("", ""));
+            $( api.column({{grand_child_calc_field_id}}).footer() ).html("<b>"+
               grand_child_sum.toFixed(2) + 
               "</b>"
             );
