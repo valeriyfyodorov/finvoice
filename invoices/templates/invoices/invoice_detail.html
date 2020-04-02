@@ -38,8 +38,16 @@
         <td class="logofont" >Seahorse Management 
         </td>
         <td class="text-center">
+          {% if invoice.is_advance %}
+          
+          Proforma invoice <br>
+          Avanse rēķins
+          {% else %}
           Invoice <br>
           Rēķins
+
+          {% endif %}
+          
         </td>
         <td class="text-right">
           <br>

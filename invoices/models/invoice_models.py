@@ -87,10 +87,14 @@ class Invoice(models.Model):
         return self.number
 
     def is_incoming_name(self):
-        if self.is_incoming:
-            return "INCM"
+        if self.is_incoming and self.is_reissued:
+            return "INCMSTRP"
+        elif self.is_incoming:
+            return "INCMIZDV"
+        elif not self.is_incoming and self.is_reissued:
+            return "OTGGSTRP" 
         else:
-            return "OTGG" 
+            return "OTGGIZDV" 
 
     def is_advance_name(self):
         if self.is_advance:
@@ -272,5 +276,8 @@ class BankRecord(models.Model):
     def save(self, *args, **kwargs):
         if (self.id and self.id > 0):
             self.deal_related = self.deals.exists()
+        elif self.pk is None:
+            if self.used_amount == 0 or self.used_amount is None:
+                self.used_amount = self.amount
         super().save(*args, **kwargs)
         self.bank_account.save()

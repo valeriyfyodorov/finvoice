@@ -144,9 +144,9 @@
             "searchable": false,
             render: function ( data, type, row, meta ) {
                 var url_mask = "{% url 'invoices:print_detail' invoice_id=12345 %}".replace(/12345/, row.id.toString());
-                if (row.total_gross > 0)
+                if (!row.is_incoming)
                 {
-                  return '<a href="'+ url_mask + '?returnUrl={{returnUrl}}">'+'<i class="fas fa-fw fa-file-pdf"> </i>'+'</a>';
+                  return '<a href="'+ url_mask + '?returnUrl={{returnUrl}}">'+row.is_incoming_name+'</a>';
                 }
                 else
                 {

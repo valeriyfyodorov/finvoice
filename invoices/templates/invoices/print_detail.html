@@ -76,8 +76,14 @@
         <td 
         style="text-align: center;
         ">
+        {% if invoice.is_advance %}
+          Proforma invoice <br>
+          Avansa rēķins
+          {% else %}
           Invoice <br>
           Rēķins
+          {% endif %}
+          
         </td>
         <td 
         style="text-align: right;
