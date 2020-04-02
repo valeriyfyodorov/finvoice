@@ -228,14 +228,23 @@
               // }
               return data === true ? "X" : "_";
             }},
-            {targets:10, render: function(data, type, row) {
-              if (row.file_size > 0)
-              {
-                return '<a href="'+ row.file + '" target="_blank">'+row.is_incoming_name+'</a>';
-              }
-              else
-                {return row.is_incoming_name;}
+            {targets:10, render: function(data, type, row, meta) {
 
+              var url_mask = "{% url 'invoices:print_detail' invoice_id=12345 %}".replace(/12345/, row.id.toString());
+                if (!row.is_incoming)
+                {
+                  return '<a href="'+ url_mask + '?returnUrl={{returnUrl}}">'+row.is_incoming_name+'</a>';
+                }
+                else
+                {
+                  if (row.file_size > 0)
+                  {
+                    return '<a href="'+ row.file + '" target="_blank">'+row.is_incoming_name+'</a>';
+                  }
+                  else
+                    {return row.is_incoming_name;}
+                }
+              
             }},
 
             
