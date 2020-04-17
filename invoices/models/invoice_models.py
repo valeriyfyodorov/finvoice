@@ -278,6 +278,9 @@ class BankRecord(models.Model):
             self.deal_related = self.deals.exists()
         elif self.pk is None:
             if self.used_amount == 0 or self.used_amount is None:
-                self.used_amount = self.amount
+                if self.amount > 0:
+                    self.used_amount = self.amount
+                else:
+                    self.used_amount = 0
         super().save(*args, **kwargs)
         self.bank_account.save()
