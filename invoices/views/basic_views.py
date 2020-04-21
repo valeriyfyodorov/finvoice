@@ -29,6 +29,7 @@ def invoices_creation_index(request):
                 issued_date__gte=first_jan, 
                 deal__department=template.department,
                 is_incoming=False,
+                is_advance=True,
             ).distinct().count()
             count_part += 1
             invoice = Invoice.objects.create_invoice_from_template(template, count_part, 
