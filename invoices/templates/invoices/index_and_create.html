@@ -67,7 +67,10 @@
     <tr >
     {% for invoice in invoices %}
         <td>{{ invoice.number }}</td>
-        <td>{{ invoice.deal.department.name }}</td>
+        <td>{% if invoice.deal %}
+          {{ invoice.deal.department.name }}
+          {% endif %}
+        </td>
         <td data-sort='{{ invoice.issued_date|date:"Y-m-d" }}'> {{ invoice.issued_date }}</td>
         <td>
           {% if invoice.is_paid %}
