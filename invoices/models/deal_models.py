@@ -33,18 +33,20 @@ class Deal(models.Model):
 
 
     def save(self, *args, **kwargs):
-        bank_records_total_sum = 0
-        invoices_total_sum = 0
+        total_received = 0
+        invoices_total_compensated = 0
         if (self.id):
-            bank_records_total_sum = self.bank_records.all().aggregate(Sum('used_amount'))['used_amount__sum'] or 0
+            total_received = self.bank_records.all().aggregate(Sum('used_amount'))['used_amount__sum'] or 0
             # print("bank_records_total_sum:", bank_records_total_sum)
-            invoices_total_sum = self.invoices.compensated().aggregate(Sum('total_gross'))['total_gross__sum'] or 0
-            invoices_total_sum = -invoices_total_sum
-            invoices_total_sum += self.invoices.charged().aggregate(Sum('total_gross'))['total_gross__sum'] or 0
+            invoices_total_compensated = self.invoices.compensated().aggregate(Sum('total_gross'))['total_gross__sum'] or 0
+            invoices_total_compensated = -invoices_total_compensated
+            invoices_total_charged = self.invoices.charged().aggregate(Sum('total_gross'))['total_gross__sum'] or 0
+            total_invoiced = invoices_total_compensated + invoices_total_charged
             # print("invoices_total_sum:", invoices_total_sum)
-            self.total_received = bank_records_total_sum
-            self.total_invoiced = invoices_total_sum
-            self.total_balance = self.total_invoiced - self.total_received
+            self.total_received = total_received
+            self.total_invoiced = total_invoiced
+            self.total_balance = self.total_received - self.total_invoiced
+            # print(f"total_received {total_received} invoices_total_compensated {invoices_total_compensated} invoices_total_charged {invoices_total_charged} total_invoiced {total_invoiced} total_balance {self.total_balance}")
         super().save(*args, **kwargs)
 
 class Currency(models.Model):

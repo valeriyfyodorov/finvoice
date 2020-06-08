@@ -337,7 +337,7 @@
             {"data": "name"},
             {"data": "description"},
             {"data": "amount"},
-            // {"data": "used_amount"},
+            {"data": "used_amount"},
             // {"data": "deal_related"},
             {"data": "deals", "name": "deals.name", "sortable": false},
             {"data": "bank_account.name", "name": "bank_account.name"},
@@ -384,6 +384,10 @@
             // console.log(api.column( 5, {page:'current'} ).data().sum());
             $( api.column(4).footer() ).html("<b>"+
               api.column( 4, {page:'all', search: 'applied'} ).data().sum().toFixed(2) + 
+              "</b>"
+            );
+            $( api.column(5).footer() ).html("<b>"+
+              api.column( 5, {page:'all', search: 'applied'} ).data().sum().toFixed(2) + 
               "</b>"
             );
         },
@@ -475,6 +479,7 @@
              <th>Name</th>
              <th>Details </th>
              <th>Amount</th>
+             <th>To Use</th>
              <th>Deals</th>
              <th>Account name</th>
           </tr>
